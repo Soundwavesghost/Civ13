@@ -13,7 +13,7 @@
 	not_disassemblable = TRUE
 	var/obj/item/weapon/gun/projectile/custom/current_gun = null
 
-/obj/structure/gunbench/attackby(obj/item/P as obj, mob/user as mob)
+/obj/structure/gunbench/attackby(obj/item/P as obj, mob/living/carbon/human/user as mob)
 	if (istype(P, /obj/item/stack/material/wood))
 		user << "You begin cutting the wood..."
 		playsound(loc, 'sound/effects/woodfile.ogg', 100, TRUE)
@@ -34,11 +34,116 @@
 			qdel(P)
 		return
 
+	else if (istype(P, /obj/item/weapon/gun/projectile))
+		if (!istype(P, /obj/item/weapon/gun/projectile/ancient) && !istype(P, /obj/item/weapon/gun/projectile/bow) && !istype(P, /obj/item/weapon/gun/projectile/capnball) && !istype(P, /obj/item/weapon/gun/projectile/flintlock))
+			rechamber_gun(P, user)
+			return
+	else if (istype(P, /obj/item/blueprint/gun) && user.getStatCoeff("crafting") >= 1.5)
+		assemble_from_blueprint(user,P)
+		return
+	else if (user.getStatCoeff("crafting") < 1.5)
+		user << "<span class='warning'>You are not skilled enough to do this.</span>"
+		return
+/obj/item/weapon/gun/projectile
+	var/rechambered = FALSE
 
+/obj/structure/gunbench/proc/rechamber_gun(var/obj/item/weapon/gun/projectile/P, var/mob/living/carbon/human/H)
+	var/list/caliber_options = list("Cancel")
+	//custom guns:
+	if (istype(P, /obj/item/weapon/gun/projectile/custom))
+		var/obj/item/weapon/gun/projectile/custom/PC = P
+		switch (PC.receiver_type)
+			if ("Pump-Action")
+				caliber_options = list("shotgun","Cancel")
+
+			if ("Bolt-Action","Semi-Auto (large)")
+				caliber_options = list("8mm large rifle","6.5mm small rifle","7.5mm intermediate rifle","5.5mm intermediate rifle","Cancel")
+
+			if ("Open-Bolt (large)")
+				caliber_options = list("7.5mm intermediate rifle","5.5mm intermediate rifle","Cancel")
+
+			if ("Open-Bolt (small)","Revolver","Semi-Auto (small)")
+				caliber_options = list("9mm pistol",".45 pistol","Cancel")
+
+			if ("Dual Selective Fire", "Triple Selective Fire")
+				caliber_options = list("7.5mm intermediate rifle","5.5mm intermediate rifle","Cancel")
+
+		if (PC.feeding_type == "Internal Magazine (Removable)")
+			caliber_options = list("9mm pistol",".45 pistol","Cancel")
+	//others
+	else if (istype(P, /obj/item/weapon/gun/projectile/automatic))
+		caliber_options = list("7.5mm intermediate rifle","5.5mm intermediate rifle","Cancel")
+	else if (istype(P, /obj/item/weapon/gun/projectile/boltaction))
+		caliber_options = list("8mm large rifle","6.5mm small rifle","7.5mm intermediate rifle","5.5mm intermediate rifle","Cancel")
+	else if (istype(P, /obj/item/weapon/gun/projectile/leveraction))
+		caliber_options = list("6.5mm small rifle","5.5mm intermediate rifle","Cancel")
+	else if (istype(P, /obj/item/weapon/gun/projectile/pistol) || istype(P, /obj/item/weapon/gun/projectile/revolver) || istype(P, /obj/item/weapon/gun/projectile/revolving))
+		caliber_options = list("9mm pistol",".45 pistol","Cancel")
+	else if (istype(P, /obj/item/weapon/gun/projectile/semiautomatic))
+		caliber_options = list("8mm large rifle","6.5mm small rifle","7.5mm intermediate rifle","5.5mm intermediate rifle","Cancel")
+	else if (istype(P, /obj/item/weapon/gun/projectile/special) || istype(P, /obj/item/weapon/gun/projectile/submachinegun))
+		caliber_options = list("7.5mm intermediate rifle","5.5mm intermediate rifle","Cancel")
+	else
+		caliber_options = list("Cancel")
+
+	var/choice = WWinput(H, "Which caliber do you want to convert \the [P] into? Be aware that this will permanently reduce accuracy by around 10%!", "Firearm Rechambering", "Cancel", caliber_options)
+	if (choice == "Cancel")
+		return
+	else
+		H << "You start converting \the [P] into [choice]..."
+		playsound(loc, 'sound/effects/gunbench.ogg', 100, TRUE)
+		if (do_after(H, 100, src))
+			H << "You successfully convert \the [P]."
+			P.caliber = null
+
+			if (choice == "8mm large rifle")
+				P.caliber = "largerifle"
+				P.ammo_type = /obj/item/ammo_casing/largerifle
+
+			else if (choice == "6.5mm small rifle")
+				P.caliber = "smallrifle"
+				P.ammo_type = /obj/item/ammo_casing/smallrifle
+
+			else if (choice == ".45 pistol")
+				P.caliber = "pistol45"
+				P.ammo_type = /obj/item/ammo_casing/pistol45
+
+			else if (choice == "9mm pistol")
+				P.caliber = "pistol9"
+				P.ammo_type = /obj/item/ammo_casing/pistol9
+
+			else if (choice == "7.5mm intermediate rifle")
+				P.caliber = "intermediumrifle"
+				P.ammo_type = /obj/item/ammo_casing/intermediumrifle
+
+			else if (choice == "5.5mm intermediate rifle")
+				P.caliber = "smallintermediumrifle"
+				P.ammo_type = /obj/item/ammo_casing/smallintermediumrifle
+
+			P.effectiveness_mod *= 0.9
+			if (!findtext(P.name,"(rechambered)"))
+				P.name = "[P.name] (rechambered)"
+			if (!findtext(P.desc,". Rechambered into"))
+				P.desc = "[P.desc]. Rechambered into [choice]."
+			else
+				var/list/split_desc = splittext(P.desc, ". Rechambered into")
+				P.desc = "[split_desc[1]]. Rechambered into [choice]."
 /obj/structure/gunbench/attack_hand(var/mob/user as mob)
 	var/mob/living/carbon/human/H = user
-	if (H.getStatCoeff("crafting") < 1.9 && map.civilizations)
-		user << "You don't have the skills to use this."
+	if (H.getStatCoeff("crafting") < 2.5 && map.civilizations)
+		user << "You don't have the skills to design a new gun! Use an existing blueprint."
+		return FALSE
+	var/found = FALSE
+	if (istype(user.l_hand, /obj/item/stack/money))
+		var/obj/item/stack/money/M = user.l_hand
+		if (M.value*M.amount >= 200)
+			found = TRUE
+	else if (istype(user.r_hand, /obj/item/stack/money))
+		var/obj/item/stack/money/M = user.r_hand
+		if (M.value*M.amount >= 200)
+			found = TRUE
+	if (!found)
+		user << "You don't have enough money to make a new blueprint! You need 500 gold or equivalent in one of your hands."
 		return FALSE
 ////////////////STOCK///////////////////////////////
 	var/list/display = list("Cancel")
@@ -259,6 +364,44 @@
 	else if (choice_caliber == "5.5mm intermediate rifle")
 		current_gun.caliber = "smallintermediumrifle"
 		current_gun.ammo_type = /obj/item/ammo_casing/smallintermediumrifle
+	var/do_skn_override = WWinput(user, "Do you want to give this gun a different appearance or keep the default look?", "Gunsmithing", "Keep", list("Keep","Change"))
+	if (do_skn_override == "Change")
+		var/list/possible_list = list("Cancel")
+		switch (choice_receiver)
+			if ("Pump-Action")
+				possible_list = list("Cancel", "shotgun", "remington870", "remington11", "winchester1873")
+			if ("Bolt-Action")
+				possible_list = list("Cancel", "gewehr71", "gewehr98", "lebel", "mosin", "murata", "enfield", "p14enfield", "carcano", "arisaka30", "arisaka35")
+				if (map.ordinal_age >= 6)
+					possible_list = list("Cancel", "gewehr71", "gewehr98", "kar98k", "lebel", "mosin", "mosin30", "murata", "enfield", "p14enfield", "carcano", "springfieldww2", "arisaka30", "arisaka35", "arisaka38", "arisaka99")
+			if("Semi-Auto (large)")
+				possible_list = list("Cancel", "svt", "g41", "g43", "m1garand")
+				if (map.ordinal_age >= 7)
+					possible_list += "m14"
+					possible_list += "sks"
+			if ("Open-Bolt (large)")
+				possible_list = list("Cancel", "madsen", "mg34", "type99lmg", "bar", "dp")
+				if (map.ordinal_age >= 7)
+					possible_list += "pkmp"
+					possible_list += "negev"
+					possible_list += "m60"
+			if ("Open-Bolt (small)")
+				possible_list = list("Cancel", "pps", "ppsh", "mp40", "greasegun", "tommygun", "thompson", "avtomat")
+				if (map.ordinal_age >= 8)
+					possible_list += "victor"
+					possible_list += "p90"
+			if ("Revolver")
+				possible_list = list("Cancel", "revolver", "t26revolver", "nagant", "panther", "detective", "detective_leopard", "detective_gold", "goldrevolver", "mateba", "peacemaker", "colt1877", "dragoon", "coltnewpolice", "enfield02", "smithwesson32", "graysonfito", "magnum58", "webley4", "m1892")
+			if ("Semi-Auto (small)")
+				possible_list = list("Cancel", "p220", "nambu", "mauser", "luger", "borchardt", "colt", "m9beretta", "tanm9", "black1911","tt30", "waltherp38", "jericho941", "glock17", "coltpockethammerles", "tarusg3", "mp443", "chinese_ms14", "chinese_plastic", "pl14", "sig250")
+			if ("Dual Selective Fire")
+				possible_list = list("Cancel", "stg", "g3", "ar12", "ak47", "ak74", "aks74", "aks", "ak74m", "az58", "whiteaz58", "blackaz58", "chinese_assault_rifle")
+			if ("Triple Selective Fire")
+				possible_list = list("Cancel", "m16","m16a2","m16a4","m4", "m4mws", "hk417", "scarl", "scarh", "ar15", "mk18", "mk18tan", "sigsauer")
+		var/dst = WWinput(user, "Choose the gun's look:", "Gunsmithing", "Cancel", possible_list)
+		if (dst != "Cancel" && dst != null)
+			current_gun.override_sprite = dst
+
 	if (choice_caliber && choice_stock && choice_barrel && choice_receiver && choice_feeding)
 		var/named = input(user, "Choose a name for this gun (max 15 characters):", "Gunsmithing", "gun")
 		if (named && named != "")
@@ -272,6 +415,39 @@
 				current_gun.name = "gun"
 			else
 				return
+		var/foundm = FALSE
+		if (istype(user.l_hand, /obj/item/stack/money))
+			var/obj/item/stack/money/M = user.l_hand
+			if (M.value*M.amount >= 200)
+				foundm = TRUE
+				M.amount -= 200/M.value
+		else if (istype(user.r_hand, /obj/item/stack/money))
+			var/obj/item/stack/money/M = user.r_hand
+			if (M.value*M.amount >= 200)
+				foundm = TRUE
+				M.amount -= 200/M.value
+		if (foundm)
+			var/obj/item/blueprint/gun/newgunbp = new/obj/item/blueprint/gun(loc)
+			newgunbp.name = "[current_gun.name] blueprint"
+			newgunbp.caliber = current_gun.caliber
+			newgunbp.ammo_type = current_gun.ammo_type
+			newgunbp.custom_name = current_gun.name
+			newgunbp.custom_name = replacetext(newgunbp.name, " blueprint", "")
+			if (choice_caliber == "shotgun")
+				newgunbp.desc = "A blueprint for a gun chambered in 12 gauge. The feed system is [lowertext(current_gun.feeding_type)]."
+			else
+				newgunbp.desc = "A blueprint for a gun chambered in [choice_caliber] rounds. The feed system is [lowertext(current_gun.feeding_type)]."
+			newgunbp.receiver_type = current_gun.receiver_type
+			newgunbp.stock_type = current_gun.stock_type
+			newgunbp.barrel_type = current_gun.barrel_type
+			newgunbp.feeding_type = current_gun.feeding_type
+			newgunbp.override_sprite = current_gun.override_sprite
+			newgunbp.cost_wood = using_wood
+			newgunbp.cost_steel = using_steel
+		else
+			user << "<span class='warning'>You do not have enough money to finish the blueprint!</span>"
+			qdel(current_gun)
+			return
 		if (current_gun)
 			current_gun.finish()
 			wood_amt -= using_wood
@@ -294,25 +470,48 @@
 		using_steel = 0
 		return
 
-/////////////////////////////////////////////////////////
-///////////////////THE CUSTOM GUN////////////////////////
-/////////////////////////////////////////////////////////
-#define SHORT_RANGE_STILL "short_range_still"
-#define SHORT_RANGE_MOVING "short_range_moving"
+/obj/structure/gunbench/proc/assemble_from_blueprint(var/mob/living/user = null, var/obj/item/blueprint/gun/bpsource = null)
+	if (!bpsource)
+		return
+	if (wood_amt < bpsource.cost_wood)
+		if (user)
+			user << "Not enough wood!"
+		return
+	if (steel_amt < bpsource.cost_steel)
+		if (user)
+			user << "Not enough steel!"
+		return
 
-#define MEDIUM_RANGE_STILL "medium_range_still"
-#define MEDIUM_RANGE_MOVING "medium_range_moving"
+	using_wood -= bpsource.cost_wood
+	using_steel -= bpsource.cost_steel
+	user << "You begin crafting the [bpsource.custom_name]..."
+	playsound(loc, 'sound/effects/gunbench.ogg', 100, TRUE)
+	if (do_after(user,200,src))
+		if (!bpsource)
+			return
+		if (wood_amt < bpsource.cost_wood)
+			if (user)
+				user << "Not enough wood!"
+			return
+		if (steel_amt < bpsource.cost_steel)
+			if (user)
+				user << "Not enough steel!"
+			return
+		var/obj/item/weapon/gun/projectile/custom/NEWGUN = new/obj/item/weapon/gun/projectile/custom(src.loc)
+		NEWGUN.name = bpsource.custom_name
+		NEWGUN.caliber = bpsource.caliber
+		NEWGUN.ammo_type = bpsource.ammo_type
+		NEWGUN.receiver_type = bpsource.receiver_type
+		NEWGUN.stock_type = bpsource.stock_type
+		NEWGUN.barrel_type = bpsource.barrel_type
+		NEWGUN.feeding_type = bpsource.feeding_type
+		NEWGUN.override_sprite = bpsource.override_sprite
+		NEWGUN.step = 4
+		NEWGUN.finish()
 
-#define LONG_RANGE_STILL "long_range_still"
-#define LONG_RANGE_MOVING "long_range_moving"
-
-#define VERY_LONG_RANGE_STILL "very_long_range_still"
-#define VERY_LONG_RANGE_MOVING "very_long_range_moving"
-
-#define KD_CHANCE_VERY_LOW 20
-#define KD_CHANCE_LOW 40
-#define KD_CHANCE_MEDIUM 60
-#define KD_CHANCE_HIGH 80
+		if (user)
+			user << "You assemble a new [NEWGUN.name]."
+		return
 /obj/item/weapon/gun/projectile/custom
 	name = "unfinished gun"
 	desc = "an unfinished gun"
@@ -329,6 +528,8 @@
 	var/image/feeding_img = null
 	var/barrel_type = "none"
 	var/image/barrel_img = null
+
+	var/override_sprite = null
 
 	gun_safety = TRUE
 	//bolt action
@@ -366,16 +567,19 @@
 	if (stock_type == "none" || receiver_type == "none" || feeding_type == "none" || barrel_type == "none")
 		qdel(src)
 		return
-	stock_img = image("icon" = src.icon, "icon_state" = src.stock_type)
-	overlays += stock_img
-	barrel_img = image("icon" = src.icon, "icon_state" = src.barrel_type)
-	overlays += barrel_img
-	receiver_img = image("icon" = src.icon, "icon_state" = src.receiver_type)
-	overlays += receiver_img
-	if (feeding_type == "Open (Belt-Fed)" || feeding_type == "External Magazine" || feeding_type == "Large External Magazine")
-		feeding_img = image("icon" = src.icon, "icon_state" = "[src.feeding_type]_unloaded")
-		overlays += feeding_img
-
+	if (!override_sprite)
+		stock_img = image("icon" = src.icon, "icon_state" = src.stock_type)
+		overlays += stock_img
+		barrel_img = image("icon" = src.icon, "icon_state" = src.barrel_type)
+		overlays += barrel_img
+		receiver_img = image("icon" = src.icon, "icon_state" = src.receiver_type)
+		overlays += receiver_img
+		if (feeding_type == "Open (Belt-Fed)" || feeding_type == "External Magazine" || feeding_type == "Large External Magazine")
+			feeding_img = image("icon" = src.icon, "icon_state" = "[src.feeding_type]_unloaded")
+			overlays += feeding_img
+	else
+		icon = 'icons/obj/gun.dmi'
+		icon_state = override_sprite
 	switch(stock_type)
 		if ("Rifle Wooden Stock")
 			equiptimer = 15
@@ -404,7 +608,7 @@
 			recoil = 2 //extra kickback
 			handle_casings = HOLD_CASINGS
 			load_method = SINGLE_CASING | SPEEDLOADER
-			load_shell_sound = 'sound/weapons/clip_reload.ogg'
+			load_shell_sound = 'sound/weapons/guns/interact/clip_reload.ogg'
 			accuracy = TRUE
 			gun_type = GUN_TYPE_RIFLE
 			attachment_slots = ATTACH_IRONSIGHTS|ATTACH_SCOPE|ATTACH_BARREL
@@ -470,7 +674,7 @@
 			unload_sound 	= 'sound/weapons/guns/interact/rev_magout.ogg'
 			reload_sound 	= 'sound/weapons/guns/interact/rev_magin.ogg'
 			cocked_sound 	= 'sound/weapons/guns/interact/rev_cock.ogg'
-			fire_sound = 'sound/weapons/guns/fire/revolver_fire.ogg'
+			fire_sound = 'sound/weapons/guns/fire/revolver.ogg'
 			magazine_based = FALSE
 			gun_type = GUN_TYPE_PISTOL
 			single_action = FALSE
@@ -786,7 +990,7 @@
 			w_class = 3
 			sel_mode = 1
 			full_auto = TRUE
-			fire_sound = 'sound/weapons/mosin_shot.ogg'
+			fire_sound = 'sound/weapons/guns/fire/rifle.ogg'
 			weight = 3.47
 			slot_flags = SLOT_SHOULDER
 			firemodes = list(
@@ -852,7 +1056,7 @@
 			w_class = 3
 			sel_mode = 1
 			full_auto = TRUE
-			fire_sound = 'sound/weapons/mosin_shot.ogg'
+			fire_sound = 'sound/weapons/guns/fire/rifle.ogg'
 			weight = 3.47
 			slot_flags = SLOT_SHOULDER
 			firemodes = list(
@@ -917,7 +1121,7 @@
 			item_state = "shotgun-f"
 			stat = "rifle"
 			gun_type = GUN_TYPE_SHOTGUN
-			fire_sound = 'sound/weapons/guns/fire/shotgun_fire.ogg'
+			fire_sound = 'sound/weapons/guns/fire/shotgun.ogg'
 			// 15% more accurate than SMGs
 			accuracy_list = list(
 
@@ -983,7 +1187,7 @@
 		if ("Internal Magazine")
 			handle_casings = EJECT_CASINGS
 			load_method = SINGLE_CASING | SPEEDLOADER
-			load_shell_sound = 'sound/weapons/clip_reload.ogg'
+			load_shell_sound = 'sound/weapons/guns/interact/clip_reload.ogg'
 			max_shells = 5
 			magazine_type = /obj/item/ammo_magazine/emptyclip
 		if ("Internal Magazine (Removable)")
@@ -997,7 +1201,7 @@
 		if ("Tubular")
 			handle_casings = EJECT_CASINGS
 			load_method = SINGLE_CASING
-			load_shell_sound = 'sound/weapons/clip_reload.ogg'
+			load_shell_sound = 'sound/weapons/guns/interact/clip_reload.ogg'
 			max_shells = 8
 			slot_flags &= ~SLOT_HOLSTER
 		if ("Revolving")
@@ -1077,24 +1281,27 @@
 		if (FM.fire_delay == -1)
 			FM.fire_delay = fire_delay
 /obj/item/weapon/gun/projectile/custom/update_icon()
-	if (stock_type == "Folding Stock")
-		if (!folded)
-			stock_img = image("icon" = src.icon, "icon_state" = "[src.stock_type]")
+	if (!override_sprite)
+		if (stock_type == "Folding Stock")
+			if (!folded)
+				stock_img = image("icon" = src.icon, "icon_state" = "[src.stock_type]")
+			else
+				stock_img = image("icon" = src.icon, "icon_state" = "none")
+		if (feeding_type == "Open (Belt-Fed)" || feeding_type == "External Magazine" || feeding_type == "Large External Magazine")
+			if (ammo_magazine)
+				feeding_img = image("icon" = src.icon, "icon_state" = "[src.feeding_type]_loaded")
+			else
+				feeding_img = image("icon" = src.icon, "icon_state" = "[src.feeding_type]_unloaded")
 		else
-			stock_img = image("icon" = src.icon, "icon_state" = "none")
-	if (feeding_type == "Open (Belt-Fed)" || feeding_type == "External Magazine" || feeding_type == "Large External Magazine")
-		if (ammo_magazine)
-			feeding_img = image("icon" = src.icon, "icon_state" = "[src.feeding_type]_loaded")
-		else
-			feeding_img = image("icon" = src.icon, "icon_state" = "[src.feeding_type]_unloaded")
+			feeding_img = image("icon" = src.icon, "icon_state" = "none")
+		overlays.Cut()
+		overlays += stock_img
+		overlays += barrel_img
+		overlays += receiver_img
+		overlays += feeding_img
+		update_held_icon()
 	else
-		feeding_img = image("icon" = src.icon, "icon_state" = "none")
-	overlays.Cut()
-	overlays += stock_img
-	overlays += barrel_img
-	overlays += receiver_img
-	overlays += feeding_img
-	update_held_icon()
+		..()
 
 
 
@@ -1116,7 +1323,7 @@
 
 /obj/item/weapon/gun/projectile/custom/handle_post_fire()
 	..()
-
+	var/reverse_health_percentage = (1-(health/maxhealth)+0.25)*100
 	if (receiver_type == "Semi-Auto (large)" || receiver_type == "Semi-Auto (small)" )
 		if (world.time - last_fire > 50)
 			jamcheck = 0
@@ -1126,7 +1333,7 @@
 			else
 				jamcheck += 0.6
 
-		if (prob(jamcheck))
+		if (prob(jamcheck*reverse_health_percentage))
 			jammed_until = max(world.time + (jamcheck * 4), 40)
 			jamcheck = 0
 
@@ -1151,7 +1358,7 @@
 		else
 			++jamcheck
 
-		if (prob(jamcheck))
+		if (prob(jamcheck*reverse_health_percentage))
 			jammed_until = max(world.time + (jamcheck * 5), 50)
 			jamcheck = 0
 		if (blackpowder)
@@ -1170,7 +1377,7 @@
 			else
 				jamcheck += 0.3
 
-		if (prob(jamcheck))
+		if (prob(jamcheck*reverse_health_percentage))
 			jammed_until = max(world.time + (jamcheck * 4), 45)
 			jamcheck = 0
 
@@ -1184,7 +1391,7 @@
 			else
 				jamcheck += 0.6
 
-		if (prob(jamcheck))
+		if (prob(jamcheck*reverse_health_percentage))
 			jammed_until = max(world.time + (jamcheck * 5), 50)
 			jamcheck = 0
 
@@ -1211,7 +1418,7 @@
 		bolt_open = !bolt_open
 		if (bolt_open)
 			if (chambered)
-				playsound(loc, 'sound/weapons/bolt_open.ogg', 50, TRUE)
+				playsound(loc, 'sound/weapons/guns/interact/bolt_open.ogg', 50, TRUE)
 				user << "<span class='notice'>You work the bolt open, ejecting [chambered]!</span>"
 				chambered.loc = get_turf(src)
 				chambered.randomrotation()
@@ -1222,10 +1429,10 @@
 						check_bolt_lock++
 						user << "<span class='notice'>The bolt is locked!</span>"
 			else
-				playsound(loc, 'sound/weapons/bolt_open.ogg', 50, TRUE)
+				playsound(loc, 'sound/weapons/guns/interact/bolt_open.ogg', 50, TRUE)
 				user << "<span class='notice'>You work the bolt open.</span>"
 		else
-			playsound(loc, 'sound/weapons/bolt_close.ogg', 50, TRUE)
+			playsound(loc, 'sound/weapons/guns/interact/bolt_close.ogg', 50, TRUE)
 			user << "<span class='notice'>You work the bolt closed.</span>"
 			bolt_open = FALSE
 		add_fingerprint(user)
@@ -1321,7 +1528,7 @@
 
 /obj/item/weapon/gun/projectile/custom/proc/pump(mob/M as mob)
 	if (receiver_type == "Pump-Action")
-		playsound(M, 'sound/weapons/shotgunpump.ogg', 60, TRUE)
+		playsound(M, 'sound/weapons/guns/interact/shotgun_pump.ogg', 60, TRUE)
 
 		if (chambered)//We have a shell in the chamber
 			chambered.loc = get_turf(src)//Eject casing

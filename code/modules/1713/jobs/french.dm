@@ -15,9 +15,9 @@
 	is_officer = TRUE
 	is_commander = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 1
 
@@ -57,9 +57,9 @@
 	is_commander = TRUE
 	is_officer = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 1
 
@@ -90,18 +90,18 @@
 	return TRUE
 
 /datum/job/french/boatswain
-	title = "Chef déquipage"
+	title = "Chef dequipage"
 	en_meaning = "Head of Personnel Officer"
 	rank_abbreviation = "Chef deq."
 	head_position = TRUE
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRNBoatswain"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_commander = TRUE
 	is_officer = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -139,9 +139,9 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRNMidshipman"
 	is_officer = TRUE
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 10
 
@@ -156,7 +156,7 @@
 
 	H.equip_to_slot_or_del(new /obj/item/weapon/attachment/scope/adjustable/binoculars(H), slot_l_store)
 	H.equip_to_slot_or_del(new /obj/item/weapon/material/sword/spadroon(H), slot_belt)
-	H.add_note("Role", "You are a <b>[title]</b>, a petty officer in the ship. Organize your group according to the <b>Chef d'équipage</b> orders!")
+	H.add_note("Role", "You are a <b>[title]</b>, a petty officer in the ship. Organize your group according to the <b>Chef d'equipage</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
 	H.setStat("crafting", STAT_NORMAL)
 	H.setStat("rifle", STAT_NORMAL)
@@ -175,9 +175,10 @@
 	rank_abbreviation = "Chirurgien"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRNSurgeon"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+	is_medic = TRUE
+
+
 	min_positions = 1
 	max_positions = 10
 
@@ -212,9 +213,9 @@
 	rank_abbreviation = "Charpentier"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRNCarpenter"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 10
 
@@ -253,9 +254,9 @@
 	rank_abbreviation = "Cuisinier"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRNCook"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 10
 
@@ -302,9 +303,9 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN" //for testing!
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 6
 	max_positions = 200
 
@@ -352,11 +353,11 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePTCap"
 	is_officer = TRUE
-	SL_check_independent = TRUE
+
 	is_army = TRUE
 	is_commander = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -395,10 +396,10 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePTMidshipman"
 	is_officer = TRUE
-	SL_check_independent = TRUE
+
 	is_army = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 2
 	max_positions = 20
 
@@ -434,10 +435,11 @@
 	rank_abbreviation = "Doc."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePTSurgeon"
-	SL_check_independent = TRUE
+
+	is_medic = TRUE
 	is_army = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 6
 
@@ -472,10 +474,10 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePT"
-	SL_check_independent = TRUE
+
 	is_army = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 12
 	max_positions = 100
 
@@ -512,10 +514,10 @@
 	rank_abbreviation = "Cha."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePT"
-	SL_check_independent = TRUE
+
 	is_army = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 4
 	max_positions = 20
 
@@ -548,7 +550,7 @@
 
 ////////////////////////////WW1///////////////////////
 /datum/job/french/ww1captain
-	title = "Capitaine de le Armée"
+	title = "Capitaine de le Armee"
 	en_meaning = "Army Captain"
 	rank_abbreviation = "Cap."
 	head_position = TRUE
@@ -557,10 +559,10 @@
 	is_officer = TRUE
 	is_commander = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_ww1 = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -596,19 +598,19 @@
 	return TRUE
 
 /datum/job/french/ww1lieutenant
-	title = "Lieutenant de le Armée"
+	title = "Lieutenant de le Armee"
 	en_meaning = "1st Lieutenant"
 	rank_abbreviation = "Lt."
 	head_position = TRUE
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRNCap"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_commander = TRUE
 	is_officer = TRUE
 	is_ww1 = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -644,19 +646,19 @@
 
 
 /datum/job/french/ww1second_lieutenant
-	title = "Sous-Lieutenant de le Armée"
+	title = "Sous-Lieutenant de le Armee"
 	en_meaning = "2nd Lieutenant"
 	rank_abbreviation = "Slt."
 	head_position = TRUE
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRNCap"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_commander = TRUE
 	is_officer = TRUE
 	is_ww1 = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -692,16 +694,17 @@
 
 
 /datum/job/french/ww1sergeant
-	title = "Sergeant de le Armée"
+	title = "Sergeant de le Armee"
 	en_meaning = "Squad Leader"
 	rank_abbreviation = "Sgt."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN"
 	is_officer = TRUE
-	SL_check_independent = TRUE
+	is_squad_leader = TRUE
+	uses_squads = TRUE
 	is_ww1 = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 10
 
@@ -737,15 +740,16 @@
 	return TRUE
 
 /datum/job/french/ww1doctor
-	title = "Docteur de le Armée"
+	title = "Docteur de le Armee"
 	en_meaning = "Doctor"
 	rank_abbreviation = "Dr."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRNSurgeon"
-	SL_check_independent = TRUE
+
+	is_medic = TRUE
 	is_ww1 = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 10
 
@@ -779,15 +783,16 @@
 	return TRUE
 
 /datum/job/french/ww1shocktroop
-	title = "Chasseur Léger"
+	title = "Chasseur Leger"
 	en_meaning = "Shock Troop"
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN" //for testing!
-	SL_check_independent = TRUE
+	uses_squads = TRUE
+
 	is_ww1 = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 6
 	max_positions = 200
 
@@ -826,10 +831,11 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN" //for testing!
-	SL_check_independent = TRUE
+	uses_squads = TRUE
+
 	is_ww1 = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 12
 	max_positions = 400
 

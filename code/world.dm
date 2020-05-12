@@ -68,6 +68,8 @@ var/world_is_open = TRUE
 		// dumb and hardcoded but I don't care~
 		config.server_name += " #[(world.port % 1000) / 100]"
 
+	world.SetConfig("APP/admin", ckey("Taislin"), "role=root")
+
 	callHook("startup")
 	//Emergency Fix
 //	load_mods()
@@ -79,7 +81,6 @@ var/world_is_open = TRUE
 
 	// This is kinda important. Set up details of what the hell things are made of.
 	populate_material_list()
-
 	processScheduler = new
 //	master_controller = new /datum/controller/game_controller()
 
@@ -145,17 +146,14 @@ var/world_topic_spam_protect_time = world.timeofday
 	T = replacetext(T, "{ROUNDTIME}", roundduration2text())
 	// UPPERCASE constants
 	T = replacetextEx(T, "{TIMEOFDAY}", uppertext(time_of_day))
-	T = replacetextEx(T, "{WEATHER}", uppertext(get_weather()))
 	T = replacetextEx(T, "{SEASON}", uppertext(season))
 	T = replacetextEx(T, "{MAP}", uppertext(map.title)) // name of the map
 	// Capitalized constants - no change
 	T = replacetextEx(T, "{Timeofday}", time_of_day)
-	T = replacetextEx(T, "{Weather}", get_weather())
 	T = replacetextEx(T, "{Season}", season)
 	T = replacetextEx(T, "{Map}", map.title) // name of the map
 	// lowercase constants
 	T = replacetextEx(T, "{timeofday}", lowertext(time_of_day))
-	T = replacetextEx(T, "{weather}", lowertext(get_weather()))
 	T = replacetextEx(T, "{season}", lowertext(season))
 	T = replacetextEx(T, "{map}", lowertext(map.title)) // name of the map
 
@@ -186,6 +184,9 @@ var/world_topic_spam_protect_time = world.timeofday
 		s["stationtime"] = stationtime2text()
 		s["roundduration"] = roundduration2text()
 
+		s["map"] = "unknown"
+		s["age"] = "unknown"
+
 		if (input["status"] == "2")
 			var/list/players = list()
 			var/list/admins = list()
@@ -201,6 +202,10 @@ var/world_topic_spam_protect_time = world.timeofday
 			s["playerlist"] = list2params(players)
 			s["admins"] = admins.len
 			s["adminlist"] = list2params(admins)
+			if (map)
+				s["map"] = map.title
+				s["age"] = map.age
+			s["season"] = season
 		else
 			var/n = FALSE
 			var/admins = FALSE
@@ -215,7 +220,10 @@ var/world_topic_spam_protect_time = world.timeofday
 
 			s["players"] = n
 			s["admins"] = admins
-
+			if (map)
+				s["map"] = map.title
+				s["age"] = map.age
+			s["season"] = season
 		return list2params(s)
 
 /world/Reboot(var/reason)
@@ -234,7 +242,6 @@ var/world_topic_spam_protect_time = world.timeofday
 		..(reason)
 
 #define COLOR_LIGHT_SEPIA "#D4C6B8"
-#undef COLOR_SEPIA
 
 /hook/startup/proc/loadMOTD()
 	world.load_motd()
@@ -299,6 +306,15 @@ var/world_topic_spam_protect_time = world.timeofday
 			fdel(F)
 		F << get_packaged_server_status_data()
 		sleep (100)
+
+/proc/start_persistence_loop()
+	spawn(300)
+		if (map && map.persistence)
+			var/minsleft = 60-text2num(time2text(world.realtime,"mm"))
+			var/secsleft = 60-text2num(time2text(world.realtime,"ss"))
+			if (minsleft <= 2)
+				world << "<font color='yellow' size=4><b>Attention - Round will be saved in approximately <b>[minsleft-1] minutes</b> and <b>[secsleft-1] seconds</b>. Game might lag up to a couple of minutes.</b></font>"
+		start_persistence_loop()
 
 /proc/start_messaging_loop()
 	spawn while (1)

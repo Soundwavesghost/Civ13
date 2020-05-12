@@ -24,8 +24,8 @@
 
 	var/prob_of_weather_mod = ((((1/mod_weather_interval) * 10) / 2) * 100) * schedule_interval/20
 	var/prob_of_weather_change = ((((1/change_weather_interval) * 10) / 2) * 100) * schedule_interval/20
-	if (weather == WEATHER_RAIN || weather == WEATHER_STORM || weather == WEATHER_BLIZZARD || weather == WEATHER_SANDSTORM)
-		prob_of_weather_change = (prob_of_weather_change*2)
+	if (weather == WEATHER_WET || weather == WEATHER_EXTREME)
+		prob_of_weather_change = (prob_of_weather_change*3)
 	if (prob(prob_of_weather_mod))
 		if (world.realtime >= next_can_mod_weather)
 			modify_weather_somehow()
@@ -33,7 +33,7 @@
 	else if (prob(prob_of_weather_change))
 		if (world.realtime >= next_can_change_weather)
 			change_weather_somehow()
-			next_can_change_weather = world.realtime + minimum_change_weather_delay
+		next_can_change_weather = world.realtime + minimum_change_weather_delay
 	if ((season == "WINTER" && map.triggered_blizzard) && !map.blizzard)
 		if (prob(1) || map.triggered_blizzard)
 			if(prob(50) || map.triggered_blizzard)
@@ -41,7 +41,7 @@
 				map.triggered_blizzard = FALSE
 				spawn(600)
 					map.blizzard = TRUE
-					change_weather(WEATHER_BLIZZARD)
+					change_weather(WEATHER_EXTREME)
 					//world << "<big>The blizzard is in full force!</big>"
 					spawn(rand(2400,3600))
 						map.blizzard = FALSE
@@ -74,7 +74,7 @@
 				map.triggered_sandstorm = FALSE
 				spawn(600)
 					map.sandstorm = TRUE
-					change_weather(WEATHER_SANDSTORM)
+					change_weather(WEATHER_EXTREME)
 					//world << "<big>A sandstorm has arrived in this area!</big>"
 					spawn(rand(3000,3600))
 						map.sandstorm = FALSE

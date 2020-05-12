@@ -3,7 +3,7 @@
  */
 /obj/item/weapon/tray
 	name = "tray"
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food/food.dmi'
 	icon_state = "tray"
 	desc = "A metal tray to lay food on."
 	force = WEAPON_FORCE_NORMAL
@@ -12,7 +12,6 @@
 	throw_range = 5
 	w_class = 3.0
 	flags = CONDUCT
-	matter = list(DEFAULT_WALL_MATERIAL = 3000)
 	var/list/carrying = list() // List of things on the tray. - Doohl
 	var/max_carry = 10
 
@@ -31,7 +30,7 @@
 						sleep(rand(2,4))
 
 
-	var/mob/living/carbon/human/H = M      ///////////////////////////////////// /Let's have this ready for later.
+	var/mob/living/carbon/human/H = M	  ///////////////////////////////////// /Let's have this ready for later.
 
 
 	if (!(user.targeted_organ == ("eyes" || "head"))) //////////////hitting anything else other than the eyes
@@ -39,7 +38,7 @@
 			add_blood(H)
 			var/turf/location = H.loc
 			if (istype(location, /turf))
-				location.add_blood(H)     ///Plik plik, the sound of blood
+				location.add_blood(H)	 ///Plik plik, the sound of blood
 
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [name] by [user.name] ([user.ckey])</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to attack [M.name] ([M.ckey])</font>")
@@ -78,7 +77,7 @@
 			if (H.head)
 				H.head.add_blood(H)
 			var/turf/location = H.loc
-			if (istype(location, /turf))     //Addin' blood! At least on the floor and item :v
+			if (istype(location, /turf))	 //Addin' blood! At least on the floor and item :v
 				location.add_blood(H)
 
 		if (prob(50))

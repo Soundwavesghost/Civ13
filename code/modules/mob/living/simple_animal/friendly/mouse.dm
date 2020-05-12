@@ -12,7 +12,7 @@
 	emote_see = list("runs in a circle", "shakes", "scritches at something")
 	pass_flags = PASSTABLE
 	speak_chance = TRUE
-	turns_per_move = 5
+	move_to_delay = 5
 	see_in_dark = 6
 	maxHealth = 5
 	health = 5
@@ -36,6 +36,9 @@
 	can_pull_mobs = MOB_PULL_NONE
 	granivore = 1
 	scavenger = 1
+	behaviour = "defends"
+	melee_damage_lower = 2
+	melee_damage_upper = 5
 
 /mob/living/simple_animal/mouse/New()
 	..()
@@ -50,17 +53,17 @@
 
 	if(body_color == "black")
 		if(map.ordinal_age == 2 || map.ordinal_age == 3) //Approx epochs where black plague was a thing.
-			if(prob(0.50))
+			if(prob(50))
 				plaguemouse = TRUE
 		else
-			if(prob(0.25))
+			if(prob(25))
 				plaguemouse = TRUE
 	else
 		if(map.ordinal_age == 2 || map.ordinal_age == 3) //Approx epochs where black plague was a thing.
-			if(prob(0.10))
+			if(prob(10))
 				plaguemouse = TRUE
 		else
-			if(prob(0.05))
+			if(prob(5))
 				plaguemouse = TRUE
 
 /mob/living/simple_animal/mouse/proc/splat()
@@ -84,16 +87,26 @@
 	if ( ishuman(AM) )
 		if (!stat)
 			var/mob/living/carbon/human/M = AM
+			var/dmod = 1
+			if (find_trait("Weak Immune System"))
+				dmod = 2
 			M << "<span class = 'notice'>\icon[src] Squeek!</span>"
 			M << 'sound/effects/mousesqueek.ogg'
-			if(plaguemouse && prob(0.02))
-				M.reagents.add_reagent("plague", 0.15)
-			else if((plaguemouse && prob(0.03)) && (map.ordinal_age == 2 || map.ordinal_age == 3)) //2 percent chance because of if-else logic,
-				M.reagents.add_reagent("plague", 0.15)
-			else if(plaguemouse && body_color == "black" && prob(0.04)) //prob is 3 percent.
-				M.reagents.add_reagent("plague", 0.25)
-			else if((plaguemouse && body_color == "black" && prob(0.05)) && (map.ordinal_age == 2 || map.ordinal_age == 3)) //four percent chance kinda
-				M.reagents.add_reagent("plague", 0.25)
+			target_mob = M
+			stance = HOSTILE_STANCE_ATTACK
+			stance_step = 6
+			if(plaguemouse && prob(2*dmod))
+				M.disease = TRUE
+				M.disease_type = "plague"
+			else if((plaguemouse && prob(0.03*dmod)) && (map.ordinal_age == 2 || map.ordinal_age == 3)) //2 percent chance because of if-else logic,
+				M.disease = TRUE
+				M.disease_type = "plague"
+			else if(plaguemouse && body_color == "black" && prob(4*dmod)) //prob is 3 percent.
+				M.disease = TRUE
+				M.disease_type = "plague"
+			else if((plaguemouse && body_color == "black" && prob(5*dmod)) && (map.ordinal_age == 2 || map.ordinal_age == 3)) //four percent chance kinda
+				M.disease = TRUE
+				M.disease_type = "plague"
 	..()
 
 /mob/living/simple_animal/mouse/death()
@@ -138,6 +151,9 @@
 /mob/living/simple_animal/mouse/black
 	body_color = "black"
 	icon_state = "mouse_black"
+
+/mob/living/simple_animal/mouse/black/plague
+	plaguemouse = TRUE
 
 //TOM IS ALIVE! SQUEEEEEEEE~K :)
 /mob/living/simple_animal/mouse/brown/Tom

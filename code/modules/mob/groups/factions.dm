@@ -17,6 +17,8 @@
 	verbs += /mob/living/carbon/human/proc/create_religion
 	verbs += /mob/living/carbon/human/proc/abandon_religion
 	verbs += /mob/living/carbon/human/proc/clergy
+	verbs += /mob/living/carbon/human/proc/create_company
+	verbs += /mob/living/carbon/human/proc/transfer_company_stock
 
 /mob/living/carbon/human/proc/make_businessman()
 	verbs += /mob/living/carbon/human/proc/create_company
@@ -37,16 +39,18 @@
 		U = src
 	else
 		return
+
 	if (map.nomads == TRUE)
 		if (U.civilization != "none")
 			usr << "<span class='danger'>You are already in a faction. Abandon it first.</span>"
 			return
 		else
 			var/choosename = russian_to_cp1251(input(src, "Choose a name for the faction:") as text|null)
-			create_faction_pr(choosename)
-			make_commander()
-			make_title_changer()
-			return
+			if (choosename != null && choosename != "")
+				create_faction_pr(choosename)
+				make_commander()
+				make_title_changer()
+				return
 	else
 		usr << "<span class='danger'>You cannot create a faction in this map.</span>"
 		return
@@ -71,7 +75,7 @@
 			return
 		else
 			choosecolor1 = uppertext(choosecolor1)
-			if (lentext(choosecolor1) != 6)
+			if (length(choosecolor1) != 6)
 				return
 			var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 			for (var/i = 1, i <= 6, i++)
@@ -89,7 +93,7 @@
 			return
 		else
 			choosecolor2 = uppertext(choosecolor2)
-			if (lentext(choosecolor2) != 6)
+			if (length(choosecolor2) != 6)
 				return
 			var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 			for (var/i = 1, i <= 6, i++)
@@ -105,7 +109,8 @@
 		H.leader = TRUE
 		H.faction_perms = list(1,1,1,1)
 		map.custom_faction_nr += newname
-		var/newnamev = list("[newname]" = list(map.default_research,map.default_research,map.default_research,H,0,choosesymbol,choosecolor1,choosecolor2))
+												//ind						mil					med			leader money	symbol	main color	backcolor, sales tax, business tax
+		var/newnamev = list("[newname]" = list(map.default_research,map.default_research,map.default_research,H,0,choosesymbol,choosecolor1,choosecolor2,10,10))
 		map.custom_civs += newnamev
 		usr << "<big>You are now the leader of the <b>[newname]</b> faction.</big>"
 		return
@@ -127,20 +132,31 @@
 			usr << "You are not part of any faction."
 			return
 		else
-			if (WWinput(src, "Are you sure you want to leave your faction?", "", "Stay in faction", list("Leave", "Stay in faction")) == "Stay in faction")
+			var/confirmation = WWinput(src, "Are you sure you want to leave your faction? You won't be able to re-join it for 24 hours, and everyone will know you're a former member.", "", "Stay in faction", list("Leave", "Stay in faction"))
+			if (confirmation == "Stay in faction")
 				return
-			if (map.custom_civs[U.civilization][4] != null)
-				if (map.custom_civs[U.civilization][4].real_name == U.real_name)
-					map.custom_civs[U.civilization][4] = null
-			U.civilization = "none"
-			U.leader = FALSE
-			U.faction_perms = list(0,0,0,0)
-			usr << "You left your faction. You are now a Nomad."
-			remove_commander()
+			else
+				faction_leaving_proc()
 	else
 		usr << "<span class='danger'>You cannot leave a faction in this map.</span>"
 		return
 
+
+/mob/living/carbon/human/proc/faction_leaving_proc()
+	if (civilization == null || civilization == "none")
+		return FALSE
+	left_factions += list(list(civilization,world.realtime+864000)) //24 hours
+	if (map.custom_civs[civilization][4] != null)
+		if (map.custom_civs[civilization][4].real_name == real_name)
+			map.custom_civs[civilization][4] = null
+	civilization = "none"
+	name = replacetext(real_name,"[title] ","")
+	title = ""
+	leader = FALSE
+	faction_perms = list(0,0,0,0)
+	src << "You left your faction. You are now a Nomad."
+	remove_commander()
+	return TRUE
 
 /mob/living/carbon/human/proc/transfer_faction()
 	set name = "Transfer Faction Leadership"
@@ -248,7 +264,7 @@
 							return
 						else
 							U.title = inp
-							U.fully_replace_character_name(U.real_name,"[U.title] [U.name]")
+							U.name = "[U.title] [U.name]"
 							usr << "[src] is now a [U.title]."
 							return
 	else

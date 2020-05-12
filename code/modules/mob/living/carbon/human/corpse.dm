@@ -101,6 +101,115 @@ mob/living/carbon/human/corpse/british_sailor
 		spawn (50) // must be here or they won't spawn, it seems - Kachnov
 			death()
 
+/mob/living/carbon/human/corpse/japanese_ww2
+	gender = MALE
+
+/mob/living/carbon/human/corpse/japanese_ww2/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "Nitohei")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(6,7))
+		name = "Japanese Soldier"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/japanese_ww2_antitank
+	gender = MALE
+
+/mob/living/carbon/human/corpse/japanese_ww2_antitank/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "Nitohei Taisen-sha")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(6,7))
+		name = "Japanese Soldier"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/ww2_jap_sl
+	gender = MALE
+
+/mob/living/carbon/human/corpse/ww2_jap_sl/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "IJA Gunso")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(6,7))
+		name = "Japanese Sergeant"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/ww2_jap_medic
+	gender = MALE
+
+/mob/living/carbon/human/corpse/ww2_jap_medic/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "Sento-i")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(6,7))
+		name = "Japanese Medic"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/ww2_jap_mg
+	gender = MALE
+
+/mob/living/carbon/human/corpse/ww2_jap_mg/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "Taiho")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(6,7))
+		name = "Japanese Machinegunner"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
 /mob/living/carbon/human/corpse/russian
 	gender = MALE
 
@@ -119,6 +228,72 @@ mob/living/carbon/human/corpse/british_sailor
 		dir = pick(NORTH,SOUTH,EAST,WEST)
 		adjustBruteLoss(rand(6,7))
 		name = "Russian Soldier"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/russian_soviet
+	gender = MALE
+
+/mob/living/carbon/human/corpse/russian_soviet/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "K.A. Soldat")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(6,7))
+		name = "Russian Soldier"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/russian_soviet_sgt
+	gender = MALE
+
+/mob/living/carbon/human/corpse/russian_soviet_sgt/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "K.A. Serjant")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(6,7))
+		name = "Russian Sergeant"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+mob/living/carbon/human/corpse/russian_soviet_tanker
+	gender = MALE
+
+/mob/living/carbon/human/corpse/russian_soviet_tanker/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "Tankist")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(6,7))
+		name = "Russian Tanker"
 		invisibility = 0
 		spawn (50) // must be here or they won't spawn, it seems - Kachnov
 			death()
@@ -199,3 +374,202 @@ mob/living/carbon/human/corpse/british_sailor
 	icon_state = "body_m_giant"
 	spawn (50) // must be here or they won't spawn, it seems - Kachnov
 		death()
+
+/mob/living/carbon/human/corpse/prisoner
+	gender = MALE
+
+/mob/living/carbon/human/corpse/prisoner/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "DO NOT USE")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(6,7))
+		name = "Escaped Prisoner"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/bandit
+	gender = MALE
+	h_style = "Fade"
+
+/mob/living/carbon/human/corpse/bandit/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "Bandit")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(30,45))
+		name = "Bandit"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/pmc
+	gender = MALE
+
+/mob/living/carbon/human/corpse/pmc/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "Bandit")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(30,45))
+		name = "pmc"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/ww2_american
+	gender = MALE
+
+/mob/living/carbon/human/corpse/ww2_american/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "US Rifleman")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(30,45))
+		name = "American Soldier"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/ww2_american_medic
+	gender = MALE
+
+/mob/living/carbon/human/corpse/ww2_american_medic/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "US Field Medic")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(30,45))
+		name = "American Medic"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/ww2_american_sl
+	gender = MALE
+
+/mob/living/carbon/human/corpse/ww2_american_sl/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "US Sergeant")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(30,45))
+		name = "American Sergeant"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/ww2_american_mg
+	gender = MALE
+
+/mob/living/carbon/human/corpse/ww2_american_mg/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "US Machine Gunner")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(30,45))
+		name = "American Machinegunner"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/beggar
+	gender = MALE
+
+/mob/living/carbon/human/corpse/beggar/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "Beggar")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(30,45))
+		name = "Beggar"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()
+
+/mob/living/carbon/human/corpse/beggar_f
+	gender = FEMALE
+
+/mob/living/carbon/human/corpse/beggar_f/New()
+	..()
+	icon_state = "human_m_s"
+	var/spawntime = 0
+	invisibility = 101
+	if (!job_master)
+		spawntime = 5
+	spawn (spawntime)
+		if (!job_master)
+			qdel(src)
+			return
+		job_master.EquipRank(src, "Beggar")
+		dir = pick(NORTH,SOUTH,EAST,WEST)
+		adjustBruteLoss(rand(30,45))
+		name = "Beggar"
+		invisibility = 0
+		spawn (50) // must be here or they won't spawn, it seems - Kachnov
+			death()

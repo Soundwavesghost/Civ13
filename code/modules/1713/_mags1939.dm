@@ -2,7 +2,7 @@
 	name = "clip (7.7x58mm)"
 	icon_state = "kclip"
 	caliber = "a77x58"
-	matter = list(DEFAULT_WALL_MATERIAL = 360)
+
 	ammo_type = /obj/item/ammo_casing/a77x58
 	max_ammo = 5
 	weight = 0.038
@@ -15,15 +15,26 @@
 	mag_type = MAGAZINE
 	caliber = "a77x58"
 	w_class = 3
-	matter = list(DEFAULT_WALL_MATERIAL = 4500)
+
 	ammo_type = /obj/item/ammo_casing/a77x58
 	max_ammo = 50
 	multiple_sprites = FALSE
 	is_box = TRUE
 
+/obj/item/ammo_magazine/arisaka99_training
+	name = "clip (7.7x58mm)"
+	icon_state = "kclip"
+	caliber = "a77x58_wood"
+
+	ammo_type = /obj/item/ammo_casing/a77x58_wood
+	max_ammo = 5
+	weight = 0.038
+	multiple_sprites = TRUE
+	clip = TRUE
+
 obj/item/ammo_magazine/type100
-	name = "Type-100 magazine"
-	icon_state = "madsen"
+	name = "Type 100 Magazine"
+	icon_state = "pps"
 	mag_type = MAGAZINE
 	caliber = "c8mmnambu"
 	ammo_type = /obj/item/ammo_casing/c8mmnambu
@@ -32,7 +43,7 @@ obj/item/ammo_magazine/type100
 	multiple_sprites = TRUE
 
 obj/item/ammo_magazine/type99
-	name = "Type-99 magazine"
+	name = "Type-99 Magazine"
 	icon_state = "type99"
 	mag_type = MAGAZINE
 	caliber = "a77x58"
@@ -45,11 +56,11 @@ obj/item/ammo_magazine/type99
 	name = "Type 92 ammo belt"
 	icon_state = "maximbelt"
 	mag_type = MAGAZINE
-	caliber = "a77x58_weak"
+	caliber = "a77x58"
 	w_class = 4
-	matter = list(DEFAULT_WALL_MATERIAL = 4500)
-	ammo_type = /obj/item/ammo_casing/a77x58/weak
-	max_ammo = 250
+
+	ammo_type = /obj/item/ammo_casing/a77x58
+	max_ammo = 30
 	multiple_sprites = TRUE
 	var/slot = "decor"
 	var/obj/item/clothing/under/has_suit = null		//the suit the tie may be attached to
@@ -103,17 +114,17 @@ obj/item/ammo_magazine/type99
 	mag_type = MAGAZINE
 	caliber = "a762x25"
 	ammo_type = /obj/item/ammo_casing/a762x25
-	max_ammo = 71
+	max_ammo = 65
 	weight = 1.3
 	multiple_sprites = TRUE
 
 obj/item/ammo_magazine/dp
-	name = "DP disk (7.62x54mmR)"
+	name = "DP pan (7.62x54mmR)"
 	icon_state = "dpdisk"
 	mag_type = MAGAZINE
 	caliber = "a762x54_weak"
 	ammo_type = /obj/item/ammo_casing/a762x54/weak
-	max_ammo = 60
+	max_ammo = 47
 	weight = 0.40
 	multiple_sprites = FALSE
 
@@ -132,19 +143,30 @@ obj/item/ammo_magazine/dp
 	icon_state = "g43"
 	caliber = "a792x57"
 	mag_type = MAGAZINE
-	matter = list(DEFAULT_WALL_MATERIAL = 360)
+
 	ammo_type = /obj/item/ammo_casing/a792x57
 	max_ammo = 10
 	weight = 0.32
 	multiple_sprites = TRUE
 
-/obj/item/ammo_magazine/avtomat
-	name = "avtomat magazine (7.62x54mm)"
+/obj/item/ammo_magazine/svd
+	name = "SVD magazine (7.62x54mmR)"
 	icon_state = "g43"
 	caliber = "a762x54"
 	mag_type = MAGAZINE
-	matter = list(DEFAULT_WALL_MATERIAL = 360)
+
 	ammo_type = /obj/item/ammo_casing/a762x54
+	max_ammo = 10
+	weight = 0.32
+	multiple_sprites = TRUE
+
+/obj/item/ammo_magazine/avtomat
+	name = "avtomat magazine (6.5x50mm)"
+	icon_state = "g43"
+	caliber = "a65x50"
+	mag_type = MAGAZINE
+
+	ammo_type = /obj/item/ammo_casing/a65x50
 	max_ammo = 25
 	weight = 0.44
 	multiple_sprites = TRUE
@@ -154,7 +176,7 @@ obj/item/ammo_magazine/dp
 	icon_state = "svt"
 	caliber = "a762x54"
 	mag_type = MAGAZINE
-	matter = list(DEFAULT_WALL_MATERIAL = 360)
+
 	ammo_type = /obj/item/ammo_casing/a762x54
 	max_ammo = 10
 	weight = 0.3
@@ -165,7 +187,6 @@ obj/item/ammo_magazine/dp
 	icon_state = "m1911"
 	mag_type = MAGAZINE
 	ammo_type = /obj/item/ammo_casing/a45acp
-	matter = list(DEFAULT_WALL_MATERIAL = 525) //metal costs are very roughly based around TRUE .45 casing = 75 metal
 	caliber = "a45acp"
 	max_ammo = 7
 	multiple_sprites = TRUE
@@ -174,12 +195,11 @@ obj/item/ammo_magazine/dp
 	stored_ammo.Cut()
 
 /obj/item/ammo_magazine/tt30
-	name = "TT30 magazine (7.62x25mm)"
+	name = "TT-33 magazine (7.62x25mm)"
 	icon_state = "m1911"
 	mag_type = MAGAZINE
-	ammo_type = /obj/item/ammo_casing/a765x25
-	matter = list(DEFAULT_WALL_MATERIAL = 525) //metal costs are very roughly based around TRUE .45 casing = 75 metal
-	caliber = "a765x25"
+	ammo_type = /obj/item/ammo_casing/a762x25
+	caliber = "a762x25"
 	max_ammo = 8
 	multiple_sprites = TRUE
 /obj/item/ammo_magazine/tt30/empty/New()
@@ -191,7 +211,7 @@ obj/item/ammo_magazine/dp
 	name = "clip (30-06) 8 rounds"
 	icon_state = "clip"
 	caliber = "a3006"
-	matter = list(DEFAULT_WALL_MATERIAL = 360)
+
 	ammo_type = /obj/item/ammo_casing/a3006
 	max_ammo = 8
 	weight = 0.038
@@ -202,7 +222,7 @@ obj/item/ammo_magazine/dp
 	name = "clip (30-06)"
 	icon_state = "clip"
 	caliber = "a3006"
-	matter = list(DEFAULT_WALL_MATERIAL = 360)
+
 	ammo_type = /obj/item/ammo_casing/a3006
 	max_ammo = 5
 	weight = 0.038
@@ -210,10 +230,10 @@ obj/item/ammo_magazine/dp
 	clip = TRUE
 
 /obj/item/ammo_magazine/bar
-	name = "magazine (30-06)"
+	name = "BAR magazine (30-06)"
 	icon_state = "bar"
 	caliber = "a3006_weak"
-	matter = list(DEFAULT_WALL_MATERIAL = 360)
+
 	ammo_type = /obj/item/ammo_casing/a3006/weak
 	max_ammo = 20
 	weight = 0.038
@@ -221,11 +241,10 @@ obj/item/ammo_magazine/dp
 	multiple_sprites = TRUE
 
 /obj/item/ammo_magazine/thompson
-	name = "Thomspon magazine (.45)"
+	name = "Thompson magazine (.45)"
 	icon_state = "thompson"
+	caliber = "a45acp"
 	mag_type = MAGAZINE
 	ammo_type = /obj/item/ammo_casing/a45acp
-	matter = list(DEFAULT_WALL_MATERIAL = 525) //metal costs are very roughly based around TRUE .45 casing = 75 metal
-	caliber = "a45acp"
 	max_ammo = 20
 	multiple_sprites = TRUE

@@ -36,6 +36,41 @@
 
 	)
 
+/obj/structure/vending/capnball
+	name = "Cap n Ball weapon rack"
+	desc = "An assorted rack of Cap n Ball weapons."
+	icon_state = "apparel_rifles"
+	products = list(
+		/obj/item/weapon/gun/projectile/flintlock/springfield = 15,
+		/obj/item/weapon/gun/projectile/flintlock/springfield1795 = 5,
+		/obj/item/weapon/attachment/bayonet = 15,
+		/obj/item/weapon/shovel/trench = 15,
+	)
+
+/obj/structure/vending/confederate_apparel
+	name = "confederate apparel rack"
+	desc = "An assorted rack of confederate apparel."
+	icon_state = "apparel_confed"
+	products = list(
+		/obj/item/clothing/head/confederatecap = 15,
+		/obj/item/clothing/under/confederate_uniform/grey = 15,
+		/obj/item/clothing/under/confederate_uniform/grey_blue = 15,
+		/obj/item/clothing/head/confederatehat = 5,
+		/obj/item/clothing/accessory/storage/webbing/civil_war = 15,
+	)
+/obj/structure/vending/union_apparel
+	name = "union apparel rack"
+	desc = "An assorted rack of union apparel."
+	icon_state = "apparel_japan"
+	products = list(
+		/obj/item/clothing/head/unioncap = 15,
+		/obj/item/clothing/under/union_uniform = 15,
+		/obj/item/clothing/head/unionhat = 5,
+		/obj/item/clothing/head/unionhatlight = 5,
+		/obj/item/clothing/accessory/storage/webbing/civil_war = 15,
+
+	)
+
 /obj/structure/vending/britishapparel
 	name = "Royal Navy sailor clothes rack"
 	desc = "Basic wear for sailors of the Royal Navy."
@@ -121,8 +156,8 @@
 		/obj/item/clothing/suit/storage/coat/britishcoat = 15,
 		/obj/item/clothing/head/ww/britishcap = 15,
 		/obj/item/clothing/accessory/storage/webbing/ww1/british = 15,
-		/obj/item/clothing/head/helmet/ww/brodie = 15,
-		/obj/item/clothing/head/helmet/ww/brodie/khaki = 15,
+		/obj/item/clothing/head/helmet/ww/mk1brodieag = 15,
+	    /obj/item/clothing/head/helmet/ww/mk1brodiedeb = 15,
 		/obj/item/clothing/mask/gas/british = 15,
 		/obj/item/stack/medical/bruise_pack/bint = 10,
 		/obj/item/weapon/shovel/trench = 10,
@@ -176,6 +211,35 @@
 		/obj/item/weapon/reagent_containers/food/snacks/MRE/generic/japanese = 50,
 	)
 
+/obj/structure/vending/chineseweapons
+	name = "Chinese Weapon rack"
+	desc = "A rack of war equipment."
+	icon_state = "equipment_japan"
+	products = list(
+		/obj/item/weapon/gun/projectile/boltaction/gewehr98/karabiner98k/chinese = 15,
+		/obj/item/ammo_magazine/gewehr98box = 10,
+		/obj/item/ammo_magazine/gewehr98 = 50,
+		/obj/item/weapon/attachment/bayonet/military = 15,
+	)
+
+/obj/structure/vending/chineseapparel
+	name = "Chinese apparel rack"
+	desc = "Basic wear for soldiers of the Chinese Army."
+	icon_state = "apparel_china"
+	products = list(
+		/obj/item/clothing/shoes/heavyboots/wrappedboots = 15,
+		/obj/item/clothing/under/ww2/chiuni = 15,
+		/obj/item/clothing/under/ww2/chiuni2 = 15,
+		/obj/item/clothing/under/ww2/german = 15,
+		/obj/item/clothing/head/ww2/chicap = 15,
+		/obj/item/clothing/head/ww2/chicap2 = 15,
+		/obj/item/clothing/head/ww2/german_fieldcap = 15,
+		/obj/item/stack/medical/bruise_pack/bint = 10,
+		/obj/item/weapon/shovel/trench = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/canteen/full = 30,
+		/obj/item/clothing/accessory/storage/webbing/ww1/leather = 30,
+	)
+
 /obj/structure/vending/usa_apparel_ww2
 	name = "US Army apparel rack"
 	desc = "Basic wear for soldiers of the US Army."
@@ -184,7 +248,10 @@
 		/obj/item/clothing/shoes/jackboots = 15,
 		/obj/item/clothing/under/ww2/us = 15,
 		/obj/item/clothing/under/ww2/us_shirtless = 15,
-		/obj/item/clothing/head/helmet/ww2/us = 15,
+		/obj/item/clothing/head/helmet/ww2/usm1camogreen = 5,
+		/obj/item/clothing/head/helmet/ww2/usgreennet = 5,
+		/obj/item/clothing/head/helmet/ww2/ustannet = 5,
+		/obj/item/clothing/head/helmet/ww2/usm1 = 15,
 		/obj/item/stack/medical/bruise_pack/bint = 10,
 		/obj/item/weapon/shovel/trench = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/canteen/full = 30,
@@ -362,6 +429,44 @@ obj/structure/vending/sofammo
 
 	)
 
+/obj/structure/vending/ssapparel
+	name = "SS apparel rack"
+	desc = "Basic wear for SS soldiers."
+	icon_state = "apparel_german"
+	products = list(
+		/obj/item/clothing/shoes/jackboots = 15,
+		/obj/item/clothing/under/ww2/german_ss = 15,
+		/obj/item/clothing/suit/storage/coat/ww2/ss_parka = 15,
+		/obj/item/clothing/head/ww2/german_fieldcap = 15,
+		/obj/item/clothing/head/helmet/ww2/ss/dark = 15,
+		/obj/item/clothing/accessory/storage/webbing/ww1/german = 15,
+		/obj/item/stack/medical/bruise_pack/bint = 10,
+		/obj/item/weapon/shovel/trench = 10,
+		/obj/item/flashlight/flashlight = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/canteen/full = 30,
+		/obj/item/weapon/reagent_containers/food/snacks/MRE/generic/german = 50,
+
+	)
+
+/obj/structure/vending/ss_officerapparel
+	name = "SS Officer apparel rack"
+	desc = "Basic wear for SS Officers."
+	icon_state = "apparel_german"
+	products = list(
+		/obj/item/clothing/shoes/jackboots = 10,
+		/obj/item/clothing/under/ww2/german_ss_officer = 10,
+		/obj/item/clothing/suit/storage/coat/ww2/german_officer = 10,
+		/obj/item/clothing/head/ww2/ss_cap = 10,
+		/obj/item/clothing/head/helmet/ww2/ss/dark = 10,
+		/obj/item/clothing/accessory/storage/webbing/ww1/german = 10,
+		/obj/item/stack/medical/bruise_pack/bint = 10,
+		/obj/item/weapon/shovel/trench = 10,
+		/obj/item/flashlight/flashlight = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/canteen/full = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/MRE/generic/german = 20,
+
+	)
+
 /obj/structure/vending/wehrmachtweapons
 	name = "Wehrmacht rifle rack"
 	desc = "A rack of war equipment."
@@ -447,4 +552,36 @@ obj/structure/vending/hezammo
 		/obj/item/ammo_magazine/pkm/c100 = 10,
 		/obj/item/weapon/grenade/coldwar/m26= 20,
 		/obj/item/weapon/grenade/smokebomb/m18smoke = 20,
+	)
+
+/obj/structure/vending/usa_apparel_modern
+	name = "USMC apparel rack"
+	desc = "Basic wear for soldiers of the USMC."
+	icon_state = "apparel_usa"
+	products = list(
+		/obj/item/clothing/shoes/jackboots = 15,
+		/obj/item/clothing/under/us_uni/us_camo_dcu = 15,
+		/obj/item/clothing/head/helmet/modern/pasgt/desert = 15,
+		/obj/item/clothing/glasses/tactical_goggles = 15,
+		/obj/item/stack/medical/bruise_pack/bint = 10,
+		/obj/item/weapon/shovel/trench = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/canteen/full = 30,
+		/obj/item/weapon/reagent_containers/food/snacks/MRE/generic/american = 50,
+	)
+
+/obj/structure/vending/usa_equipment_modern
+	name = "USMC ammunition"
+	desc = "Ammunition and explosives for USMC forces."
+	icon_state = "ammo_crates"
+	products = list(
+		/obj/item/weapon/grenade/smokebomb/m18smoke = 15,
+		/obj/item/weapon/grenade/coldwar/m67 = 15,
+		/obj/item/weapon/grenade/coldwar/nonfrag/m26 = 15,
+		/obj/item/weapon/grenade/flashbang/m84 = 15,
+		/obj/item/weapon/grenade/incendiary/anm14 = 15,
+		/obj/item/weapon/plastique/c4 = 6,
+		/obj/item/ammo_magazine/m16 = 50,
+		/obj/item/ammo_magazine/m14 = 50,
+		/obj/item/ammo_magazine/m249 = 15,
+		/obj/item/ammo_magazine/m9beretta = 50,
 	)

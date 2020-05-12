@@ -1,17 +1,15 @@
-#define NO_WINNER "The fighting is still going on."
 /obj/map_metadata/sammirhayeed
 	ID = MAP_SAMMIRHAYEED
 	title = "Sammir Hayeed (80x80x1)"
 	lobby_icon_state = "medieval"
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall/)
 	respawn_delay = 300
-	squad_spawn_locations = FALSE
-//	min_autobalance_players = 90
+
+
 	faction_organization = list(
 		ARAB,
 		FRENCH)
-	available_subfactions = list(
-		)
+
 	roundend_condition_sides = list(
 		list(ARAB) = /area/caribbean/arab,
 		list(FRENCH) = /area/caribbean/colonies,
@@ -33,7 +31,7 @@
 /obj/map_metadata/sammirhayeed/faction2_can_cross_blocks()
 	return (processes.ticker.playtime_elapsed >= 3600 || admin_ended_all_grace_periods)
 
-obj/map_metadata/sammirhayeed/job_enabled_specialcheck(var/datum/job/J)
+/obj/map_metadata/sammirhayeed/job_enabled_specialcheck(var/datum/job/J)
 	..()
 	if (istype(J, /datum/job/arab))
 		if (J.is_coldwar || J.is_specops)
@@ -143,14 +141,13 @@ var/no_loop_kar = FALSE
 				current_winner = "Crusaders"
 				current_loser = "Arabic Caliphate"
 	else
-		if (current_win_condition != NO_WINNER && current_winner && current_loser)
+		if (current_win_condition != no_winner && current_winner && current_loser)
 			world << "<font size = 3>The Arabs have recaptured the fortress!</font>"
 			current_winner = null
 			current_loser = null
 		next_win = -1
-		current_win_condition = NO_WINNER
+		current_win_condition = no_winner
 		win_condition.hash = 0
 	last_win_condition = win_condition.hash
 	return TRUE
 
-	#undef NO_WINNER

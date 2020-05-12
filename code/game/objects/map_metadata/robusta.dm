@@ -1,18 +1,17 @@
-#define NO_WINNER "The fighting is still going."
+
 /obj/map_metadata/robusta
 	ID = MAP_ROBUSTA
 	title = "Isla Robusta (125x125x1)"
 	lobby_icon_state = "imperial"
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall/)
 	respawn_delay = 900
-	squad_spawn_locations = FALSE
-//	min_autobalance_players = 90
+
+
 	faction_organization = list(
 		PORTUGUESE,
 		SPANISH,
 		INDIANS)
-	available_subfactions = list(
-		)
+
 	roundend_condition_sides = list(
 		list(PORTUGUESE) = /area/caribbean/british/land,
 		list(SPANISH) = /area/caribbean/pirates/land,
@@ -51,4 +50,3 @@ obj/map_metadata/robusta/job_enabled_specialcheck(var/datum/job/J)
 /obj/map_metadata/robusta/cross_message(faction)
 	return "<font size = 4>All factions may cross the grace wall now!</font>"
 
-#undef NO_WINNER

@@ -265,7 +265,13 @@
 	vehicle_m_delay = 12
 	health = 50
 /obj/structure/vehicle/raft/do_vehicle_check()
-	if (istype(get_turf(get_step(src,driver.dir)), /turf/floor/beach/water) || istype(get_turf(get_step(src,driver.dir)), /turf/floor/trench/flooded))
+	var/turf/DT = get_turf(get_step(src,driver.dir))
+	if (!DT)
+		return FALSE
+	if (driver && istype(DT, /turf/floor/beach/water) || istype(DT, /turf/floor/trench/flooded))
+		if (istype(DT, /turf/floor/beach/water/deep/saltwater) && istype(DT.loc, /area/caribbean/sea))
+			driver << "<span class='danger'>You can't go further into the sea with a raft!</span>"
+			return FALSE
 		if (driver in get_turf(src))
 			return TRUE
 		else
@@ -281,18 +287,18 @@
 		return FALSE
 
 /obj/structure/vehicle/raft/attackby(obj/item/O as obj, mob/user as mob)
-    if (istype(O,/obj/item/weapon/hammer) && !not_disassemblable)
-        playsound(loc, 'sound/items/Screwdriver.ogg', 75, TRUE)
-        user << "<span class='notice'>You begin dismantling \the [src].</span>"
-        if (do_after(user,25,src))
-            user << "<span class='notice'>You dismantle \the [src].</span>"//We lose some materials in the process. Some wood and rope is no longer useful as raw.
-            var /obj/item/stack/material/wood/W = new /obj/item/stack/material/wood(get_turf(src))
-            new /obj/item/stack/material/rope(get_turf(src))
-            W.add(4)//adds 4 boards to the stack, making it 5
-            qdel(src)
-            return
-    else
-        ..()
+	if (istype(O,/obj/item/weapon/hammer) && !not_disassemblable)
+		playsound(loc, 'sound/items/Screwdriver.ogg', 75, TRUE)
+		user << "<span class='notice'>You begin dismantling \the [src].</span>"
+		if (do_after(user,25,src))
+			user << "<span class='notice'>You dismantle \the [src].</span>"//We lose some materials in the process. Some wood and rope is no longer useful as raw.
+			var /obj/item/stack/material/wood/W = new /obj/item/stack/material/wood(get_turf(src))
+			new /obj/item/stack/material/rope(get_turf(src))
+			W.add(4)//adds 4 boards to the stack, making it 5
+			qdel(src)
+			return
+	else
+		..()
 
 ///////////////////////////////////////////////////////
 //dirs:
@@ -312,6 +318,7 @@
 	not_movable = TRUE
 	not_disassemblable = FALSE
 	vehicle_m_delay = 12
+	layer = 2.95
 	health = 90
 	axis = new/obj/structure/vehicleparts/axis/boat
 	wheeled = TRUE
@@ -345,9 +352,9 @@
 	New()
 		..()
 		dwheel.origin = src
-		cover_overlay = image(icon, "sail0")
+		cover_overlay = image(icon, "sail1")
 		cover_overlay.layer = MOB_LAYER + 2.11
-		cover_overlay_c = image(icon, "sail")
+		cover_overlay_c = image(icon, "sail2")
 		cover_overlay_c.layer = MOB_LAYER + 2.12
 		add_overlay(cover_overlay)
 		update_overlay()
@@ -495,18 +502,18 @@
 						OB.dir = dir
 
 /obj/structure/vehicle/boat/sailboat/attackby(obj/item/O as obj, mob/user as mob)
-    if (istype(O,/obj/item/weapon/hammer) && !not_disassemblable)
-        playsound(loc, 'sound/items/Screwdriver.ogg', 75, TRUE)
-        user << "<span class='notice'>You begin dismantling \the [src].</span>"
-        if (do_after(user,25,src))
-            user << "<span class='notice'>You dismantle \the [src].</span>"//We lose some materials in the process. Some wood is no longer useful as raw.
-            new /obj/item/sail(get_turf(src))
-            var /obj/item/stack/material/wood/W = new /obj/item/stack/material/wood(get_turf(src))
-            W.add(9)//adds 9 boards to the stack, making it 10
-            qdel(src)
-            return
-    else
-        ..()
+	if (istype(O,/obj/item/weapon/hammer) && !not_disassemblable)
+		playsound(loc, 'sound/items/Screwdriver.ogg', 75, TRUE)
+		user << "<span class='notice'>You begin dismantling \the [src].</span>"
+		if (do_after(user,25,src))
+			user << "<span class='notice'>You dismantle \the [src].</span>"//We lose some materials in the process. Some wood is no longer useful as raw.
+			new /obj/item/sail(get_turf(src))
+			var /obj/item/stack/material/wood/W = new /obj/item/stack/material/wood(get_turf(src))
+			W.add(9)//adds 9 boards to the stack, making it 10
+			qdel(src)
+			return
+	else
+		..()
 
 /obj/structure/vehicle/boat/b400/New()
 	..()
@@ -618,10 +625,10 @@
 /obj/structure/vehicle/boat/attackby(obj/item/weapon/W as obj, mob/living/carbon/human/user as mob)
 	if (istype(W, /obj/item/weapon/reagent_containers/glass))
 		var/obj/item/weapon/reagent_containers/glass/GC = W
-		if (fueltank.reagents.total_volume < fueltank.reagents.maximum_volume)
+		if (fueltank && fueltank.reagents && fueltank.reagents.total_volume < fueltank.reagents.maximum_volume)
 			var/found = FALSE
 			for (var/i in engine.fuels)
-				if (GC.reagents.has_reagent(i))
+				if (GC && GC.reagents && GC.reagents.has_reagent(i))
 					found = TRUE
 			if (!found)
 				user << "\The [W] has no acceptable fuel in it."

@@ -20,6 +20,38 @@
 	icon_state = "blue1"
 	location = AREA_INSIDE
 
+/area/caribbean/roofed/tundra
+	climate = "tundra"
+	base_turf = /turf/floor/dirt/winter
+
+/area/caribbean/roofed/taiga
+	climate = "taiga"
+	base_turf = /turf/floor/dirt/winter
+
+/area/caribbean/roofed/temperate
+	climate = "temperate"
+	base_turf = /turf/floor/dirt
+
+/area/caribbean/roofed/sea
+	climate = "sea"
+	base_turf = /turf/floor/dirt
+
+/area/caribbean/roofed/desert
+	climate = "desert"
+	base_turf = /turf/floor/beach/sand/desert
+
+/area/caribbean/roofed/semiarid
+	climate = "semiarid"
+	base_turf = /turf/floor/dirt/dust
+
+/area/caribbean/roofed/savanna
+	climate = "savanna"
+	base_turf = /turf/floor/dirt/jungledirt
+
+/area/caribbean/roofed/jungle
+	climate = "jungle"
+	base_turf = /turf/floor/dirt/jungledirt
+
 /area/caribbean/treasury
 	name = "Colony Treasury"
 	base_turf = /turf/floor/dirt
@@ -160,6 +192,25 @@
 	icon_state = "green1"
 	climate = "jungle"
 
+//lava paths
+/area/caribbean/nomads/forest/Jungle/lava_west
+	icon_state = "green3"
+/area/caribbean/nomads/forest/Jungle/lava_west/one
+
+/area/caribbean/nomads/forest/Jungle/lava_west/two
+
+/area/caribbean/nomads/forest/Jungle/lava_east
+	icon_state = "green3"
+/area/caribbean/nomads/forest/Jungle/lava_east/one
+
+/area/caribbean/nomads/forest/Jungle/lava_east/two
+
+/area/caribbean/nomads/forest/Jungle/lava_south
+	icon_state = "green3"
+/area/caribbean/nomads/forest/Jungle/lava_south/one
+
+/area/caribbean/nomads/forest/Jungle/lava_south/two
+
 /area/caribbean/nomads/forest/savanna
 	name = "Savanna"
 	base_turf = /turf/floor/grass/jungle/savanna
@@ -210,8 +261,20 @@
 	climate = "sea"
 
 /area/caribbean/island/river
-	base_turf = /turf/floor/beach/water/shallowsaltwater
+	base_turf = /turf/floor/beach/water
 	icon_state = "red1"
+
+/area/caribbean/island/tropical
+	name = "Island"
+	base_turf = /turf/floor/beach/sand
+	icon_state = "red3"
+	ambience = list("sound/ambience/jungle1.ogg")
+	climate = "jungle"
+
+/area/caribbean/island/river/tropical
+	base_turf = /turf/floor/beach/water
+	icon_state = "red1"
+	climate = "jungle"
 
 /area/caribbean/sea
 	name = "Island"
@@ -239,6 +302,21 @@
 	name = "No Man's Land"
 	icon_state = "purple1"
 	base_turf = /turf/floor/dirt
+
+/area/caribbean/no_mans_land/capturable
+	base_turf = /turf/floor/dirt/burned
+	icon_state = "red4"
+	location = AREA_INSIDE
+
+/area/caribbean/no_mans_land/capturable/one
+	name = "Telephone Central"
+
+/area/caribbean/no_mans_land/capturable/two
+	name = "Train Station"
+
+/area/caribbean/no_mans_land/capturable/three
+	name = "City Hall"
+
 /area/caribbean/no_mans_land/tundra
 	name = "No Man's Land"
 	icon_state = "purple1"

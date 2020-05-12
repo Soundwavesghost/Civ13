@@ -11,7 +11,7 @@
 		U = src
 	else
 		return
-	if (map.civilizations == TRUE)
+	if (map.civilizations == TRUE || map.ID == MAP_TRIBES)
 		var/choosename = russian_to_cp1251(input(U, "Choose a name for the company:") as text|null)
 		create_company_pr(choosename)
 		return
@@ -35,7 +35,7 @@
 			return
 		else
 			choosecolor1 = uppertext(choosecolor1)
-			if (lentext(choosecolor1) != 6)
+			if (length(choosecolor1) != 6)
 				return
 			var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 			for (var/i = 1, i <= 6, i++)
@@ -53,7 +53,7 @@
 			return
 		else
 			choosecolor2 = uppertext(choosecolor2)
-			if (lentext(choosecolor2) != 6)
+			if (length(choosecolor2) != 6)
 				return
 			var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 			for (var/i = 1, i <= 6, i++)
@@ -82,7 +82,7 @@
 		H = src
 	else
 		return
-	if (map.civilizations == TRUE)
+	if (map.civilizations == TRUE || map.ID == MAP_TRIBES)
 		var/found = FALSE
 		var/list/currlist = list()
 		var/list/currlist_ind = list("Cancel")
@@ -138,8 +138,15 @@
 	if (!map || !H || !company)
 		return FALSE
 
+	if (company == "Global")
+		return FALSE
+
+	if (!map.custom_company[company] || !map.custom_company[company].len)
+		return FALSE
+
 	for(var/i=1,i<=map.custom_company[company].len,i++)
-		if (map.custom_company[company][i][1] == H)
+		if (map.custom_company[company][i][1] == H && map.custom_company[company][i][2] > 0)
+			world.log << "found"
 			return TRUE
 
 	return FALSE
@@ -162,4 +169,24 @@
 	map.custom_company[companyname] += list(list(target,stock,0))
 	src << "<big>Transfered [stock]% of [companyname] to [target].</big>"
 	target << "<big>You received [stock]% of [companyname] from [src].</big>"
+	return
+
+//to be used when the seller does not exist (normally if he died and theres no body)
+//the stock is still for sale but "nobody" will receive the cost.
+/proc/transfer_stock_nomob(var/companyname, var/stock, var/mob/living/carbon/human/target)
+	if (!companyname || !stock || !target)
+		return
+
+	for(var/l=1, l <= map.custom_company[companyname].len, l++)
+		if (map.custom_company[companyname][l][1] == null)
+			var/currb = map.custom_company[companyname][l][2]
+			map.custom_company[companyname][l][2] = currb-stock
+
+	for(var/l=1,  l <= map.custom_company[companyname].len, l++)
+		if (map.custom_company[companyname][l][1] == target)
+			var/currb = map.custom_company[companyname][l][2]
+			map.custom_company[companyname][l][2] = currb+stock
+			return
+	map.custom_company[companyname] += list(list(target,stock,0))
+	target << "<big>You received [stock]% of [companyname] from the stock market.</big>"
 	return

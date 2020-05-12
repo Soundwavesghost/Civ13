@@ -62,12 +62,12 @@ Current Defines (_defines/attachment.dm)
 
 /obj/item/weapon/gun/dropped(mob/user)
 	..()
-	if (attachments.len)
+	if (attachments && attachments.len)
 		for (var/obj/item/weapon/attachment/A in attachments)
 			A.dropped(user)
 
 /obj/item/weapon/gun/pickup(mob/user)
-	if (attachments.len)
+	if (attachments && attachments.len)
 		for (var/obj/item/weapon/attachment/A in attachments)
 			A.pickup(user)
 
@@ -147,7 +147,7 @@ Current Defines (_defines/attachment.dm)
 	edge = TRUE
 	attack_verb = list("slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 	attachment_type = ATTACH_BARREL
-	force = 20
+	force = 65
 	var/attack_sound = 'sound/weapons/slice.ogg'
 	var/weakens = 0
 	//var/datum/action/bayonet/amelee
@@ -172,30 +172,42 @@ Current Defines (_defines/attachment.dm)
 		edge = 1
 		sharp = 1
 		return
-/obj/item/weapon/attachment/bayonet/attached(mob/user, obj/item/weapon/gun/G, var/quick = FALSE)
+/obj/item/weapon/attachment/bayonet/attached(var/mob/user = null, obj/item/weapon/gun/G, var/quick = FALSE)
 	if (quick)
-		user.unEquip(src)
+		if (user)
+			user.unEquip(src)
 		A_attached = TRUE
 		G.attachment_slots -= attachment_type
 		loc = G
 		G.actions += actions
 		G.verbs += verbs
 		G.attachments += src
-		user << "<span class = 'notice'>You attach [src] to the [G].</span>"
+		if (user)
+			user << "<span class = 'notice'>You attach [src] to the [G].</span>"
 		G.bayonet = src
 		G.overlays += G.bayonet_ico
 	else
-		user << "<span class = 'notice'>You start to attach [src] to the [G].</span>"
+		if (user)
+			user << "<span class = 'notice'>You start to attach [src] to the [G].</span>"
 		if (do_after(user, 15, user))
-			user.unEquip(src)
 			A_attached = TRUE
 			G.attachment_slots -= attachment_type
-			loc = G
 			G.actions += actions
 			G.verbs += verbs
 			G.attachments += src
-			G.update_attachment_actions(user)
-			user << "<span class = 'notice'>You attach [src] to the [G].</span>"
+			if (user)
+				user.unEquip(src)
+				G.update_attachment_actions(user)
+				user << "<span class = 'notice'>You attach [src] to the [G].</span>"
+				if (istype(src, /obj/item/weapon/attachment/bayonet/flag))
+					G.bayonet_ico.icon_state = "jap_flag"
+					G.bayonet_ico.pixel_x = 0
+					G.bayonet_ico.pixel_y = 0
+				else
+					G.bayonet_ico.icon_state = "bayonet"
+					G.bayonet_ico.pixel_x = 6
+					G.bayonet_ico.pixel_y = 6
+			loc = G
 			G.bayonet = src
 			G.overlays += G.bayonet_ico
 		else
@@ -217,9 +229,22 @@ Current Defines (_defines/attachment.dm)
 	else
 		return
 
+/obj/item/weapon/attachment/bayonet/flag
+	name = "japanese flag"
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "jap_flag"
+	item_state = "jap_flag"
+	sharp = FALSE
+	edge = FALSE
+	attack_verb = list("bashed")
+	attachment_type = ATTACH_BARREL
+	force = 1
+
+/obj/item/weapon/attachment/bayonet/flag/attack_self(mob/user)
+	return
 
 /obj/item/weapon/attachment/bayonet/military
-	force = WEAPON_FORCE_ROBUST
+	force = 65
 //	weakens = 1
 	weight = 0.450
 	value = 12
@@ -228,6 +253,11 @@ Current Defines (_defines/attachment.dm)
 	name = "iron sights"
 	attachment_type = ATTACH_IRONSIGHTS
 	zoom_amt = ZOOM_CONSTANT
+
+/obj/item/weapon/attachment/scope/iron_sights/mg
+	name = "iron sights"
+	attachment_type = ATTACH_IRONSIGHTS
+	zoom_amt = ZOOM_CONSTANT + 5
 
 /obj/item/weapon/attachment/scope/adjustable/sniper_scope
 	name = "sniper scope"
@@ -300,7 +330,6 @@ Current Defines (_defines/attachment.dm)
 
 /obj/item/weapon/attachment/scope/iron_sights/removed(mob/user, obj/item/weapon/gun/G)
 	return
-
 
 /////////////////ADVANCED OPTICS//////////////////////////////
 

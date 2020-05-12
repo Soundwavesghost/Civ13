@@ -34,6 +34,14 @@
 	max_w_class = 3
 	max_storage_space = 28
 
+/obj/item/weapon/storage/belt/security
+	name = "security belt"
+	icon_state = "security"
+	item_state = "security"
+	storage_slots = 9
+	max_w_class = 3
+	max_storage_space = 34
+
 /obj/item/weapon/storage/belt/medical
 	name = "medical belt"
 	can_hold = list(
@@ -102,14 +110,21 @@
 	storage_slots = 9
 	max_w_class = 2
 
-/obj/item/weapon/storage/belt/leather/farmer
-	..()
-
 /obj/item/weapon/storage/belt/leather/farmer/New()
 	..()
 	new /obj/item/stack/farming/seeds/tomato(src)
 	new /obj/item/stack/farming/seeds/potato(src)
 	new /obj/item/stack/farming/seeds/hemp(src)
+	new /obj/item/stack/farming/seeds/flax(src)
+
+/obj/item/weapon/storage/belt/gator_belt //doesn't hold anything
+	name = "alligator scale belt"
+	desc = "A purely decorative alligator scale thin belt. It has no pockets or attachments for items"
+	icon_state = "gator_belt"
+	item_state = "gator_belt"
+	storage_slots = 0
+	max_w_class = 1
+	max_storage_space = 0
 
 /obj/item/weapon/storage/belt/throwing
 	name = "throwing belt"
@@ -126,8 +141,6 @@
 		/obj/item/weapon/material/thrown/throwing_axe,
 		)
 
-/obj/item/weapon/storage/belt/leather/ninja
-	..()
 /obj/item/weapon/storage/belt/throwing/ninja/New()
 	..()
 	new /obj/item/weapon/material/thrown/star(src)

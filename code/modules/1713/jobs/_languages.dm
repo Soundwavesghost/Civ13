@@ -1,7 +1,6 @@
 /datum/job
 	var/default_language = "Common"
 	var/list/additional_languages = list() // "Name" = probability between 1-100
-	var/SL_check_independent = FALSE // we're important, so we can spawn even if SLs are needed
 
 /datum/job/civilian
 	default_language = "English"
@@ -78,6 +77,9 @@
 /datum/job/chinese
 	default_language = "Chinese"
 	additional_languages = list("English" = 5, "Vietnamese" = 10, "Japanese" = 5)
+/datum/job/npc
+	default_language = "English"
+
 /datum/job/update_character(var/mob/living/carbon/human/H)
 	. = ..()
 
@@ -88,11 +90,11 @@
 	if (!H.languages.len)
 		H.add_language(default_language, FALSE)
 		if (!notes.Find(default_language))
-			if (map.ID == MAP_NOMADS_CONTINENTAL || map.ID == MAP_NOMADS_PANGEA)
+			if (map.ID == MAP_NOMADS_CONTINENTAL || map.ID == MAP_NOMADS_PANGEA || map.ID == MAP_NOMADS_MEDITERRANEAN)
 				H.add_note("Known Languages", default_language)
 	else if (H.languages[1] != default_language)
 		H.add_language(default_language, FALSE)
-		if (map.ID == MAP_NOMADS_CONTINENTAL || map.ID == MAP_NOMADS_PANGEA)
+		if (map.ID == MAP_NOMADS_CONTINENTAL || map.ID == MAP_NOMADS_PANGEA || map.ID == MAP_NOMADS_MEDITERRANEAN)
 			if (!notes.Find(default_language))
 				H.add_note("Known Languages", default_language)
 

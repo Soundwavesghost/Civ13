@@ -1,7 +1,3 @@
-#define SLASH 1
-#define STAB 2
-#define BASH 3
-
 /obj/item/weapon/material/sword
 	name = "claymore"
 	desc = "What are you standing around staring at this for? Get to killing!"
@@ -88,6 +84,33 @@
 		edge = 1
 		sharp = 1
 		return
+
+/obj/item/weapon/material/sword/training
+	name = "Training Sword"
+	desc = "A wood sword used for nonlethal practice."
+	icon_state = "wood_sword"
+	item_state = "wood_sword"
+	block_chance = 50
+	force_divisor = 1
+	thrown_force_divisor = 1
+	force = 1
+	slot_flags = SLOT_BELT | SLOT_BACK
+	value = 0
+	cooldownw = 8
+	sharpness = 0
+	flammable = TRUE
+	attack_verb = list("thwacked", "hit", "clonked", "batted", "tapped", "smacked", "poked", "slapped")
+	hitsound = 'sound/weapons/kick.ogg'
+	drawsound = 'sound/items/unholster_sword01.ogg'
+	sharp = FALSE
+	edge = FALSE
+	default_material = "wood"
+
+/obj/item/weapon/material/sword/attack_self(mob/user)
+	..()
+	edge = 0
+	sharp = 0
+
 /obj/item/weapon/material/sword/katana
 	name = "katana"
 	desc = "A sword used by the japanese for centuries. Made to slice and slash, not chop or saw."
@@ -158,7 +181,7 @@ obj/item/weapon/material/sword/wakazashi
 				tgt = pick("l_foot","r_foot","l_leg","r_leg","chest","groin","l_arm","r_arm","l_hand","r_hand","eyes","mouth","head")
 			if (tgt == "groin" && !suicide)
 				handle_suicide(user)
-			else if (user.a_intent == I_HURT && do_after(user, 2, get_turf(user)))
+			else if (user.a_intent == I_HARM && do_after(user, 2, get_turf(user)))
 				attackby(user)
 			return
 /obj/item/weapon/material/sword/katana/iron
@@ -166,7 +189,7 @@ obj/item/weapon/material/sword/wakazashi
 
 /obj/item/weapon/material/sword/smallsword
 	name = "small sword"
-	desc = "A common european sword, with about one meter in lenght."
+	desc = "A common european sword, with about one meter in length."
 	icon_state = "smallsword"
 	item_state = "smallsword"
 	throw_speed = 2
@@ -232,6 +255,20 @@ obj/item/weapon/material/sword/armingsword/copper
 
 obj/item/weapon/material/sword/armingsword/bronze
 	default_material = "bronze"
+
+/obj/item/weapon/material/sword/mersksword
+	name = "mersks sword"
+	desc = "A very common medieval medium-sized sword."
+	icon_state = "mersksword"
+	item_state = "longsword2"
+	throw_speed = 3
+	throw_range = 3
+	force_divisor = 0.11 // 48 when wielded with hardnes 60 (steel)
+	thrown_force_divisor = 0.45 // 10 when thrown with weight 20 (steel)
+	slot_flags = SLOT_BELT | SLOT_BACK
+	block_chance = 40
+	cooldownw = 13
+	value = 50
 
 /obj/item/weapon/material/sword/vangar
 	name = "Vangar's sword"
@@ -337,19 +374,19 @@ obj/item/weapon/material/sword/longsword/bronze
 obj/item/weapon/material/sword/longsword/diamond
 	default_material = "diamond"
 
-/obj/item/weapon/material/sword/urukhaiscimitar
-	name = "uruk-hai scimitar"
-	desc = "A broad sword with a curved tip."
-	icon_state = "urukhaiscimitar"
-	item_state = "urukhaiscimitar"
-	throw_speed = 2
+/obj/item/weapon/material/sword/zweihander
+	name = "Zweihander"
+	desc = "A German sword used by knights."
+	icon_state = "zweihander"
+	item_state = "longsword"
+	throw_speed = 1
 	throw_range = 2
-	force_divisor = 1 // 60 when wielded with hardness 60 (steel)
+	force_divisor = 1.90 // 60 when wielded with hardness 60 (steel)
 	thrown_force_divisor = 0.6 // 12 when thrown with weight 20 (steel)
 	slot_flags = SLOT_BELT | SLOT_BACK
-	block_chance = 40
-	cooldownw = 15
-	value = 55
+	block_chance = 60
+	cooldownw = 30
+	value = 60
 
 /obj/item/weapon/material/sword/rapier
 	name = "rapier"

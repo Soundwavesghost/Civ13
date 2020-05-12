@@ -1,16 +1,15 @@
-#define NO_WINNER "The round is proceeding normally."
 /obj/map_metadata/hunt
 	ID = MAP_HUNT
 	title = "Hunt (175x175x2)"
 	lobby_icon_state = "imperial"
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall/)
 	respawn_delay = 6000 // 10 minutes!
-	squad_spawn_locations = FALSE
+
+	no_winner ="The round is proceeding normally."
 	faction_organization = list(
 		INDIANS,
 		PIRATES)
-	available_subfactions = list(
-		)
+
 	roundend_condition_sides = list(
 		list(INDIANS) = /area/caribbean/british,
 		list(PIRATES) = /area/caribbean/british,
@@ -26,6 +25,7 @@
 	songs = list(
 		"Nassau Shores:1" = 'sound/music/nassau_shores.ogg',)
 	gamemode = "Survival RP"
+	is_RP = TRUE
 
 /obj/map_metadata/hunt/New()
 	..()
@@ -33,7 +33,8 @@
 		for (var/i = 1, i <= 50, i++)
 			var/turf/areaspawn = safepick(get_area_turfs(/area/caribbean/island/river))
 			new/obj/structure/piranha(areaspawn)
-
+	spawn(18000)
+		seasons()
 obj/map_metadata/hunt/job_enabled_specialcheck(var/datum/job/J)
 	..()
 	if (istype(J, /datum/job/pirates))
@@ -56,4 +57,3 @@ obj/map_metadata/hunt/job_enabled_specialcheck(var/datum/job/J)
 	return "The gracewall is now removed."
 
 
-#undef NO_WINNER

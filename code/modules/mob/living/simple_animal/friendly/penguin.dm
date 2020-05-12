@@ -10,7 +10,7 @@
 	emote_hear = list("honks")
 	emote_see = list("honks", "peeps")
 	speak_chance = TRUE
-	turns_per_move = 4
+	move_to_delay = 4
 	see_in_dark = 8
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 2
@@ -20,21 +20,4 @@
 	attacktext = "kicked"
 	health = 25
 	mob_size = MOB_SMALL
-
-
-/mob/living/simple_animal/penguin/Life()
-	..()
-	if (stat != DEAD)
-		var/done = FALSE
-		for (var/mob/living/carbon/human/H in range(7, src))
-			if (done == FALSE)
-				var/dirh = get_dir(src,H)
-				if (dirh == WEST)
-					walk_to(src, locate(x+7,y,z), TRUE, 3)
-				else if (dirh == EAST)
-					walk_to(src, locate(x-7,y,z), TRUE, 3)
-				else if (dirh == NORTH)
-					walk_to(src, locate(x,y-7,z), TRUE, 3)
-				else if (dirh == SOUTH)
-					walk_to(src, locate(x,y+7,z), TRUE, 3)
-				done = TRUE
+	behaviour = "scared"

@@ -7,18 +7,18 @@
 	H.real_name = H.name
 
 /datum/job/spanish/captain
-	title = "Capitán"
+	title = "Capitan"
 	en_meaning = "Ship Captain"
-	rank_abbreviation = "Capitán"
+	rank_abbreviation = "Capitan"
 	head_position = TRUE
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateSPCap"
 	is_officer = TRUE
 	is_commander = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 1
 
@@ -58,9 +58,9 @@
 	is_commander = TRUE
 	is_officer = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 1
 
@@ -77,7 +77,7 @@
 
 	H.equip_to_slot_or_del(new /obj/item/weapon/material/sword/spadroon(H), slot_belt)
 	world << "<b><big>[H.real_name] is the Quartermaster of the Spanish Navy ship!</big></b>"
-	H.add_note("Role", "You are a <b>[title]</b>, an officer in charge of the ship's supply allocation. You are also the second in command, after the <b>Capitán</b>.")
+	H.add_note("Role", "You are a <b>[title]</b>, an officer in charge of the ship's supply allocation. You are also the second in command, after the <b>Capitan</b>.")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
 	H.setStat("crafting", STAT_NORMAL)
 	H.setStat("rifle", STAT_NORMAL)
@@ -98,11 +98,11 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateSPBoatswain"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_commander = TRUE
 	is_officer = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -140,9 +140,9 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateSPMidshipman"
 	is_officer = TRUE
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 10
 
@@ -176,9 +176,8 @@
 	rank_abbreviation = "Cirujano"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateSPSurgeon"
-	SL_check_independent = TRUE
+	is_medic = TRUE
 
-	// AUTOBALANCE
 	min_positions = 1
 	max_positions = 10
 
@@ -213,9 +212,9 @@
 	rank_abbreviation = "Carpintero"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateSPCarpenter"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 10
 
@@ -254,9 +253,9 @@
 	rank_abbreviation = "Cocinero"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateSPCook"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 10
 
@@ -303,9 +302,9 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateSP"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 6
 	max_positions = 200
 
@@ -332,7 +331,7 @@
 	else if (randweapon == 2)
 		H.equip_to_slot_or_del(new 	/obj/item/weapon/material/harpoon(H), slot_belt)
 
-	H.add_note("Role", "You are a <b>[title]</b>, a simple seaman employed by the Spanish Armada Real. Follow your <b>Capitán</b> orders!")
+	H.add_note("Role", "You are a <b>[title]</b>, a simple seaman employed by the Spanish Armada Real. Follow your <b>Capitan</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
 	H.setStat("rifle", STAT_MEDIUM_LOW) //muskets

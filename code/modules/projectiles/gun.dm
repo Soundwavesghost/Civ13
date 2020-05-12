@@ -30,7 +30,6 @@
 	item_state = "gun"
 	flags =  CONDUCT
 	slot_flags = SLOT_BELT|SLOT_HOLSTER
-	matter = list(DEFAULT_WALL_MATERIAL = 2000)
 	w_class = 3
 	throwforce = 5
 	throw_speed = 4
@@ -41,7 +40,7 @@
 	var/full_auto = FALSE
 	var/fire_delay = 5 	//delay after shooting before the gun can be used again
 	var/burst_delay = 2	//delay between shots, if firing in bursts
-	var/fire_sound = 'sound/weapons/kar_shot.ogg'
+	var/fire_sound = 'sound/weapons/guns/fire/rifle.ogg'
 	var/fire_sound_text = "gunshot"
 	var/recoil = 0		//screen shake
 	var/silenced = FALSE
@@ -63,6 +62,9 @@
 	var/tmp/mob/living/last_moved_mob //Used to fire faster at more than one person.
 	var/tmp/told_cant_shoot = FALSE //So that it doesn't spam them with the fact they cannot hit them.
 	var/tmp/lock_time = -100
+
+
+	var/damage_modifier = 0
 
 //	var/wielded = FALSE
 //	var/must_wield = FALSE
@@ -165,8 +167,6 @@
 
 /obj/item/weapon/gun/attack(atom/A, mob/living/user, def_zone)
 	var/mob/living/carbon/human/H = user
-	health_check()
-	health -= rand(0,1)
 	if (istype(H) && (H.faction_text == "INDIANS" || H.crab))
 		user << "<span class = 'danger'>You have no idea how this thing works.</span>"
 		return
@@ -176,7 +176,7 @@
 			tgt = pick("l_foot","r_foot","l_leg","r_leg","chest","groin","l_arm","r_arm","l_hand","r_hand","eyes","mouth","head")
 		if (tgt == "mouth" && !mouthshoot)
 			handle_suicide(user)
-		else if (user.a_intent == I_HURT && do_after(user, 2, get_turf(user)))
+		else if (user.a_intent == I_HARM && do_after(user, 2, get_turf(user)))
 			handle_shoot_self(user)
 		return
 
@@ -189,7 +189,7 @@
 	if (user.a_intent != I_HELP && !bayonet && fire) // point blank shooting
 		Fire(A, user, pointblank=1)
 	else
-		if (bayonet && isliving(A))
+		if (bayonet && isliving(A) && !istype(bayonet, /obj/item/weapon/attachment/bayonet/flag))
 			var/mob/living/L = A
 			var/mob/living/carbon/C = A
 			if (!istype(C) || !C.check_attack_throat(src, user))
@@ -267,6 +267,12 @@
 		if (!projectile)
 			handle_click_empty(user)
 			break
+		if (istype(src, /obj/item/weapon/gun/projectile/semiautomatic/m1garand))
+			var/obj/item/weapon/gun/projectile/semiautomatic/m1garand/G = src
+			if (!G.loaded.len)
+				playsound(loc, 'sound/weapons/guns/interact/GarandUnload.ogg', 100, TRUE)
+		health_check(user)
+		health -= 0.2
 
 		var/acc = 0 // calculated in projectile code
 		var/disp = firemode.dispersion[min(i, firemode.dispersion.len)]
@@ -411,6 +417,9 @@
 	if (params)
 		P.set_clickpoint(params)
 
+	if (damage_modifier != 0)
+		P.damage += damage_modifier
+
 	//shooting while in shock
 	var/x_offset = 0
 	var/y_offset = 0
@@ -539,11 +548,26 @@
 
 /obj/item/weapon/gun/examine(mob/user)
 	..()
+	if (health > 0 && maxhealth > 0)
+		var/health_percentage = (health/maxhealth)*100
+		switch (health_percentage)
+			if (-100 to 21)
+				user << "<font color='#7f0000'>Is pratically falling apart!</font>"
+			if (22 to 49)
+				user << "<font color='#a74510'>Seems to be in very bad condition.</font>"
+			if (50 to 69)
+				user << "<font color='#cccc00'>Seems to be in a rough condition.</font>"
+			if (70 to 84)
+				user << "<font color='#4d5319'>Seems to be in a somewhat decent condition.</font>"
+			if (85 to 200)
+				user << "<font color='#245319'>Seems to be in very good condition.</font>"
+
 	if (firemodes.len > 1)
 		var/datum/firemode/current_mode = firemodes[sel_mode]
 		user.visible_message("The fire selector is set to [current_mode.name].")
 	if (safetyon)
 		user << "<span class='notice'><b>The safety is on.</b></span>"
+
 /obj/item/weapon/gun/proc/switch_firemodes(mob/user=null)
 	sel_mode++
 	if (sel_mode > firemodes.len)
@@ -648,14 +672,18 @@
 		.+= ammo_magazine.get_weight()
 	return .
 
-//health stuff
-/obj/item/weapon/gun/proc/health_check(mob/living/user)
-	//var/mob/living/carbon/human/H = user
+//health stuff; if the gun quality is too low, it might blow up in your hands!
+/obj/item/weapon/gun/proc/health_check(mob/living/carbon/human/H)
 	if(health <= 0 || maxhealth <= 0)
 		playsound(src, "shatter", 70, TRUE)
 		visible_message("<span class='danger'>\The [src.name] shatters!</span>")
+		var/hurthand = "r_hand"
+		if (src.loc == H.l_hand)
+			hurthand = "l_hand"
+		var/obj/item/organ/external/affecting = H.get_organ(hurthand)
+		H.apply_damage(25, BRUTE, affecting)
+		H.bloody_hands(H,0)
+		H.emote("painscream")
+		H.drop_from_inventory(src)
+		new /obj/item/weapon/material/shard(H.loc, "steel")
 		qdel(src)
-		/*var/hurthand = H.get_active_hand()
-		if(prob(25))
-			H.bloody_hands(H,0)*/
-

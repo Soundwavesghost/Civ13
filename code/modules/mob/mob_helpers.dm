@@ -32,7 +32,7 @@
 proc/isdeaf(A)
 	if (isliving(A))
 		var/mob/living/M = A
-		return (M.sdisabilities & DEAF) || M.ear_deaf
+		return (M.sdisabilities & DEAF) || M.ear_deaf || M.find_trait("Deaf")
 	return FALSE
 
 proc/hasorgans(A) // Fucking really??
@@ -44,7 +44,6 @@ proc/iscuffed(A)
 		if (C.handcuffed)
 			return TRUE
 	return FALSE
-/
 
 /proc/is_admin(var/mob/user)
 	return check_rights(R_ADMIN, FALSE, user) != FALSE
@@ -157,8 +156,8 @@ var/list/global/organ_rel_size = list(
 
 proc/slur(phrase)
 	phrase = rhtml_decode(phrase)
-	var/leng=lentext(phrase)
-	var/counter=lentext(phrase)
+	var/leng=length(phrase)
+	var/counter=length(phrase)
 	var/newphrase=""
 	var/newletter=""
 	while (counter>=1)
@@ -302,7 +301,7 @@ It's fairly easy to fix if dealing with single letters but not so much with comp
 	return FALSE
 
 //converts intent-strings into numbers and back
-var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
+var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HARM)
 /proc/intent_numeric(argument)
 	if (istext(argument))
 		switch(argument)
@@ -315,13 +314,13 @@ var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 			if (0)			return I_HELP
 			if (1)			return I_DISARM
 			if (2)			return I_GRAB
-			else			return I_HURT
+			else			return I_HARM
 
 
 proc/is_blind(A)
 	if (istype(A, /mob/living/carbon))
 		var/mob/living/carbon/C = A
-		if (C.sdisabilities & BLIND || C.blinded)
+		if ((C.sdisabilities & BLIND) || C.blinded || C.find_trait("Blind"))
 			return TRUE
 		if (istype(C.eyes, /obj/item/clothing/glasses/sunglasses/blindfold))
 			return TRUE
@@ -485,13 +484,3 @@ proc/is_blind(A)
 	return threatcount
 
 #undef SAFE_PERP
-/*
-/mob/proc/get_multitool(var/obj/item/multitool/P)
-	if (istype(P))
-		return P
-
-/mob/observer/ghost/get_multitool()
-	return can_admin_interact() && ..(ghost_multitool)
-
-/mob/living/carbon/human/get_multitool()
-	return ..(get_active_hand())*/

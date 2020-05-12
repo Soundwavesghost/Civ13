@@ -15,9 +15,9 @@
 	is_officer = TRUE
 	is_commander = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 1
 
@@ -62,11 +62,11 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRUCap"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_commander = TRUE
 	is_officer = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -111,11 +111,11 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRUCap"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_commander = TRUE
 	is_officer = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -159,11 +159,12 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU"
 	is_officer = TRUE
-	SL_check_independent = TRUE
+	is_squad_leader = TRUE
+	uses_squads = TRUE
 
-	// AUTOBALANCE
-	min_positions = 1
-	max_positions = 10
+
+	min_positions = 2
+	max_positions = 12
 
 /datum/job/russian/sergeant/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -204,9 +205,8 @@
 	rank_abbreviation = "Dr."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRUDoc"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+	is_medic = TRUE
 	min_positions = 1
 	max_positions = 10
 
@@ -244,9 +244,9 @@
 	rank_abbreviation = "Ye."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU" //for testing!
-	SL_check_independent = TRUE
+	uses_squads = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 6
 	max_positions = 200
 
@@ -286,9 +286,9 @@
 	rank_abbreviation = "Ry."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU" //for testing!
-	SL_check_independent = TRUE
+	uses_squads = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 6
 	max_positions = 200
 
@@ -334,9 +334,8 @@
 	is_officer = TRUE
 	is_commander = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
 	is_ww2 = TRUE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -353,6 +352,8 @@
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/c762x38mmR(H), slot_l_store)
 
 	H.equip_to_slot_or_del(new /obj/item/weapon/attachment/scope/adjustable/binoculars(H), slot_r_store)
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/soviet_officer(H), slot_wear_suit)
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/holster/hip/holsterh = new /obj/item/clothing/accessory/holster/hip(null)
 	uniform.attackby(holsterh, H)
@@ -381,9 +382,9 @@
 	spawn_location = "JoinLateRUCap"
 	is_officer = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -399,6 +400,8 @@
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/revolver/nagant_revolver(H), slot_l_hand)
 
 	H.equip_to_slot_or_del(new /obj/item/weapon/melee/classic_baton(H), slot_belt)
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/soviet_officer(H), slot_wear_suit)
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/holster/hip/holsterh = new /obj/item/clothing/accessory/holster/hip(null)
 	uniform.attackby(holsterh, H)
@@ -421,12 +424,13 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU"
 	is_officer = TRUE
-	SL_check_independent = TRUE
+	is_squad_leader = TRUE
+	uses_squads = TRUE
 	is_ww2 = TRUE
 
-	// AUTOBALANCE
-	min_positions = 1
-	max_positions = 6
+
+	min_positions = 2
+	max_positions = 12
 
 /datum/job/russian/sergeant_soviet/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -440,7 +444,8 @@
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/submachinegun/ppsh(H), slot_belt)
 
 	H.equip_to_slot_or_del(new /obj/item/weapon/radio/faction2(H), slot_back)
-
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/sovcoat(H), slot_wear_suit)
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/storage/webbing/ww1/leather/webbing = new /obj/item/clothing/accessory/storage/webbing/ww1/leather(null)
 	uniform.attackby(webbing, H)
@@ -464,10 +469,9 @@
 	rank_abbreviation = "Srj."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRUDoc"
-	SL_check_independent = TRUE
-	is_ww2 = TRUE
 
-	// AUTOBALANCE
+	is_ww2 = TRUE
+	is_medic = TRUE
 	min_positions = 1
 	max_positions = 4
 
@@ -505,12 +509,13 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU"
-	SL_check_independent = TRUE
-	is_ww2 = TRUE
 
-	// AUTOBALANCE
-	min_positions = 1
-	max_positions = 8
+	is_ww2 = TRUE
+	uses_squads = TRUE
+
+
+	min_positions = 2
+	max_positions = 12
 
 /datum/job/russian/machinegunner_soviet/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -523,8 +528,9 @@
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/sov_ushanka(H), slot_head)
 	else
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/sov_pilotka(H), slot_head)
-
-		H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/largepouches/sovietmg(H), slot_belt)
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/sovcoat(H), slot_wear_suit)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/largepouches/sovietmg(H), slot_belt)
 //weapons
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/automatic/dp28(H), slot_l_hand)
 
@@ -548,10 +554,11 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU"
-	SL_check_independent = TRUE
-	is_ww2 = TRUE
 
-	// AUTOBALANCE
+	is_ww2 = TRUE
+	uses_squads = TRUE
+
+
 	min_positions = 20
 	max_positions = 100
 
@@ -567,6 +574,8 @@
 	else
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/sov_pilotka(H), slot_head)
 //weapons
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/sovcoat(H), slot_wear_suit)
 	if (prob(15))
 		H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/submachinegun/pps(H), slot_belt)
 	else
@@ -574,7 +583,11 @@
 			H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/semiautomatic/svt(H), slot_shoulder)
 		else
 			H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/boltaction/mosin/m30(H), slot_shoulder)
-
+	//head
+	if (prob(80))
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/ww2/soviet(H), slot_head)
+	else
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/sov_pilotka(H), slot_head)
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/storage/webbing/ww1/leather/webbing = new /obj/item/clothing/accessory/storage/webbing/ww1/leather(null)
 	uniform.attackby(webbing, H)
@@ -608,9 +621,9 @@
 	is_commander = TRUE
 	whitelisted = TRUE
 	is_rcw = TRUE
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 2
 
@@ -653,10 +666,11 @@
 	spawn_location = "JoinLateRU"
 	is_officer = TRUE
 	is_squad_leader = TRUE
-	SL_check_independent = TRUE
+	uses_squads = TRUE
+
 	is_rcw = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 2
 	max_positions = 8
 
@@ -696,10 +710,10 @@
 	rank_abbreviation = "Dr."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU"
-	SL_check_independent = TRUE
-	is_rcw = TRUE
 
-	// AUTOBALANCE
+	is_rcw = TRUE
+	is_medic = TRUE
+
 	min_positions = 1
 	max_positions = 10
 
@@ -741,10 +755,11 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU" //for testing!
-	SL_check_independent = TRUE
-	is_rcw = TRUE
 
-	// AUTOBALANCE
+	is_rcw = TRUE
+	uses_squads = TRUE
+
+
 	min_positions = 6
 	max_positions = 100
 
@@ -790,13 +805,14 @@
 	rank_abbreviation = "Vakhmistr"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU2"
-	SL_check_independent = TRUE
+
 	is_rcw = TRUE
+	uses_squads = TRUE
 	is_squad_leader = TRUE
 	is_officer = TRUE
 	whitelisted = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 3
 
@@ -839,10 +855,10 @@
 	rank_abbreviation = "Kazak"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU2"
-	SL_check_independent = TRUE
-	is_rcw = TRUE
 
-	// AUTOBALANCE
+	is_rcw = TRUE
+	uses_squads = TRUE
+
 	min_positions = 6
 	max_positions = 70
 
@@ -889,12 +905,12 @@
 	rank_abbreviation = "Chekist"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU3"
-	SL_check_independent = TRUE
+
 	is_rcw = TRUE
 	is_officer = TRUE
 	whitelisted = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 3
 
@@ -935,12 +951,13 @@
 	rank_abbreviation = "Kom."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU3"
-	SL_check_independent = TRUE
+
+	uses_squads = TRUE
 	is_rcw = TRUE
 	is_squad_leader = TRUE
 	is_officer = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 2
 	max_positions = 12
 
@@ -982,10 +999,9 @@
 	rank_abbreviation = "Dr."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU3"
-	SL_check_independent = TRUE
 	is_rcw = TRUE
+	is_medic = TRUE
 
-	// AUTOBALANCE
 	min_positions = 1
 	max_positions = 10
 
@@ -1025,10 +1041,11 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU3"
-	SL_check_independent = TRUE
-	is_rcw = TRUE
 
-	// AUTOBALANCE
+	is_rcw = TRUE
+	uses_squads = TRUE
+
+
 	min_positions = 10
 	max_positions = 100
 
@@ -1078,16 +1095,17 @@
 	rank_abbreviation = "Kom."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = FALSE
+	uses_squads = TRUE
 	is_tanker = TRUE
 	whitelisted = TRUE
 	is_squad_leader = TRUE
 	is_officer = TRUE
-	// AUTOBALANCE
-	min_positions = 1
-	max_positions = 8
+
+	min_positions = 2
+	max_positions = 6
 
 /datum/job/russian/tank_crew_leader/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -1124,13 +1142,14 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = FALSE
 	is_tanker = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 4
-	max_positions = 64
+	max_positions = 32
 
 /datum/job/russian/tank_crew/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -1169,12 +1188,13 @@
 	rank_abbreviation = "Srj."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU"
-	SL_check_independent = TRUE
+	is_ss_panzer = TRUE
+
 	is_ww2 = TRUE
-	is_tanker = TRUE
 	is_squad_leader = TRUE
+	uses_squads = TRUE
 	is_officer = TRUE
-	// AUTOBALANCE
+
 	min_positions = 2
 	max_positions = 6
 
@@ -1213,10 +1233,11 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRU"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
-	is_tanker = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+	is_ss_panzer = TRUE
+
 	min_positions = 6
 	max_positions = 30
 
@@ -1263,10 +1284,10 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRUSap"
-	SL_check_independent = TRUE
+	is_ss_panzer = TRUE
+
 	is_ww2 = TRUE
-	is_tanker = TRUE
-	// AUTOBALANCE
+
 	min_positions = 2
 	max_positions = 12
 
@@ -1283,7 +1304,7 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/glasses/pilot(H), slot_eyes)
 //back
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/submachinegun/ppsh(H), slot_belt)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/sapper(H), slot_back)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/ww2/german/sapper(H), slot_back)
 
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/storage/webbing/ww1/leather/webbing = new /obj/item/clothing/accessory/storage/webbing/ww1/leather(null)

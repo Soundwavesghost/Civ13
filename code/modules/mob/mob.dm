@@ -48,19 +48,19 @@
 	if (!client)	return
 
 	if (type)
-		if (type & TRUE && (sdisabilities & BLIND || blinded || paralysis) )//Vision related
+		if (type & TRUE && ((sdisabilities & BLIND) || blinded || find_trait("Blind") || paralysis) )//Vision related
 			if (!( alt ))
 				return
 			else
 				msg = alt
 				type = alt_type
-		if (type & 2 && (sdisabilities & DEAF || ear_deaf))//Hearing related
+		if (type & 2 && ((sdisabilities & DEAF) || ear_deaf || find_trait("Deaf")))//Hearing related
 			if (!( alt ))
 				return
 			else
 				msg = alt
 				type = alt_type
-				if ((type & TRUE && sdisabilities & BLIND))
+				if ((type & TRUE && (sdisabilities & BLIND)) || find_trait("Blind"))
 					return
 	// Added voice muffling for Issue 41.
 	if (stat == UNCONSCIOUS || sleeping > 0)
@@ -344,7 +344,7 @@
 	if (flavor_text && flavor_text != "")
 		var/msg = trim(replacetext(flavor_text, "\n", " "))
 		if (!msg) return ""
-		if (lentext(msg) <= 40)
+		if (length(msg) <= 40)
 			return "<span class = 'notice'>[msg]</span>"
 		else
 			return "<span class = 'notice'>[copytext_preserve_html(msg, TRUE, 37)]... <a href='byond://?src=\ref[src];flavor_more=1'>More...</a></span>"
@@ -593,7 +593,7 @@
 			stat(stat_header("Server"))
 			stat("")
 			stat("Players Online (Playing, Observing, Lobby):", "[clients.len] ([human_clients_mob_list.len], [clients.len-human_clients_mob_list.len-new_player_mob_list.len], [new_player_mob_list.len])")
-			stat("Round Duration:", roundduration2text())
+			stat("Round Duration:", roundduration2text_days())
 
 			if (map && !map.civilizations)
 				var/grace_period_string = ""
@@ -616,9 +616,16 @@
 				stat("Grace Period Status:", grace_period_string)
 				stat("Round End Condition:", map.current_stat_message())
 			if (map)
+				var/gmd = map.gamemode
+				switch(map.gamemode)
+					if ("Normal")
+						gmd = "<font color='green'>Normal</font>"
+					if ("Competitive")
+						gmd = "<font color='yellow'>Competitive</font>"
+					if ("Hardcore")
+						gmd = "<font color='red'>Hardcore</font>"
 				stat("Map:", map.title)
-				if (map.civilizations)
-					stat("Mode:", map.gamemode)
+				stat("Mode:", gmd)
 				stat("Epoch:", map.age)
 				stat("Season:", get_season())
 				stat("Wind:", map.winddesc)
@@ -681,14 +688,13 @@
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
 /mob/proc/update_canmove()
 
-	var/noose = FALSE
 	var/gallows = FALSE
 	for (var/obj/structure/noose/N in get_turf(src))
 		if (N.hanging == src)
 			lying = FALSE
 			canmove = FALSE
 			anchored = TRUE
-			noose = TRUE
+			gallows = TRUE
 			prone = FALSE
 			update_icons()
 	for (var/obj/structure/gallows/G in get_turf(src))
@@ -699,7 +705,23 @@
 			gallows = TRUE
 			prone = FALSE
 			update_icons()
-	if (!noose && !gallows)
+	for (var/obj/structure/cross/G in get_turf(src))
+		if (G.hanging == src)
+			lying = FALSE
+			canmove = FALSE
+			anchored = TRUE
+			gallows = TRUE
+			prone = FALSE
+			update_icons()
+	for (var/obj/structure/pillory/G in get_turf(src))
+		if (G.hanging == src)
+			lying = FALSE
+			canmove = FALSE
+			anchored = TRUE
+			gallows = TRUE
+			prone = FALSE
+			update_icons()
+	if (!gallows)
 		if (buckled)
 			anchored = TRUE
 			canmove = FALSE
@@ -906,7 +928,9 @@ mob/proc/yank_out_object()
 	return weakened
 
 /mob/living/proc/handle_stuttering()
-	if (stuttering)
+	if (find_trait("Stutter"))
+		stuttering = 10
+	else if (stuttering)
 		stuttering = max(stuttering-1, 0)
 	return stuttering
 

@@ -10,7 +10,7 @@
 	emote_hear = list("neighs")
 	emote_see = list("shakes its head")
 	speak_chance = TRUE
-	turns_per_move = 5
+	move_to_delay = 5
 	see_in_dark = 6
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 6
@@ -21,5 +21,5 @@
 	health = 120
 	mob_size = MOB_LARGE
 	layer = 3.99
-	a_intent = I_HURT
+	a_intent = I_HARM
 	can_ride = TRUE

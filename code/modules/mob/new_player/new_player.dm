@@ -24,7 +24,7 @@
 
 	var/on_welcome_popup = FALSE
 
-
+var/global/redirect_all_players = null
 /mob/new_player/New()
 	mob_list += src
 	new_player_mob_list += src
@@ -33,10 +33,14 @@
 	spawn (10)
 		if (client)
 			movementMachine_clients -= client
-
+	if (!client || !client.holder || (client.holder.rank != "Host" && client.holder.rank != "Admiral"))
+		if (redirect_all_players)
+			for (var/C in clients)
+				winset(C, null, "mainwindow.flash=1")
+				C << link(redirect_all_players)
 /mob/new_player/Destroy()
-	..()
 	new_player_mob_list -= src
+	..()
 
 /mob/new_player/say(var/message)
 	message = sanitize(message)
@@ -169,7 +173,7 @@
 	if (href_list["observe"])
 
 		if (client && client.quickBan_isbanned("Observe"))
-			src << "<span class = 'danger'>You're banned from observing.</span>"
+			WWalert(src,"You're banned from observing.","Error")
 			return TRUE
 
 		if (WWinput(src, "Are you sure you wish to observe?", "Player Setup", "Yes", list("Yes","No")) == "Yes")
@@ -181,10 +185,9 @@
 
 			observer.started_as_observer = TRUE
 			close_spawn_windows()
-			var/obj/O = locate("landmark/Observer-Start")
-			if (istype(O))
-				src << "<span class='notice'>Now teleporting.</span>"
-				observer.loc = O.loc
+			var/turf/T = get_turf(locate(1,1,world.maxz))
+			if (T)
+				observer.loc = T
 			else
 				src << "<span class='danger'>Could not locate an observer spawn point. Use the Teleport verb to jump to another map point.</span>"
 			observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
@@ -202,8 +205,6 @@
 
 			observer.real_name = capitalize(key)
 			observer.name = observer.real_name
-		//	if (!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
-				//observer.verbs -= /mob/observer/ghost/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
 			observer.key = key
 			observer.overlays += icon('icons/mob/uniform.dmi', "civuni[rand(1,3)]")
 			observer.original_icon = observer.icon
@@ -213,16 +214,20 @@
 			return TRUE
 
 		if (client && client.quickBan_isbanned("Playing"))
-			src << "<span class = 'danger'>You're banned from playing.</span>"
+			WWalert(src,"You're banned from playing.","Error")
 			return TRUE
 
 		if (!ticker.players_can_join)
-			src << "<span class = 'danger'>You can't join the game yet.</span>"
+			WWalert(src,"You can't join the game yet.","Error")
 			return TRUE
 
 		if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
-			src << "<span class = 'red'>The round is either not ready, or has already finished.</span>"
-			return
+			WWalert(src,"The round is either not ready, or has already finished.","Error")
+			return TRUE
+
+		if (check_trait_points(client.prefs.traits) > 0)
+			WWalert(src,"Your traits are not balanced! You can't join until you balance them (sum has to be <= 0).","Error")
+			return FALSE
 
 		if (client && client.next_normal_respawn > world.realtime && !config.no_respawn_delays)
 			var/wait = ceil((client.next_normal_respawn-world.realtime)/10)
@@ -241,16 +246,20 @@
 	if (href_list["tribes"])
 
 		if (client && client.quickBan_isbanned("Playing"))
-			src << "<span class = 'danger'>You're banned from playing.</span>"
+			WWalert(src,"You're banned from playing.","Error")
 			return TRUE
 
 		if (!ticker.players_can_join)
-			src << "<span class = 'danger'>You can't join the game yet.</span>"
+			WWalert(src,"You can't join the game yet.","Error")
 			return TRUE
 
 		if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
-			src << "<span class = 'red'>The round is either not ready, or has already finished.</span>"
+			WWalert(src,"The round is either not ready, or has already finished.","Error")
 			return
+
+		if (check_trait_points(client.prefs.traits) > 0)
+			WWalert(src,"Your traits are not balanced! You can't join until you balance them (sum has to be <= 0).","Error")
+			return FALSE
 
 		if (client.next_normal_respawn > world.realtime && !config.no_respawn_delays)
 			var/wait = ceil((client.next_normal_respawn-world.realtime)/600)
@@ -261,7 +270,7 @@
 					message_admins(msg)
 					LateChoices()
 					return TRUE
-			WWalert(src, "Because you died in combat, you must wait [wait] more minutes to respawn. You can still join as a reinforcement.", "Error")
+			WWalert(src, "Because you died in combat, you must wait [wait] more minutes to respawn.", "Error")
 			return FALSE
 
 		if (map && map.ID == MAP_TRIBES)
@@ -275,16 +284,20 @@
 	if (href_list["civilizations"])
 
 		if (client && client.quickBan_isbanned("Playing"))
-			src << "<span class = 'danger'>You're banned from playing.</span>"
+			WWalert(src,"You're banned from playing.","Error")
 			return TRUE
 
 		if (!ticker.players_can_join)
-			src << "<span class = 'danger'>You can't join the game yet.</span>"
+			WWalert(src,"You can't join the game yet.","Error")
 			return TRUE
 
 		if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
-			src << "<span class = 'red'>The round is either not ready, or has already finished.</span>"
+			WWalert(src,"The round is either not ready, or has already finished.","Error")
 			return
+
+		if (check_trait_points(client.prefs.traits) > 0)
+			WWalert(src,"Your traits are not balanced! You can't join until you balance them (sum has to be <= 0).","Error")
+			return FALSE
 
 		if (client.next_normal_respawn > world.realtime && !config.no_respawn_delays)
 			var/wait = ceil((client.next_normal_respawn-world.realtime)/600)
@@ -293,9 +306,10 @@
 					var/msg = "[key_name(src)] bypassed a [wait] minute wait to respawn."
 					log_admin(msg)
 					message_admins(msg)
-					LateChoices()
+					close_spawn_windows()
+					AttemptLateSpawn(pick(map.availablefactions))
 					return TRUE
-			WWalert(src, "Because you died, you must wait [wait] more minutes to respawn. You can still join as a reinforcement.", "Error")
+			WWalert(src, "Because you died, you must wait [wait] more minutes to respawn.", "Error")
 			return FALSE
 
 		if (map && map.civilizations == TRUE)
@@ -303,22 +317,25 @@
 			AttemptLateSpawn(pick(map.availablefactions))
 		else
 			return
-		LateChoices()
 		return TRUE
 
 	if (href_list["nomads"])
 
 		if (client && client.quickBan_isbanned("Playing"))
-			src << "<span class = 'danger'>You're banned from playing.</span>"
+			WWalert(src,"You're banned from playing.","Error")
 			return TRUE
 
 		if (!ticker.players_can_join)
-			src << "<span class = 'danger'>You can't join the game yet.</span>"
+			WWalert(src,"You can't join the game yet.","Error")
 			return TRUE
 
 		if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
-			src << "<span class = 'red'>The round is either not ready, or has already finished.</span>"
+			WWalert(src,"The round is either not ready, or has already finished.","Error")
 			return
+
+		if (check_trait_points(client.prefs.traits) > 0)
+			WWalert(src,"<Your traits are not balanced! You can't join until you balance them (sum has to be <= 0).","Error")
+			return FALSE
 
 		if (client.next_normal_respawn > world.realtime && !config.no_respawn_delays)
 			var/wait = ceil((client.next_normal_respawn-world.realtime)/600)
@@ -327,24 +344,29 @@
 					var/msg = "[key_name(src)] bypassed a [wait] minute wait to respawn."
 					log_admin(msg)
 					message_admins(msg)
-					LateChoices()
+					close_spawn_windows()
+					AttemptLateSpawn("Nomad")
 					return TRUE
-			WWalert(src, "Because you died, you must wait [wait] more minutes to respawn. You can still join as a reinforcement.", "Error")
+				else
+					return FALSE
+			WWalert(src, "Because you died, you must wait [wait] more minutes to respawn.", "Error")
 			return FALSE
 
 		if (map && map.civilizations == TRUE)
 			close_spawn_windows()
 			AttemptLateSpawn("Nomad")
+			return TRUE
 		else
 			return
-		LateChoices()
+		close_spawn_windows()
+		AttemptLateSpawn("Nomad")
 		return TRUE
 
 
 	if (href_list["late_join"])
 
 		if (client && client.quickBan_isbanned("Playing"))
-			src << "<span class = 'danger'>You're banned from playing.</span>"
+			WWalert(src,"You're banned from playing.","Error")
 			return TRUE
 
 		if (!isemptylist(approved_list) && config.useapprovedlist)
@@ -353,15 +375,18 @@
 				if (i == client.ckey)
 					found = TRUE
 			if (!found)
-				usr << "<span class = 'notice'><font size = 4 color='red'><b>The game is currently only accepting approved players. Visit the Discord to get approved.</b></font></span>"
+				if (config.discordurl)
+					WWalert(usr,"The game is currently only accepting approved players. Visit the Discord to get approved: [config.discordurl]", "Error")
+				else
+					WWalert(usr,"The game is currently only accepting approved players. Visit the Discord to get approved.", "Error")
 				return
 
 		if (!ticker.players_can_join)
-			src << "<span class = 'danger'>You can't join the game yet.</span>"
+			WWalert(src,"You can't join the game yet.","Error")
 			return TRUE
 
 		if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
-			src << "<span class = 'red'>The round is either not ready, or has already finished.</span>"
+			WWalert(src,"The round is either not ready, or has already finished.","Error")
 			return
 
 		if (client.next_normal_respawn > world.realtime && !config.no_respawn_delays)
@@ -393,16 +418,16 @@
 		var/job_flag = actual_job.base_type_flag()
 
 		if (!config.enter_allowed)
-			usr << "<span class='notice'>There is an administrative lock on entering the game!</span>"
+			WWalert(usr,"There is an administrative lock on entering the game!", "Error")
 			return
 
-		if (map && map.has_occupied_base(job_flag) && map.ID != MAP_CAMP && map.ID != MAP_HILL203)
-			usr << "<span class = 'danger'>The enemy is currently occupying your base! You can't be deployed right now.</span>"
+		if (map && map.has_occupied_base(job_flag) && map.ID != MAP_CAMP && map.ID != MAP_HILL_203)
+			WWalert(usr,"The enemy is currently occupying your base! You can't be deployed right now.", "Error")
 			return
 /* "Old" whitelisting proccess
 		if (actual_job.whitelisted)
 			if (!actual_job.validate(client))
-				usr << "<span class = 'notice'>You need to be whitelisted to play this job. Apply in the Discord.</span>"
+				WWalert(usr,"You need to be whitelisted to play this job. Apply in the Discord.","Error")
 				return
 */
 		if (actual_job.whitelisted && !isemptylist(whitelist_list) && config.use_job_whitelist)
@@ -414,7 +439,7 @@
 				if (temp_ckey == client.ckey)
 					found = TRUE
 			if (!found)
-				usr << "<span class = 'notice'><font size = 4><b>You need to be whitelisted to play this job. Apply in the Discord.</b></font></span>"
+				WWalert(usr,"You need to be whitelisted to play this job. Apply in the Discord.","Error")
 				return
 
 		if (actual_job.is_officer)
@@ -487,27 +512,27 @@
 		return FALSE
 	if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
 		if (!nomsg)
-			usr << "<span class = 'red'>The round is either not ready, or has already finished.</span>"
+			WWalert(usr,"The round is either not ready, or has already finished.","Error")
 			if (map.ID == MAP_TRIBES || map.civilizations == TRUE)
 				abandon_mob()
 				spawn(10)
-					usr << "<span class = 'red'>The round is either not ready, or has already finished.</span>"
+					WWalert(usr,"The round is either not ready, or has already finished.", "Error")
 		return FALSE
 	if (!config.enter_allowed)
 		if (!nomsg)
-			usr << "<span class='notice'>There is an administrative lock on entering the game!</span>"
+			WWalert(usr,"There is an administrative lock on entering the game!", "Error")
 			if (map.ID == MAP_TRIBES || map.civilizations == TRUE)
 				abandon_mob()
 				spawn(10)
-					usr << "<span class='notice'>There is an administrative lock on entering the game!</span>"
+					WWalert(usr,"There is an administrative lock on entering the game!", "Error")
 		return FALSE
 	if (jobBanned(rank))
 		if (!nomsg)
-			usr << "<span class = 'warning'>You're banned from this role!</span>"
+			WWalert(usr,"You're banned from this role!", "Error")
 			if (map.ID == MAP_TRIBES || map.civilizations == TRUE)
 				abandon_mob()
 				spawn(10)
-					usr << "<span class = 'warning'>You're banned from this role!</span>"
+					WWalert(usr,"You're banned from this role!", "Error")
 
 		return FALSE
 	if (!IsJobAvailable(rank))
@@ -523,52 +548,51 @@
 
 	if (factionBanned(job.base_type_flag(1)))
 		if (!nomsg)
-			usr << "<span class = 'warning'>You're banned from this faction!</span>"
+			WWalert(usr,"You're banned from this faction!","Error")
 			if (map.ID == MAP_TRIBES || map.civilizations == TRUE)
 				abandon_mob()
 				spawn(10)
-					usr << "<span class = 'warning'>You're banned from this faction!</span>"
+					WWalert(usr,"You're banned from this faction!","Error")
 		return FALSE
 
 	if (penalBanned())
 		if (job.blacklisted == FALSE)
 			if (!nomsg)
-				usr << "<span class = 'warning'>You're under a Penal ban, you can only play as that role!</span>"
+				WWalert(usr,"You're under a Penal ban, you can only play as that role!","Error")
 			if (map.ID == MAP_TRIBES || map.civilizations == TRUE)
 				abandon_mob()
 				spawn(10)
-					usr << "<span class = 'warning'>You're under a Penal ban, you can only play as that role!</span>"
+					WWalert(usr,"You're under a Penal ban, you can only play as that role!","Error")
 			return FALSE
 
 	else
 		if (job.blacklisted == TRUE)
 			if (!nomsg)
-				usr << "<span class = 'warning'>This job is reserved as a punishment for those who break server rules.</span>"
+				WWalert(usr,"This job is reserved as a punishment for those who break server rules.","Error")
 			if (map.ID == MAP_TRIBES || map.civilizations == TRUE)
 				abandon_mob()
 				spawn(10)
-					usr << "<span class = 'warning'>This job is reserved as a punishment for those who break server rules.</span>"
+					WWalert(usr,"This job is reserved as a punishment for those who break server rules.","Error")
 			return FALSE
 
 	if (job.is_deathmatch)
 		if (map && map.faction1_can_cross_blocks())
-			src << "<span class = 'red'>This job is not available for joining after the grace period has ended.</span>"
-			return
+			WWalert(usr,"This job is not available for joining after the grace period has ended.","Error")
+			return FALSE
 		if (client && client.prefs.gender == FEMALE)
-			usr << "<span class='danger'>You must be male to play as this faction.</span>"
-			return
+			WWalert(usr,"You must be male to play as this faction.","Error")
+			return FALSE
 	if (client && client.prefs.gender == FEMALE && (istype(job, /datum/job/american) || istype(job, /datum/job/arab)))
-		usr << "<span class='danger'>You must be male to play as this faction.</span>"
-		return
+		WWalert(usr,"You must be male to play as this faction.","Error")
+		return FALSE
 	if (job.is_ww1)
 		if (client && client.prefs.gender == FEMALE)
-			usr << "<span class='danger'>You must be male to play as this faction.</span>"
-			return
-	if (map.ordinal_age == 2 && !map.civilizations && !istype(job, /datum/job/civilian))
+			WWalert(usr,"You must be male to play as this faction.","Error")
+			return FALSE
+	if (map.ordinal_age == 2 && !map.civilizations && !istype(job, /datum/job/civilian) && map.ID != MAP_BOHEMIA)
 		if (client.prefs.gender == FEMALE)
-			usr << "<span class='danger'>You must be male to play as this faction.</span>"
-			return
-			return
+			WWalert(usr,"You must be male to play as this faction.","Error")
+			return FALSE
 	spawning = TRUE
 	close_spawn_windows()
 	job_master.AssignRole(src, rank, TRUE)
@@ -577,6 +601,66 @@
 		return FALSE
 
 	character = job_master.EquipRank(character, rank, TRUE)					//equips the human
+
+	//squads
+	if (ishuman(character))
+		var/mob/living/carbon/human/H = character
+		if (H.original_job.uses_squads)
+			H.verbs += /mob/living/carbon/human/proc/find_nco
+			if (H.original_job.is_squad_leader)
+				H.verbs += /mob/living/carbon/human/proc/Squad_Announcement
+			if (H.faction_text == map.faction1) //lets check the squads and see what is the one with the lowest ammount of members
+				if (H.original_job.is_officer && map.ordinal_age >= 6 || H.original_job.is_squad_leader && map.ordinal_age >= 6 || H.original_job.is_commander && map.ordinal_age >= 6)
+					H.equip_to_slot_or_del(new/obj/item/weapon/radio/faction1(H),slot_back)
+				if (H.original_job.is_squad_leader)
+					var/done = FALSE
+					for(var/i, i<=map.squads, i++)
+						if (!map.faction1_squad_leaders[i])
+							done = TRUE
+							H.squad = i
+							map.faction1_squad_leaders[i] = H
+							break
+					if (!done)
+						H.squad = rand(1,map.squads)
+				else
+					H.squad = rand(1,map.squads)
+				map.faction1_squads[H.squad] += list(H)
+				H << "<big><b>You have been assigned to Squad [H.squad]!</b></big>"
+				if (H.original_job.is_squad_leader)
+					if (!map.faction1_squad_leaders[H.squad] || map.faction1_squad_leaders[H.squad] == H)
+						H << "<big><b>You are the new squad leader!</b></big>"
+						map.faction1_squad_leaders[H.squad] = H
+					else if (map.faction1_squad_leaders[H.squad] && map.faction1_squad_leaders[H.squad] != H)
+						H << "<big><b>Your squad leader is [map.faction1_squad_leaders[H.squad]].</b></big>"
+				else if (map.faction1_squad_leaders[H.squad])
+					H << "<big><b>Your squad leader is [map.faction1_squad_leaders[H.squad]].</b></big>"
+			else if (H.faction_text == map.faction2)
+				if (H.original_job.is_officer && map.ordinal_age >= 6 || H.original_job.is_squad_leader && map.ordinal_age >= 6 || H.original_job.is_commander && map.ordinal_age >= 6)
+					H.equip_to_slot_or_del(new/obj/item/weapon/radio/faction2(H),slot_back)
+				if (H.original_job.is_squad_leader)
+					var/done = FALSE
+					for(var/i, i<=map.squads, i++)
+						if (!map.faction2_squad_leaders[i])
+							done = TRUE
+							H.squad = i
+							map.faction2_squad_leaders[i] = H
+							break
+					if (!done)
+						H.squad = rand(1,map.squads)
+				else
+					H.squad = rand(1,map.squads)
+				map.faction2_squads[H.squad] += list(H)
+				H << "<big><b>You have been assigned to Squad [H.squad]!</b></big>"
+				if (H.original_job.is_squad_leader)
+					if (!map.faction2_squad_leaders[H.squad] || map.faction2_squad_leaders[H.squad] == H)
+						H << "<big><b>You are the new squad leader!</b></big>"
+						map.faction2_squad_leaders[H.squad] = H
+					else if (map.faction2_squad_leaders[H.squad] && map.faction2_squad_leaders[H.squad] != H)
+						H << "<big><b>Your squad leader is [map.faction2_squad_leaders[H.squad]].</b></big>"
+				else if (map.faction2_squad_leaders[H.squad])
+					H << "<big><b>Your squad leader is [map.faction2_squad_leaders[H.squad]].</b></big>"
+	//
+
 	job_master.relocate(character)
 
 	if (character.buckled && istype(character.buckled, /obj/structure/bed/chair/wheelchair))
@@ -585,9 +669,8 @@
 
 	if (character.mind)
 		ticker.minds += character.mind
-
 	character.lastarea = get_area(loc)
-
+	qdel(src)
 	return TRUE
 
 /mob/new_player/proc/LateChoices()
@@ -598,7 +681,7 @@
 	var/list/dat = list("<center>")
 	dat += "<b><big>Welcome, [key].</big></b>"
 	dat += "<br>"
-	dat += "Round Duration: [roundduration2text()]"
+	dat += "Round Duration: [roundduration2text_days()]"
 	dat += "<br>"
 	dat += "<b>Current Autobalance Status</b>: "
 	if (BRITISH in map.faction_organization)
@@ -806,7 +889,7 @@
 					replaced_faction_title = TRUE
 
 	if (!any_available_jobs)
-		src << "<span class = 'danger'><font size = 3>All roles are disabled by autobalance!</font></span>"
+		WWalert(usr,"All roles are disabled by autobalance!","Error")
 		return
 
 	var/data = ""
@@ -902,13 +985,7 @@
 	new_character.key = key		//Manually transfer the key to log them in
 
 	return new_character
-/*
-/mob/new_player/proc/ViewManifest()
-	var/dat = "<html><body>"
-	dat += "<h4>Show Crew Manifest</h4>"
-	dat += data_core.get_manifest(OOC = TRUE)
-	src << browse(dat, "window=manifest;size=370x420;can_close=1")
-*/
+
 /mob/new_player/Move()
 	return FALSE
 

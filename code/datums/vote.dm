@@ -56,7 +56,9 @@ var/global/list/round_voters = list() //Keeps track of the individuals voting fo
 	proc/autogamemode()
 		if (map.ID == MAP_NOMADS_EXTENDED || map.ID == MAP_CIVILIZATIONS || map.ID == MAP_TRIBES || map.ID == MAP_NOMADS_WASTELAND || map.ID == MAP_TESTING)
 			return
-		if (map.civilizations && autogamemode_triggered == FALSE)
+		if (map.persistence)
+			return
+		if (!map.is_RP && autogamemode_triggered == FALSE)
 			initiate_vote("gamemode","the server", TRUE)
 			log_debug("The server has called a gamemode vote.")
 			autogamemode_triggered = TRUE
@@ -215,9 +217,15 @@ var/global/list/round_voters = list() //Keeps track of the individuals voting fo
 						choices.Add("Yes")
 						choices.Add("No")
 				if ("gamemode")
-					var/list/options = list("Classic (Stone Age Start)", "Chad Mode", "Chad Mode +", "Auto-Research Mode", "Resource-Based Research", "Bronze Age (No Research)", "Medieval (No Research)", "Imperial Age (No Research)", "Industrial Age (No Research)", "Early Modern Age (No Research)", "WW2 Age (No Research)", "Modern Age (No Research)")
-					if (!default)
-						default = "Classic (Stone Age Start)"
+					var/list/options = list()
+					if (!map.is_RP && !map.nomads && !map.civilizations)
+						options = list("Normal", "Competitive", "Hardcore")
+						if (!default)
+							default = "Normal"
+					else if (map.nomads || map.civilizations)
+						options = list("Classic (Stone Age Start)", "Chad Mode", "Chad Mode +", "Auto-Research Mode", "Resource-Based Research", "Bronze Age (No Research)", "Medieval (No Research)", "Imperial Age (No Research)", "Industrial Age (No Research)", "Early Modern Age (No Research)", "WW2 Age (No Research)", "Modern Age (No Research)")
+						if (!default)
+							default = "Classic (Stone Age Start)"
 					choices.Add(options)
 				else
 					return FALSE
@@ -312,6 +320,9 @@ var/global/list/round_voters = list() //Keeps track of the individuals voting fo
 				if (config.allow_vote_restart || usr.client.holder)
 					if (config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 						usr << "You can't start restart votes if you are not playing."
+						return FALSE
+					if (map.nomads && clients.len < 10 && ((world.time-round_start_time)>36000) && !usr.client.holder)
+						usr << "You can't start restart votes if the server population is lower than 10 and the round has been going for over an hour."
 						return FALSE
 					initiate_vote("restart",usr.key)
 			if ("custom")

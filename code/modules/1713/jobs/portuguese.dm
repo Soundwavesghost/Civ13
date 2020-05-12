@@ -6,18 +6,18 @@
 	H.real_name = H.name
 
 /datum/job/portuguese/captain
-	title = "Capitão"
+	title = "Capitao"
 	en_meaning = "Ship Captain"
-	rank_abbreviation = "Capitão"
+	rank_abbreviation = "Capitao"
 	head_position = TRUE
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePTCap"
 	is_officer = TRUE
 	is_commander = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 1
 
@@ -58,9 +58,9 @@
 	is_commander = TRUE
 	is_officer = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 1
 
@@ -78,7 +78,7 @@
 
 	H.equip_to_slot_or_del(new /obj/item/weapon/material/sword/spadroon(H), slot_belt)
 	world << "<b><big>[H.real_name] is the Quartermaster of the Portuguese Navy ship!</big></b>"
-	H.add_note("Role", "You are a <b>[title]</b>, an officer in charge of the ship's supply allocation. You are also the second in command, after the <b>Capitão</b>.")
+	H.add_note("Role", "You are a <b>[title]</b>, an officer in charge of the ship's supply allocation. You are also the second in command, after the <b>Capitao</b>.")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
 	H.setStat("crafting", STAT_NORMAL)
 	H.setStat("rifle", STAT_NORMAL)
@@ -99,11 +99,11 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePTBoatswain"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_commander = TRUE
 	is_officer = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -142,9 +142,9 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePTMidshipman"
 	is_officer = TRUE
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 10
 
@@ -174,14 +174,15 @@
 	return TRUE
 
 /datum/job/portuguese/surgeon
-	title = "Médico Naval"
+	title = "Medico Naval"
 	en_meaning = "Medic"
-	rank_abbreviation = "Médico"
+	rank_abbreviation = "Medico"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePTSurgeon"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+	is_medic = TRUE
+
 	min_positions = 1
 	max_positions = 10
 
@@ -217,9 +218,9 @@
 	rank_abbreviation = "Carpinteiro"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePTCarpenter"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 10
 
@@ -261,9 +262,9 @@
 	rank_abbreviation = "Cozinheiro"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePTCook"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 10
 
@@ -311,9 +312,9 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePT"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 6
 	max_positions = 200
 
@@ -343,7 +344,7 @@
 	else if (randweapon == 2)
 		H.equip_to_slot_or_del(new 	/obj/item/weapon/material/harpoon(H), slot_belt)
 
-	H.add_note("Role", "You are a <b>[title]</b>, a simple seaman employed by the Portuguese Marinha Real. Follow your <b>Capitão</b> orders!")
+	H.add_note("Role", "You are a <b>[title]</b>, a simple seaman employed by the Portuguese Marinha Real. Follow your <b>Capitao</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
 	H.setStat("crafting", STAT_MEDIUM_LOW)
 	H.setStat("rifle", STAT_MEDIUM_LOW) //muskets
@@ -365,10 +366,10 @@
 	spawn_location = "JoinLatePTCap"
 	is_officer = TRUE
 	is_commander = TRUE
-	SL_check_independent = TRUE
+
 	is_army = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -408,10 +409,10 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePTMidshipman"
 	is_officer = TRUE
-	SL_check_independent = TRUE
+
 	is_army = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 2
 	max_positions = 20
 
@@ -442,15 +443,16 @@
 
 	return TRUE
 /datum/job/portuguese/field_medic
-	title = "Médico de Campo"
+	title = "Medico de Campo"
 	en_meaning = "Infantry Field Medic"
 	rank_abbreviation = "Dr."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePTSurgeon"
-	SL_check_independent = TRUE
+
+	is_medic = TRUE
 	is_army = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 6
 
@@ -486,10 +488,10 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePT"
-	SL_check_independent = TRUE
+
 	is_army = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 12
 	max_positions = 100
 
@@ -521,15 +523,15 @@
 	return TRUE
 
 /datum/job/portuguese/chasseur
-	title = "Caçador"
+	title = "Cacador"
 	en_meaning = "Light Infantry"
-	rank_abbreviation = "Caç."
+	rank_abbreviation = "Cac."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLatePT"
-	SL_check_independent = TRUE
+
 	is_army = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 4
 	max_positions = 20
 

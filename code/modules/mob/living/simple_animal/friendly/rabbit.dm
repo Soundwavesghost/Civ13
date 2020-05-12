@@ -12,7 +12,7 @@
 	emote_see = list("runs in a circle", "jumps", "sniffs the ground")
 	pass_flags = PASSTABLE
 	speak_chance = TRUE
-	turns_per_move = 4
+	move_to_delay = 4
 	see_in_dark = 6
 	maxHealth = 12
 	health = 12
@@ -27,6 +27,7 @@
 	universal_understand = TRUE
 	mob_size = MOB_SMALL
 	granivore = 1
+	behaviour = "scared"
 
 /mob/living/simple_animal/rabbit/New()
 	..()

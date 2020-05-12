@@ -11,9 +11,8 @@ var/list/admin_verbs_default = list(
 	/client/proc/see_soldiers,
 	/client/proc/see_world_realtime,
 	/client/proc/see_processes,
-	/client/proc/giveruntimelog,		//allows us to give access to runtime logs to somebody,
 	/client/proc/getserverlog,			//allows us to fetch server logs (diary) for other days,
-	/client/proc/getruntimelog                     // allows us to access runtime logs to somebody,
+	/client/proc/getruntimelog					 // allows us to access runtime logs to somebody,
 	)
 var/list/admin_verbs_admin = list(
 	/client/proc/enable_fov,
@@ -43,7 +42,6 @@ var/list/admin_verbs_admin = list(
 	/client/proc/player_memo,
 	/client/proc/dsay,					//talk in deadchat using our ckey/fakekey,
 	/client/proc/investigate_show,		//various admintools for investigation. Such as a singulo grief-log,
-	/client/proc/secrets,
 	/datum/admins/proc/toggleooc,		//toggles ooc on/off for everyone,
 	/datum/admins/proc/togglelooc,		//toggles looc on/off for everyone,
 	/datum/admins/proc/toggleoocdead,	//toggles ooc on/off for everyone who is dead,
@@ -55,8 +53,7 @@ var/list/admin_verbs_admin = list(
 	/datum/admins/proc/show_player_info,
 	/client/proc/free_slot,			//frees slot for chosen job,
 	/client/proc/cmd_admin_change_custom_event,
-	/client/proc/allow_character_respawn,    // Allows a ghost to respawn ,
-	/client/proc/reset_roundstart_autobalance,
+	/client/proc/allow_character_respawn,	// Allows a ghost to respawn ,
 	/datum/admins/proc/ic_announce,
 	/client/proc/change_human_appearance_admin,	// Allows an admin to change the basic appearance of human-based mobs ,
 	/client/proc/change_human_appearance_self,	// Allows the human-based mob itself change its basic appearance ,
@@ -65,6 +62,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/reset_all_grace_periods,
 	/client/proc/faction_species,
 	/datum/admins/proc/paralyze_mob,
+	/datum/admins/proc/punish,
 	/client/proc/toggle_jobs,
 	/client/proc/toggle_factions,
 	/client/proc/forcibly_enable_faction,
@@ -92,7 +90,6 @@ var/list/admin_verbs_trialadmin = list(
 	/client/proc/trigger_roundend,
 	/datum/admins/proc/immreboot,
 	/client/proc/Jump,
-	/client/proc/jumptomob,
 	/client/proc/jumptocoord,
 	/datum/admins/proc/ic_announce,
 	/client/proc/start_epochswap_vote,
@@ -112,7 +109,6 @@ var/list/admin_verbs_fun = list(
 	/client/proc/nuke,
 	/client/proc/make_sound,
 	/client/proc/editappear,
-	/client/proc/randomize_lobby_music,
 	/client/proc/show_custom_roundstart_tip,
 	/client/proc/reset_custom_roundstart_tip
 	)
@@ -138,21 +134,29 @@ var/list/admin_verbs_server = list(
 	/datum/admins/proc/adrev,
 	/datum/admins/proc/adspawn,
 	/datum/admins/proc/adjump,
-	/datum/admins/proc/export,
+	/datum/admins/proc/export_savegame,
+	/datum/admins/proc/import_savegame,
+	/datum/admins/proc/persistent,
 	/client/proc/nanomapgen_DumpImage
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/cmd_admin_list_open_jobs,
 	/client/proc/Debug2,
+	/client/proc/toggle_gc_helper,
+	/client/proc/run_gc_helper,
+	/client/proc/check_null_atoms,
 	/client/proc/debug_controller,
 	/client/proc/cmd_admin_delete,
 	/client/proc/cmd_debug_del_all,
 	/client/proc/reload_admins,
+	/client/proc/reload_craft_list,
+	/client/proc/reload_bans,
+	/client/proc/purge_all_destroyed_objects,
+//	/client/proc/start_forcelife,
 	/client/proc/restart_controller,
 	/client/proc/callproc,
 	/client/proc/callproc_target,
 	/client/proc/Jump,
-	/client/proc/jumptomob,
 	/client/proc/jumptocoord,
 	/client/proc/dsay,
 	/client/proc/change_time_of_day,
@@ -160,9 +164,11 @@ var/list/admin_verbs_debug = list(
 	/client/proc/change_wind_spd,
 	/client/proc/randomly_change_weather,
 	/client/proc/randomly_modify_weather,
+	/client/proc/change_season,
 	/client/proc/change_colour_filter,
 	/datum/admins/proc/print_chemical_reactions,
 	/datum/admins/proc/print_crafting_recipes,
+	/datum/admins/proc/redirect_all_players,
 	)
 
 var/list/admin_verbs_paranoid_debug = list(
@@ -245,7 +251,6 @@ var/list/admin_verbs_mod = list(
 	/client/proc/jumptocoord,			//we ghost and jump to a coordinate,
 	/client/proc/Jump,
 	/client/proc/jumptokey,				//allows us to jump to the location of a mob with a certain ckey,
-	/client/proc/jumptomob,				//allows us to jump to a specific mob,
 	/client/proc/jumptoturf,			//allows us to jump to a specific turf,
 	/client/proc/cmd_admin_pm_context,	// right-click adminPM interface,
 	/client/proc/cmd_admin_pm_panel,	// admin-pm list,
@@ -259,6 +264,7 @@ var/list/admin_verbs_mod = list(
 	/datum/admins/proc/show_player_panel,
 	/client/proc/cmd_admin_subtle_message, // send an message to somebody as a 'voice in their head',
 	/datum/admins/proc/paralyze_mob,
+	/datum/admins/proc/punish,
 	/client/proc/admin_memo,			//admin memo system. show/delete/write. +SERVER needed to delete admin memos of others,
 	/client/proc/player_memo,
 	/client/proc/game_panel,			//game panel, allows to change game-mode etc,
@@ -281,7 +287,6 @@ var/list/admin_verbs_mentor = list(
 )
 
 var/list/admin_verbs_manager = list(
-	/client/proc/reset_roundstart_autobalance,
 	/client/proc/toggle_BYOND_hub_visibility,
 	/client/proc/toggle_playing,
 	/client/proc/start_epochswap_vote,
@@ -453,15 +458,6 @@ var/list/admin_verbs_host = list(
 	set category = "Admin"
 	if (holder)
 		holder.game_panel()
-
-	return
-
-/client/proc/secrets()
-	set name = "Secrets"
-	set category = "Admin"
-	if (holder)
-		holder.Secrets()
-
 	return
 
 /client/proc/colorooc()
@@ -925,3 +921,80 @@ var/global/list/global_colour_matrix = null
 		nuke_map(epicenter, 200, 180, 0)
 		message_admins("[key] nuked the map at ([epicenter.x],[epicenter.y],[epicenter.z]) in area [epicenter.loc.name].")
 		log_game("[key] nuked the map at ([epicenter.x],[epicenter.y],[epicenter.z]) in area [epicenter.loc.name].")
+
+
+///////////////////////GC STUFF////////////////////////////////
+
+var/global/gc_helper_on = FALSE
+
+/proc/start_gc_helper()
+	spawn(18000)
+		if (gc_helper_on)
+			gc_helper()
+		start_gc_helper()
+
+/proc/check_null_atoms_proc()
+	if (fexists("nullobj.txt"))
+		fdel("nullobj.txt")
+	var/list/tmplist = list()
+	for(var/obj/AM)
+		if (AM.loc==null)
+			if (istype(AM, /obj/covers) || istype(AM, /obj/item) || istype(AM, /obj/structure) || istype(AM, /obj/roof))
+				tmplist += AM
+	for(var/mob/living/AL)
+		if (AL.loc==null)
+			tmplist += AL
+	for(var/atom/movable/M in tmplist)
+		text2file("[M.type]","nullobj.txt")
+	return tmplist
+
+/proc/gc_helper(var/list/origin = list())
+	world.log << "Garbage Helper running..."
+	var/numb = 0
+	if (isemptylist(origin))
+		for(var/obj/AM)
+			if (AM.loc==null)
+				if (istype(AM, /obj/covers) || istype(AM, /obj/item) || istype(AM, /obj/structure) || istype(AM, /obj/roof))
+					del(AM)
+					numb++
+		for(var/mob/living/AL)
+			if (AL.loc==null)
+				del(AL)
+				numb++
+	else
+		for(var/atom/movable/M in origin)
+			del(M)
+			numb++
+	world.log << "Garbage Helper done. Deleted [numb] atoms."
+	return
+
+/client/proc/toggle_gc_helper()
+	set category = "Debug"
+	set name = "Toggle GC Helper"
+	if (!check_rights(R_DEBUG))	return
+
+	message_admins("[key_name(src)] toggled the GC helper [gc_helper_on ? "OFF" : "ON"].")
+	log_admin("[key_name(src)] toggled the GC helper [gc_helper_on ? "OFF" : "ON"].")
+	gc_helper_on = !gc_helper_on
+	if (gc_helper_on)
+		gc_helper()
+		start_gc_helper()
+
+/client/proc/run_gc_helper()
+	set category = "Debug"
+	set name = "Run GC Helper"
+	if (!check_rights(R_DEBUG))	return
+
+	gc_helper()
+
+/client/proc/check_null_atoms()
+	set category = "Debug"
+	set name = "Check null Atoms"
+	if (!check_rights(R_DEBUG))	return
+
+	var/list/result = check_null_atoms_proc()
+	var/resp = WWinput(src, "Found [result.len] deletable atoms at null. Remove them?", "Atoms at null", "No", list("Yes","No"))
+	if (resp == "No")
+		return
+	else
+		gc_helper(result)

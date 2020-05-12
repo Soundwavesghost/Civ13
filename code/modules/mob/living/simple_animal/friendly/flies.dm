@@ -10,7 +10,7 @@
 	speak = list("bzzzz","zzzzzzz")
 	emote_see = list("buzz around", "fly around")
 	speak_chance = TRUE
-	turns_per_move = 3
+	move_to_delay = 3
 	see_in_dark = 9
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 0
@@ -29,31 +29,14 @@
 	scavenger = 1
 /mob/living/simple_animal/fly/New()
 	..()
-
+	spawn(6000)
+		stat = DEAD
+		qdel(src)
 
 /mob/living/simple_animal/fly/Life()
 	..()
 	if (stat != DEAD)
-		if (prob(40))
-			var/done = FALSE
-			for (var/obj/item/weapon/reagent_containers/food/snacks/meat in range(6, src))
-				if (done == FALSE)
-					walk_towards(src, meat, 3)
-					done = TRUE
-			if (done == FALSE)
-				walk_rand(src,4)
-		else
-			walk_rand(src,4)
-		if (prob(90))
-			var/done = FALSE
-			for (var/obj/item/weapon/reagent_containers/food/snacks/poo in range(6, src))
-				if (done == FALSE)
-					walk_towards(src, poo, 3)
-					done = TRUE
-			if (done == FALSE)
-				walk_rand(src,4)
-		else
-			walk_rand(src,4)
+		walk_rand(src,4)
 
 /mob/living/simple_animal/fly/bullet_act(var/obj/item/projectile/Proj)
 	return

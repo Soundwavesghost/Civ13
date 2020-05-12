@@ -3,7 +3,6 @@
 	desc = "Does what he wants cause a pirate is free."
 	icon_state = "piratemelee"
 	icon_dead = "piratemelee_dead"
-	turns_per_move = 2
 	response_help = "pushes"
 	response_disarm = "shoves"
 	response_harm = "hits"
@@ -35,23 +34,6 @@
 //	icon_living = icon_pick
 //	icon_state = icon_pick
 
-
-/mob/living/simple_animal/hostile/pirate/ranged
-	name = "Pirate Gunner"
-	icon_state = "pirateranged"
-	icon_living = "pirateranged"
-	icon_dead = "pirateranged_dead"
-	projectilesound = 'sound/weapons/mosin_shot.ogg'
-	ranged = 1
-	rapid = 0
-	projectiletype = /obj/item/projectile/bullet/rifle/musketball
-	corpse = /mob/living/carbon/human/corpse/pirate
-	weapon1 = /obj/item/weapon/gun/projectile/flintlock/musketoon
-
-/mob/living/simple_animal/hostile/pirate/ranged/New()
-	..()
-	icon_living = "pirateranged"
-	icon_state = "pirateranged"
 
 /mob/living/simple_animal/hostile/pirate/death()
 	..()

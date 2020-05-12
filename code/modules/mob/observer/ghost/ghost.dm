@@ -11,7 +11,6 @@ var/global/list/image/ghost_sightless_images = list() //this is a list of images
 	anchored = TRUE	//  don't get pushed around
 	var/can_reenter_corpse
 	var/datum/hud/living/carbon/hud = null // hud
-	var/bootime = FALSE
 	var/started_as_observer //This variable is set to TRUE when you enter the game as an observer.
 							//If you died in the game and are a ghsot - this will remain as null.
 							//Note that this is not a reliable way to determine if admins started as observers, since they change mobs a lot.
@@ -22,7 +21,6 @@ var/global/list/image/ghost_sightless_images = list() //this is a list of images
 	var/ghostvision = TRUE //is the ghost able to see things humans can't?
 	var/seedarkness = TRUE
 
-	var/obj/item/multitool/ghost_multitool
 	incorporeal_move = TRUE
 
 	var/original_icon = null
@@ -64,21 +62,17 @@ var/global/list/image/ghost_sightless_images = list() //this is a list of images
 
 		mind = body.mind	//we don't transfer the mind but we keep a reference to it.
 
-	if (!T)	T = pick(latejoin_turfs["Ghost"])			//Safety in case we cannot find the body's position
+	if (!T)	T = get_turf(locate(1,1,world.maxz))			//Safety in case we cannot find the body's position
 	forceMove(T)
 
 	if (!name)							//To prevent nameless ghosts
 		name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 	real_name = name
 
-//	ghost_multitool = new(src)
-
 	..()
 
 /mob/observer/ghost/Destroy()
 	stop_following()
-//	qdel(ghost_multitool)
-//	ghost_multitool = null
 	return ..()
 
 /mob/observer/ghost/Topic(href, href_list)
@@ -149,6 +143,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if (ishuman(src))
 			var/mob/living/carbon/human/H = src
 			H.handle_zoom_stuff(TRUE)
+			if (human_clients_mob_list.Find(H))
+				human_clients_mob_list -= H
 		announce_ghost_joinleave(ghostize(1))
 	else
 		var/response
@@ -173,6 +169,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if (ishuman(src))
 			var/mob/living/carbon/human/H = src
 			H.handle_zoom_stuff(TRUE)
+			if (human_clients_mob_list.Find(H))
+				human_clients_mob_list -= H
 		if (client)
 			client.next_normal_respawn = world.realtime + (map ? map.respawn_delay : 3000)
 			client << RESPAWN_MESSAGE
@@ -198,7 +196,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 
 	stop_following()
-	mind.current.ajourn=0
 	mind.current.key = key
 	mind.current.teleop = null
 
@@ -466,7 +463,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	return TRUE
 
 /mob/proc/can_admin_interact()
-    return FALSE
+	return FALSE
 
 /mob/observer/ghost/can_admin_interact()
 	return check_rights(R_ADMIN, FALSE, src)

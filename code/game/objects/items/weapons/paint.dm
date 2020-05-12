@@ -9,7 +9,7 @@ var/global/list/cached_icons = list()
 	icon = 'icons/obj/items.dmi'
 	icon_state = "paint_neutral"
 	item_state = "paintcan"
-	matter = list(DEFAULT_WALL_MATERIAL = 200)
+
 	w_class = 3.0
 	amount_per_transfer_from_this = 10
 	possible_transfer_amounts = list(10,20,30,60)
@@ -26,7 +26,7 @@ var/global/list/cached_icons = list()
 			return ..()
 
 	New()
-		if (paint_type && lentext(paint_type) > 0)
+		if (paint_type && length(paint_type) > 0)
 			name = paint_type + " " + name
 		..()
 		reagents.add_reagent("water", volume*3/5)

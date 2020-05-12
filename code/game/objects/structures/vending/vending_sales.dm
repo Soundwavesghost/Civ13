@@ -27,7 +27,7 @@
 		user << "You put \the [W] in the [src]."
 		qdel(W)
 		return
-	if (istype(W, /obj/item/weapon/wrench))
+	else if (istype(W, /obj/item/weapon/wrench))
 		if (owner != "Global" && find_company_member(user,owner))
 			playsound(loc, 'sound/items/Ratchet.ogg', 100, TRUE)
 			if (anchored)
@@ -44,17 +44,27 @@
 	else
 		if (owner != "Global" && find_company_member(user,owner))
 			for (var/datum/data/vending_product/R in product_records)
-				if (istype(W, R.product_path))
-					stock(W, R, user)
-					return TRUE
-			//TODO: Fix this
-			if (istype(W, /obj/item/weapon/can) || istype(W,/obj/item/weapon/reagent_containers/glass) || W.contents)
-				user << "<span class='notice'>You can't sell this.</span>"
+				if (istype(W, R.product_path) && W.name == R.product_name)
+					if (istype(W, /obj/item/stack))
+						R.amount += W.amount
+						qdel(W)
+						return TRUE
+					else
+						stock(W, R, user)
+						return TRUE
 			//if it isnt in the list yet
 			if (product_records.len >= max_products)
-				user << "<span class='notice'>This [src] has too many different products already!</span>"
-				return FALSE
-			var/datum/data/vending_product/product = new/datum/data/vending_product(src, W.type, W.name, _icon = W.icon, _icon_state = W.icon_state)
+				var/datum/data/vending_product/free = null
+				for (var/datum/data/vending_product/R in product_records)
+					if (R.amount <= 0)
+						free=R
+				if (!free)
+					user << "<span class='notice'>This [src] has too many different products already!</span>"
+					return FALSE
+				else
+					product_records -= free
+			user.unEquip(W)
+			var/datum/data/vending_product/product = new/datum/data/vending_product(src, W.type, W.name, _icon = W.icon, _icon_state = W.icon_state, M = W)
 			var/inputp = input(user, "What price do you want to set for \the [W]? (in silver coins)") as num
 			if (!inputp)
 				inputp = 0
@@ -64,19 +74,74 @@
 			if (istype(W, /obj/item/stack))
 				var/obj/item/stack/S = W
 				product.amount = S.amount
+				qdel(W)
+			else
+				if (W)
+					W.forceMove(src)
 			product_records.Add(product)
-			qdel(W)
 			update_icon()
 			return TRUE
+/obj/structure/vending/sales/verb/Manage()
+	set category = null
+	set src in range(1, usr)
 
-/obj/structure/vending/sales/vend(datum/data/vending_product/R, mob/user)
+
+	if (!istype(usr, /mob/living/carbon/human))
+		return
+
+	if (owner != "Global" && find_company_member(usr,owner))
+		var/choice1 = WWinput(usr, "What do you want to do?", "Vendor Management", "Exit", list("Exit", "Change Name", "Change Prices", "Remove Product"))
+		if (choice1 == "Exit")
+			return TRUE
+		else if (choice1 == "Change Name")
+			var/input1 = input("What name do you want to give to this vendor?", "Vendor Name", name) as text
+			if (input1 == null || input1 == "")
+				return FALSE
+			else
+				name = input1
+				return TRUE
+		else if (choice1 == "Change Prices")
+			var/list/choicelist = list("Exit")
+			for(var/datum/data/vending_product/VP in product_records)
+				choicelist += VP.product_name
+			var/choice2 = WWinput(usr, "What product to change the price?", "Vendor Management", "Exit", choicelist)
+			if (choice2 == "Exit")
+				return FALSE
+			else
+				for(var/datum/data/vending_product/VP in product_records)
+					if (VP.product_name == choice2)
+						var/input3 = input("The current price for [VP.product_name] is [VP.price*10] silver coins. What should the new price be?", "Product Price", VP.price*10) as num
+						if (input3 < 0 || input3 == null)
+							return FALSE
+						else
+							VP.price = input3/10
+							return TRUE
+		else if (choice1 == "Remove Product")
+			var/list/choicelist = list("Exit")
+			for(var/datum/data/vending_product/VP in product_records)
+				choicelist += VP.product_name
+			var/choice2 = WWinput(usr, "What product to remove?", "Vendor Management", "Exit", choicelist)
+			if (choice2 == "Exit")
+				return FALSE
+			else
+				for(var/datum/data/vending_product/VP in product_records)
+					if (VP.product_name == choice2)
+						vend(VP, usr, VP.amount)
+						return TRUE
+
+
+	else
+		usr << "You do not have permission to manage this vendor."
+		return FALSE
+
+/obj/structure/vending/sales/vend(datum/data/vending_product/R, mob/user, var/p_amount=1)
 	vend_ready = FALSE //One thing at a time!!
 	status_message = "Vending..."
 	status_error = FALSE
 	nanomanager.update_uis(src)
 
 	spawn(vend_delay)
-		R.get_product(get_turf(src))
+		R.get_product(get_turf(src),p_amount)
 		playsound(loc, 'sound/machines/vending_drop.ogg', 100, TRUE)
 		status_message = ""
 		status_error = FALSE
@@ -130,9 +195,6 @@
 		ui.open()
 
 /obj/structure/vending/sales/Topic(href, href_list)
-	if (stat & BROKEN)
-		return
-
 	if (isliving(usr))
 		if (usr.stat || usr.restrained())
 			return
@@ -143,28 +205,60 @@
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(loc, /turf))))
 		if ((href_list["vend"]) && (vend_ready) && (!currently_vending))
 
-			var/key = text2num(href_list["vend"])
-			var/datum/data/vending_product/R = product_records[key]
-
-			if (R.price <= 0)
-				vend(R, usr)
-
+			if (find_company_member(usr,owner))
+				usr << "<span class='warning'>You can't buy from your own company. Remove the product instead.</span>"
+				status_error = FALSE
+				currently_vending = null
 			else
-				currently_vending = R
-				if (moneyin < R.price)
-					status_message = "Please insert money to pay for the item."
-					status_error = FALSE
+
+				var/key = text2num(href_list["vend"])
+				var/datum/data/vending_product/R = product_records[key]
+
+				var/inp = 1
+				if (R.amount > 1)
+					inp = input(usr, "How many do you want to buy? (1 to [R.amount])",1) as num
+					if (inp>R.amount)
+						inp = R.amount
+					else if (inp<=1)
+						inp = 1
+
+				if (R.price <= 0)
+					vend(R, usr, inp)
+
 				else
-					moneyin -= R.price
-					if (owner != "Global")
-						map.custom_company_value[owner] += R.price
-					var/obj/item/stack/money/goldcoin/GC = new/obj/item/stack/money/goldcoin(loc)
-					GC.amount = moneyin/0.4
-					if (GC.amount == 0)
-						qdel(GC)
-					moneyin = 0
-					vend(R, usr)
-					nanomanager.update_uis(src)
+					var/mob/living/carbon/human/H = usr
+					var/salestax = 0
+					if (H.civilization != "none")
+						salestax = (map.custom_civs[H.civilization][9]/100)*R.price
+					var/price_with_tax = R.price+salestax
+					currently_vending = R
+					if (moneyin < price_with_tax*inp)
+						status_message = "Please insert money to pay for the item."
+						status_error = FALSE
+					else
+						moneyin -= price_with_tax*inp
+						if (owner != "Global")
+							map.custom_company_value[owner] += price_with_tax*inp
+							if (map.custom_civs[H.civilization])
+								map.custom_civs[H.civilization][5] += salestax*inp
+						if (moneyin > 0 && moneyin <= 3)
+							var/obj/item/stack/money/coppercoin/NM = new/obj/item/stack/money/coppercoin(loc)
+							NM.amount = moneyin/NM.value
+							if (NM.amount <= 0)
+								qdel(NM)
+						else if (moneyin > 3 && moneyin <= 40)
+							var/obj/item/stack/money/silvercoin/NM = new/obj/item/stack/money/silvercoin(loc)
+							NM.amount = moneyin/NM.value
+							if (NM.amount <= 0)
+								qdel(NM)
+						else
+							var/obj/item/stack/money/goldcoin/NM = new/obj/item/stack/money/goldcoin(loc)
+							NM.amount = moneyin/NM.value
+							if (NM.amount <= 0)
+								qdel(NM)
+						moneyin = 0
+						vend(R, usr, inp)
+						nanomanager.update_uis(src)
 
 		else if (href_list["cancelpurchase"])
 			currently_vending = null
@@ -193,6 +287,24 @@
 	)
 	prices = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/apple = 0.15,
+	)
+
+/obj/structure/vending/sales/market_stall/prepared
+	name = "market stall"
+	desc = "A market stall selling an assortment of goods."
+	icon_state = "market_stall"
+	products = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/apple = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread = 10
+
+	)
+	prices = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/apple = 0.15,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage = 0.15,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot = 0.15,
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread = 0.35
 	)
 
 /obj/structure/vending/sales/market_stall
@@ -260,3 +372,25 @@
 		overlays += overlay_primary
 		overlays += overlay_secondary
 		overlays += image(icon = icon, icon_state = "[icon_state]_base")
+
+/obj/structure/vending/sales/stock(obj/item/W, var/datum/data/vending_product/R, var/mob/user)
+	if (!user.unEquip(W))
+		return
+
+	user << "<span class='notice'>You insert \the [W] in \the [src].</span>"
+	if (istype(W, /obj/item/stack))
+		var/obj/item/stack/S = W
+		R.amount += S.amount
+		qdel(W)
+	else
+		W.forceMove(src)
+		R.product_item += W
+		R.amount++
+	nanomanager.update_uis(src)
+
+/obj/structure/vending/process()
+
+	if (!active)
+		return
+
+	return

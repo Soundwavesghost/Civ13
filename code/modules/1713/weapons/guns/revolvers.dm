@@ -12,7 +12,7 @@
 	unload_sound 	= 'sound/weapons/guns/interact/rev_magout.ogg'
 	reload_sound 	= 'sound/weapons/guns/interact/rev_magin.ogg'
 	cocked_sound 	= 'sound/weapons/guns/interact/rev_cock.ogg'
-	fire_sound = 'sound/weapons/guns/fire/revolver_fire.ogg'
+	fire_sound = 'sound/weapons/guns/fire/revolver.ogg'
 	var/chamber_offset = FALSE //how many empty chambers in the cylinder until you hit a round
 	magazine_based = FALSE
 	var/single_action = FALSE
@@ -20,6 +20,7 @@
 	var/base_icon = null
 	equiptimer = 5
 	gun_type = GUN_TYPE_PISTOL
+	maxhealth = 55
 
 	accuracy_list = list(
 		// small body parts: head, hand, feet
@@ -67,7 +68,7 @@
 
 	accuracy_increase_mod = 1.50
 	accuracy_decrease_mod = 2.00
-	KD_chance = KD_CHANCE_LOW
+	KD_chance = KD_CHANCE_MEDIUM
 	stat = "pistol"
 	aim_miss_chance_divider = 2.00
 	load_delay = 6
@@ -174,7 +175,7 @@
 
 
 /obj/item/weapon/gun/projectile/revolver/nagant_revolver
-	name = "Nagant revolver"
+	name = "M1895 Nagant"
 	desc = "Russian officer's revolver."
 	icon_state = "nagant"
 	w_class = 2
@@ -183,6 +184,7 @@
 	handle_casings = CYCLE_CASINGS
 	max_shells = 7
 	magazine_type = /obj/item/ammo_magazine/c762x38mmR
+	ammo_type = /obj/item/ammo_casing/a762x38
 	weight = 1.45
 	single_action = FALSE
 	blackpowder = FALSE
@@ -191,7 +193,7 @@
 	gun_safety = TRUE
 
 /obj/item/weapon/gun/projectile/revolver/m1892
-	name = "Modele 1892 revolver"
+	name = "Modèle 1892 Revolver"
 	desc = "French officer's revolver."
 	icon_state = "m1892"
 	w_class = 2
@@ -223,40 +225,46 @@
 	blackpowder = TRUE
 	cocked = FALSE
 
-/obj/item/weapon/gun/projectile/revolver/coltnewpolice
-	name = "Colt new police"
-	desc = "Common revolver used by police."
-	icon_state = "coltnewpolice"
+/obj/item/weapon/gun/projectile/revolver/makeshift
+	name = "Makeshift Revolver"
+	desc = "A cheap makeshift revolver."
+	icon_state = "makeshiftrevolver"
+	base_icon = "makeshiftrevolver"
 	w_class = 2
-	caliber = "a38"
+	caliber = "a45"
 	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
-	magazine_type = /obj/item/ammo_magazine/c38
+	magazine_type = /obj/item/ammo_magazine/c45
 	weight = 2.3
 	single_action = TRUE
 	blackpowder = TRUE
 	cocked = FALSE
 
 /obj/item/weapon/gun/projectile/revolver/coltnewpolice
-	name = "Colt new police 32"
+	name = "Colt New Police"
 	desc = "Common revolver used by police."
 	icon_state = "coltnewpolice"
 	w_class = 2
 	caliber = "a32"
+	fire_sound = 'sound/weapons/guns/fire/32ACP.ogg'
 	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
 	magazine_type = /obj/item/ammo_magazine/c32
 	weight = 2.3
-	single_action = TRUE
-	blackpowder = TRUE
+	single_action = FALSE
+	blackpowder = FALSE
 	cocked = FALSE
+
+/obj/item/weapon/gun/projectile/revolver/coltnewpolice/standardized
+	ammo_type = /obj/item/ammo_casing/pistol9
+	caliber = "pistol9"
 
 /obj/item/weapon/gun/projectile/revolver/enfieldno2
 	name = "Enfield No. 2"
 	desc = "British revolver made with love."
-	icon_state = "Enfield02"
+	icon_state = "enfield02"
 	w_class = 2
 	caliber = "a41"
 	load_method = SINGLE_CASING
@@ -268,16 +276,18 @@
 	blackpowder = TRUE
 	cocked = FALSE
 
-/obj/item/weapon/gun/projectile/revolver/webly4
-	name = "Webly Mk IV"
-	desc = "British revolver chambered in (.445)."
-	icon_state = "webly4"
+/obj/item/weapon/gun/projectile/revolver/webley4
+	name = "Webley Mk IV"
+	desc = "British revolver chambered in (.455)."
+	icon_state = "webley4"
 	w_class = 2
-	caliber = "webly445"
+	caliber = "a455"
+	fire_sound = 'sound/weapons/guns/fire/45ACP.ogg'
 	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
-	magazine_type = /obj/item/ammo_magazine/webly445
+	magazine_type = /obj/item/ammo_magazine/c455
+	ammo_type = /obj/item/ammo_casing/a455
 	weight = 2.3
 	single_action = TRUE
 	blackpowder = TRUE
@@ -315,6 +325,38 @@
 	blackpowder = TRUE
 	cocked = FALSE
 
+/obj/item/weapon/gun/projectile/revolver/taurus
+	name = "Taurus Judge Revolver"
+	desc = "The Taurus Judge is a five shot revolver designed and produced by Taurus International, chambered for (.45 Colt)."
+	icon_state = "biggi"
+	base_icon = "biggi"
+	w_class = 2
+	caliber = "a45"
+	load_method = SINGLE_CASING
+	handle_casings = CYCLE_CASINGS
+	max_shells = 6
+	magazine_type = /obj/item/ammo_magazine/c45
+	weight = 2.3
+	single_action = TRUE
+	blackpowder = TRUE
+	cocked = FALSE
+
+/obj/item/weapon/gun/projectile/revolver/black
+	name = "Salamon 47"
+	desc = "A gold plated revolver chambered in (.44 magnum)."
+	icon_state = "salamonblack"
+	base_icon = "salamonblack"
+	w_class = 3
+	caliber = "a44magnum"
+	load_method = SINGLE_CASING
+	handle_casings = CYCLE_CASINGS
+	max_shells = 6
+	magazine_type = /obj/item/ammo_magazine/c44magnum
+	weight = 2.3
+	single_action = TRUE
+	blackpowder = TRUE
+	cocked = FALSE
+
 /obj/item/weapon/gun/projectile/revolver/magnum44
 	name = "Magnum 44"
 	desc = "A heavy revolver chambered in (magnum .44)."
@@ -338,6 +380,7 @@
 	base_icon = "smithwesson32"
 	w_class = 1
 	caliber = "a32"
+	fire_sound = 'sound/weapons/guns/fire/32ACP.ogg'
 	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
@@ -357,6 +400,7 @@
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
 	magazine_type = /obj/item/ammo_magazine/c9mm_jap_revolver
+	ammo_type = /obj/item/ammo_casing/c9mm_jap_revolver
 	weight = 2.3
 	single_action = FALSE
 	blackpowder = TRUE
@@ -364,15 +408,17 @@
 	load_delay = 5
 
 /obj/item/weapon/gun/projectile/revolver/webley
-	name = "Webley revolver"
+	name = "Webley Revolver"
 	desc = "British officer's revolver."
 	icon_state = "webley"
 	w_class = 2
 	caliber = "a455"
+	fire_sound = 'sound/weapons/guns/fire/45ACP.ogg'
 	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
 	magazine_type = /obj/item/ammo_magazine/c455
+	ammo_type = /obj/item/ammo_casing/a455
 	weight = 1.6
 	single_action = FALSE
 	blackpowder = FALSE
@@ -386,6 +432,7 @@
 	icon_state = "panther"
 	item_state = "panther"
 	w_class = 2
+	fire_sound = 'sound/weapons/guns/fire/44Mag.ogg'
 	caliber = "a44p"
 	handle_casings = CYCLE_CASINGS
 	max_shells = 7
@@ -402,7 +449,9 @@
 	item_state = "pistol"
 	w_class = 1
 	caliber = "a41"
+	fire_sound = 'sound/weapons/guns/fire/44Mag.ogg'
 	magazine_type = /obj/item/ammo_magazine/c41
+	ammo_type = /obj/item/ammo_casing/a41
 	weight = 0.31
 	load_method = SINGLE_CASING
 	max_shells = 2
@@ -533,11 +582,12 @@
 	unload_sound 	= 'sound/weapons/guns/interact/rev_magout.ogg'
 	reload_sound 	= 'sound/weapons/guns/interact/rev_magin.ogg'
 	cocked_sound 	= 'sound/weapons/guns/interact/rev_cock.ogg'
-	fire_sound = 'sound/weapons/guns/fire/revolver_fire.ogg'
+	fire_sound = 'sound/weapons/guns/fire/revolver.ogg'
 	var/chamber_offset = FALSE //how many empty chambers in the cylinder until you hit a round
 	magazine_based = FALSE
 	var/single_action = FALSE
 	var/cocked = FALSE
+	maxhealth = 45
 
 	accuracy_list = list(
 
@@ -714,7 +764,7 @@
 	unload_sound 	= 'sound/weapons/guns/interact/rev_magout.ogg'
 	reload_sound 	= 'sound/weapons/guns/interact/rev_magin.ogg'
 	cocked_sound 	= 'sound/weapons/guns/interact/rev_cock.ogg'
-	fire_sound = 'sound/weapons/guns/fire/revolver_fire.ogg'
+	fire_sound = 'sound/weapons/guns/fire/hpistol.ogg'
 	var/chamber_offset = FALSE //how many empty chambers in the cylinder until you hit a round
 	magazine_based = FALSE
 	var/single_action = FALSE

@@ -81,18 +81,35 @@
 	if (!istype(target))
 		return FALSE
 
-	if (!target.reagents || !target.reagents.total_volume)
-		user << "<span class='notice'>[target] is empty.</span>"
-		return TRUE
+	if (target.locked && target.custom_code != 0)
+		user << "<span class='notice'>\The [target] is locked.</span>"
+		return FALSE
 
-	if (reagents && !reagents.get_free_space())
-		user << "<span class='notice'>[src] is full.</span>"
-		return TRUE
+	if (target.dmode=="dispense")
+		if (!target.reagents || !target.reagents.total_volume)
+			user << "<span class='notice'>[target] is empty.</span>"
+			return TRUE
 
-	var/trans = target.reagents.trans_to_obj(src, target:amount_per_transfer_from_this)
-	user << "<span class='notice'>You fill [src] with [trans] units of the contents of [target].</span>"
-	playsound(loc, 'sound/effects/watersplash.ogg', 100, TRUE)
-	return TRUE
+		if (reagents && !reagents.get_free_space())
+			user << "<span class='notice'>[src] is full.</span>"
+			return TRUE
+
+		var/trans = target.reagents.trans_to_obj(src, target:amount_per_transfer_from_this)
+		user << "<span class='notice'>You fill [src] with [trans] units of the contents of [target].</span>"
+		playsound(loc, 'sound/effects/watersplash.ogg', 100, TRUE)
+		return TRUE
+	else
+		if (!reagents || !reagents.total_volume)
+			user << "<span class='notice'>[src] is empty.</span>"
+			return TRUE
+
+		if (target.reagents && !target.reagents.get_free_space())
+			user << "<span class='notice'>[target] is full.</span>"
+			return TRUE
+		var/trans = src.reagents.trans_to_obj(target, target.amount_per_transfer_from_this)
+		user << "<span class='notice'>You fill \the [target] with [trans] units of the contents of [src].</span>"
+		playsound(loc, 'sound/effects/watersplash.ogg', 100, TRUE)
+		return TRUE
 
 /obj/item/weapon/reagent_containers/proc/standard_splash_mob(var/mob/user, var/mob/target) // This goes into afterattack
 	if (!istype(target))
@@ -114,12 +131,13 @@
 	if (ishuman(target))
 		var/mob/living/carbon/human/HT = target
 		if (HT.is_nude())
-			if (reagents.has_reagent("water", 30) && reagents.total_volume == reagents.get_reagent_amount("water"))
+			if (reagents.has_reagent("water", 30))
 				HT.hygiene = min(HT.hygiene+(reagents.get_reagent_amount("water")),HYGIENE_LEVEL_CLEAN)
 				washed = TRUE
 			else
-				var/dirtyness = (reagents.total_volume - reagents.get_reagent_amount("water")) / reagents.total_volume
-				HT.hygiene = max(0, HT.hygiene-(dirtyness*100))
+				user.visible_message("<span class='danger'>[target] has been splashed with something by [user]!</span>", "<span class = 'notice'>You splash the solution onto [target].</span>")
+				reagents.splash(target, reagents.total_volume)
+				return TRUE
 	if (washed)
 		if (target == user)
 			user.visible_message("<span class='notice'>[user] washes himself with \the [src]</span>", "<span class = 'notice'>You wash yourself with \the [src].</span>")
@@ -167,14 +185,17 @@
 		self_feed_message(user)
 		if (reagents.has_reagent("cholera") && istype(user, /mob/living/carbon/human))
 			var/mob/living/carbon/human/HH = user
+			var/dmod = 1
+			if (HH.find_trait("Weak Immune System"))
+				dmod = 2
 			var/probcholera = reagents.get_reagent_amount("cholera")
-			if (prob(min(probcholera*25,100)) && !HH.orc && !HH.crab)
+			if (prob(min(probcholera*25*dmod,100)) && !HH.orc && !HH.crab)
 				if (HH.disease == 0)
 					HH.disease_progression = 0
 					HH.disease_type ="cholera"
 					HH.disease = 1
 		reagents.trans_to_mob(user, issmall(user) ? ceil(amount_per_transfer_from_this/2) : amount_per_transfer_from_this, CHEM_INGEST)
-		user.bladder += amount_per_transfer_from_this
+		user.bladder += amount_per_transfer_from_this/2
 		feed_sound(user)
 		return TRUE
 	else
@@ -204,14 +225,22 @@
 		msg_admin_attack("[key_name(user)] fed [key_name(target)] with [name]. Reagents: [contained] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 		if (reagents.has_reagent("cholera") && istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/HH = target
+			var/dmod = 1
+			if (HH.find_trait("Weak Immune System"))
+				dmod = 2
 			var/probcholera = reagents.get_reagent_amount("cholera")
-			if (prob(min(probcholera*25,100)))
+			if (prob(min(probcholera*25*dmod,100)))
 				if (HH.disease == 0)
 					HH.disease_progression = 0
 					HH.disease_type ="cholera"
 					HH.disease = 1
+			var/probplague = reagents.get_reagent_amount("plague")
+			if (prob(min(probplague*25*dmod,100)))
+				HH.disease_progression = 0
+				HH.disease_type ="plague"
+				HH.disease = 1
 		reagents.trans_to_mob(target, amount_per_transfer_from_this, CHEM_INGEST)
-		target.bladder += amount_per_transfer_from_this
+		target.bladder += amount_per_transfer_from_this/2
 		feed_sound(user)
 
 		return TRUE

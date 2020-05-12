@@ -42,7 +42,7 @@
 	item_state = "germcap2"
 
 /obj/item/clothing/head/ww/frenchcap
-	name = "french képi"
+	name = "french kepi"
 	desc = "A flat circular cap worn by french soldiers."
 	icon_state = "frenchcap"
 	item_state = "frenchcap"
@@ -66,25 +66,268 @@
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 45, arrow = 35, gun = 10, energy = 15, bomb = 45, bio = 20, rad = FALSE)
 
-/obj/item/clothing/head/helmet/ww/adrian
-	name = "Adrian helmet"
-	desc = "A typical french adrian helmet."
-	icon_state = "adrian"
-	item_state = "adrian"
-	worn_state = "adrian"
+/obj/item/clothing/head/helmet/ww/adriangreek
+	name = "Greek M15 Adrian helmet"
+	desc = "A typical greek adrian helmet."
+	icon_state = "adrian_greek"
+	item_state = "adrian_greek"
+	worn_state = "adrian_greek"
 	body_parts_covered = HEAD
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
 
-/obj/item/clothing/head/helmet/ww/brodie
-	name = "Brodie helmet"
-	desc = "A typical british helmet."
-	icon_state = "brodie"
-	item_state = "brodie"
-	worn_state = "brodie"
+	var/strap = FALSE
+
+/obj/item/clothing/head/helmet/ww/adriangreek/verb/toggle_strap()
+	set category = null
+	set src in usr
+	set name = "Toggle Strap"
+	if (strap)
+		icon_state = "adrian_greek"
+		item_state = "adrian_greek"
+		worn_state = "adrian_greek"
+		body_parts_covered = HEAD
+		item_state_slots["slot_wear_head"] = "adrian_greek"
+		usr << "<span class = 'danger'>You put down your helmets strap.</span>"
+		update_icon()
+		strap = FALSE
+		usr.update_inv_head(1)
+	else if (!strap)
+		icon_state = "adrian_greek_strap"
+		item_state = "adrian_greek_strap"
+		worn_state = "adrian_greek_strap"
+		body_parts_covered = HEAD
+		item_state_slots["slot_wear_head"] = "adrian_greek_strap"
+		usr << "<span class = 'danger'>You put up your helmets strap.</span>"
+		update_icon()
+		strap = TRUE
+		usr.update_inv_head(1)
+
+/obj/item/clothing/head/helmet/ww/adrian
+	name = "M15 Adrian helmet"
+	desc = "A typical french adrian."
+	icon_state = "adrian_standard"
+	item_state = "adrian_standard"
+	worn_state = "adrian_standard"
 	body_parts_covered = HEAD
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
+	var/strap = FALSE
+
+/obj/item/clothing/head/helmet/ww/adrian/verb/toggle_strap()
+	set category = null
+	set src in usr
+	set name = "Toggle Strap"
+	if (strap)
+		icon_state = "adrian_standard"
+		item_state = "adrian_standard"
+		worn_state = "adrian_standard"
+		body_parts_covered = HEAD
+		item_state_slots["slot_wear_head"] = "adrian_standard"
+		usr << "<span class = 'danger'>You put down your helmets strap.</span>"
+		update_icon()
+		strap = FALSE
+		usr.update_inv_head(1)
+	else if (!strap)
+		icon_state = "adrian_standard_strap"
+		item_state = "adrian_standard_strap"
+		worn_state = "adrian_standard_strap"
+		body_parts_covered = HEAD
+		item_state_slots["slot_wear_head"] = "adrian_standard_strap"
+		usr << "<span class = 'danger'>You put up your helmets strap.</span>"
+		update_icon()
+		strap = TRUE
+		usr.update_inv_head(1)
+
+/obj/item/clothing/head/helmet/ww/adriansoviet
+	name = "Russian M15 Adrian helmet"
+	desc = "The adrian helmet but soviet, used by the red army"
+	icon_state = "adrian_russian"
+	item_state = "adrian_russian"
+	worn_state = "adrian_russian"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
+	var/strap = FALSE
+
+/obj/item/clothing/head/helmet/ww/adriansoviet/verb/toggle_strap()
+	set category = null
+	set src in usr
+	set name = "Toggle Strap"
+	if (strap)
+		icon_state = "adrian_russian"
+		item_state = "adrian_russian"
+		worn_state = "adrian_russian"
+		body_parts_covered = HEAD
+		item_state_slots["slot_wear_head"] = "adrian_standard"
+		usr << "<span class = 'danger'>You put down your helmets strap.</span>"
+		update_icon()
+		strap = FALSE
+		usr.update_inv_head(1)
+	else if (!strap)
+		icon_state = "adrian_russian_strap"
+		item_state = "adrian_russian_strap"
+		worn_state = "adrian_russian_strap"
+		body_parts_covered = HEAD
+		item_state_slots["slot_wear_head"] = "adrian_standard_strap"
+		usr << "<span class = 'danger'>You put up your helmets strap.</span>"
+		update_icon()
+		strap = TRUE
+		usr.update_inv_head(1)
+
+/obj/item/clothing/head/helmet/ww/adrianm15medic
+	name = "Medic M15 Adrian helmet"
+	desc = "The adrian helmet but soviet, used by the red army"
+	icon_state = "m15_adrian_m"
+	item_state = "m15_adrian_m"
+	worn_state = "m15_adrian_m"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
+/obj/item/clothing/head/helmet/ww2/adrianm26
+	name = "M26 Adrian helmet"
+	desc = "A Typical M26 Adrian Helmet"
+	icon_state = "m26_adrian"
+	item_state = "m26_adrian"
+	worn_state = "m26_adrian"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
+	var/strap = FALSE
+
+/obj/item/clothing/head/helmet/ww2/adrianm26/verb/toggle_strap()
+	set category = null
+	set src in usr
+	set name = "Toggle Strap"
+	if (strap)
+		icon_state = "m26_adrian"
+		item_state = "m26_adrian"
+		worn_state = "m26_adrian"
+		body_parts_covered = HEAD
+		item_state_slots["slot_wear_head"] = "m26_adrian"
+		usr << "<span class = 'danger'>You put down your helmets strap.</span>"
+		update_icon()
+		strap = FALSE
+		usr.update_inv_head(1)
+	else if (!strap)
+		icon_state = "m26_adrian_s"
+		item_state = "m26_adrian_s"
+		worn_state = "m26_adrian_s"
+		body_parts_covered = HEAD
+		item_state_slots["slot_wear_head"] = "m26_adrian_s"
+		usr << "<span class = 'danger'>You put up your helmets strap.</span>"
+		update_icon()
+		strap = TRUE
+		usr.update_inv_head(1)
+
+/obj/item/clothing/head/helmet/ww2/adrianm26medic
+	name = "Medic M26 Adrian helmet"
+	desc = "A Typical M26 Adrian Helmet, this one for medics"
+	icon_state = "m26_medic"
+	item_state = "m26_medic"
+	worn_state = "m26_medic"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
+/obj/item/clothing/head/helmet/ww/mk1brodiedeb
+	name = "Mk1 Brodie Helmet"
+	desc = "A typical british helmet in WW1, this one being in duck egg blue."
+	icon_state = "brodie_mk1_deb"
+	item_state = "brodie_mk1_deb"
+	worn_state = "brodie_mk1_deb"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
+/obj/item/clothing/head/helmet/ww/mk1brodieag
+	name = "Mk1 Brodie Helmet"
+	desc = "A typical british helmetin WW1, this one being in apple green."
+	icon_state = "brodie_mk1_ag"
+	item_state = "brodie_mk1_ag"
+	worn_state = "brodie_mk1_ag"
+
+/obj/item/clothing/head/helmet/ww/mk2brodieog
+	name = "Mk2 Brodie Helmet"
+	desc = "A typical british helmet in WW2, this one being in olive green."
+	icon_state = "brodie_mk2_og"
+	item_state = "brodie_mk2_og"
+	worn_state = "brodie_mk2_og"
+
+/obj/item/clothing/head/helmet/ww/mk2brodiemedic
+	name = "Mk2 Brodie Medic Helmet"
+	desc = "A typical british helmet in WW2, this one being for medics."
+	icon_state = "brodie_mk2_medic"
+	item_state = "brodie_mk2_medic"
+	worn_state = "brodie_mk2_medic"
+
+
+/obj/item/clothing/head/helmet/ww/mk2brodieirish
+	name = "Irish Mk2 Brodie Helmet"
+	desc = "A typical british helmet in WW2, this one being the Irish Royal Rifles."
+	icon_state = "brodie_mk2_irish"
+	item_state = "brodie_mk2_irish"
+	worn_state = "brodie_mk2_irish"
+
+/obj/item/clothing/head/helmet/ww/mk2brodiegnet
+	name = "Mk2 Brodie Helmet with green netting"
+	desc = "A typical british helmet in WW2, this one being having green netting."
+	icon_state = "brodie_mk2_netgreen"
+	item_state = "brodie_mk2_netgreen"
+	worn_state = "brodie_mk2_netgreen"
+
+/obj/item/clothing/head/helmet/ww/mk2brodietnet
+	name = "Mk2 Brodie Helmet with tan netting"
+	desc = "A typical british helmet in WW2, this one being having tan netting."
+	icon_state = "brodie_mk2_nettan"
+	item_state = "brodie_mk2_nettan"
+	worn_state = "brodie_mk2_nettan"
+
+/obj/item/clothing/head/helmet/ww/mk2brodieog/attackby(obj/item/W as obj, mob/user as mob)
+	if (!istype(W)) return//I really don't understand why this check is needed
+	if (istype(W, /obj/item/stack/material/hemp))
+		playsound(loc, 'sound/machines/click.ogg', 75, TRUE)
+		user << "<span class='notice'>You put foliage on the helmet.</span>"
+		new/obj/item/clothing/head/helmet/ww/mk2brodiegnet(user.loc)
+		qdel(src)
+		qdel(W)
+
+/obj/item/clothing/head/helmet/ww/mk2brodiegnet/attackby(obj/item/W as obj, mob/user as mob)
+	if (!istype(W)) return//I really don't understand why this check is needed
+	if (istype(W, /obj/item/stack/material/hemp))
+		playsound(loc, 'sound/machines/click.ogg', 75, TRUE)
+		user << "<span class='notice'>You put foliage on the helmet.</span>"
+		new/obj/item/clothing/head/helmet/ww/mk2brodiegreennetf(user.loc)
+		qdel(src)
+		qdel(W)
+
+/obj/item/clothing/head/helmet/ww/mk2brodietnet/attackby(obj/item/W as obj, mob/user as mob)
+	if (!istype(W)) return//I really don't understand why this check is needed
+	if (istype(W, /obj/item/stack/material/hemp))
+		playsound(loc, 'sound/machines/click.ogg', 75, TRUE)
+		user << "<span class='notice'>You put foliage on the helmet.</span>"
+		new/obj/item/clothing/head/helmet/ww/mk2brodietannetf(user.loc)
+		qdel(src)
+		qdel(W)
+
+/obj/item/clothing/head/helmet/ww/mk2brodietannetf
+	name = "Camoflauged Mk2 Brodie Helmet"
+	desc = "A typical british helmet in WW2, this one being having tan netting and foliage for camoflauge."
+	icon_state = "brodie_mk2_nettanf"
+	item_state = "brodie_mk2_nettanf"
+	worn_state = "brodie_mk2_nettanf"
+
+/obj/item/clothing/head/helmet/ww/mk2brodiegreennetf
+	name = "Camoflauged Mk2 Brodie Helmet"
+	desc = "A typical british helmet in WW2, this one being having green netting and foliage for camoflauge."
+	icon_state = "brodie_mk2_netgreenf"
+	item_state = "brodie_mk2_netgreenf"
+	worn_state = "brodie_mk2_netgreenf"
+
 /obj/item/clothing/head/helmet/ww/pickelhaube2
 	name = "leather pickelhaube"
 	desc = "A typical pointed helmet."
@@ -94,12 +337,7 @@
 	body_parts_covered = HEAD
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 30, arrow = 30, gun = 3, energy = 10, bomb = 35, bio = 20, rad = FALSE)
-/obj/item/clothing/head/helmet/ww/brodie/khaki
-	name = "khaki Brodie helmet"
-	desc = "A typical british helmet, with a khaki cover."
-	icon_state = "brodie_old"
-	item_state = "brodie_old"
-	worn_state = "brodie_old"
+
 
 /obj/item/clothing/glasses/pilot
 	name = "pilot goggles"
@@ -282,6 +520,13 @@
 			rolled = TRUE
 	update_clothing_icon()
 
+/obj/item/clothing/under/ww2/japuni_summer
+	name = "japanese uniform"
+	desc = "A imperial japanese army uniform. This one meant for tropical warm climates."
+	icon_state = "japuni_summer"
+	item_state = "ww2_japuni"
+	worn_state = "ww2_japuni"
+
 obj/item/clothing/under/ww2/japuni_med
 	name = "japanese medic uniform"
 	desc = "A imperial japanese army uniform, this one bears the rank of a medic."
@@ -351,6 +596,17 @@ obj/item/clothing/accessory/harness
 	armor = list(melee = 10, arrow = 0, gun = FALSE, energy = 15, bomb = 5, bio = 30, rad = 25)
 	value = 65
 
+/obj/item/clothing/suit/storage/coat/ww2/japcoat_rain
+	name = "japanese rain coat"
+	desc = "A japanese army coat."
+	icon_state = "jap_raincoat"
+	item_state = "jap_raincoat"
+	worn_state = "jap_raincoat"
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
+	cold_protection = UPPER_TORSO|LOWER_TORSO|LEG_LEFT|LEG_RIGHT|ARM_LEFT|ARM_RIGHT
+	armor = list(melee = 10, arrow = 0, gun = FALSE, energy = 15, bomb = 5, bio = 30, rad = 25)
+	value = 75
+
 /obj/item/clothing/suit/storage/coat/ww2/japcoat_pilot
 	name = "japanese pilot coat"
 	desc = "A japanese air force kamikaze jacket."
@@ -376,6 +632,141 @@ obj/item/clothing/head/ww2/jap_mp
 	item_state = "japcap_mp"
 	worn_state = "japcap_mp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////BRITISH////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/obj/item/clothing/head/ww2/britishoffcap
+	name = "british officer cap"
+	desc = "A cap worn by british officers."
+	icon_state = "ww2_british_officer"
+	item_state = "ww2_british_officer"
+	worn_state = "ww2_british_officer"
+	var/toggled = FALSE
+
+/obj/item/clothing/head/ww2/britishoffcap/verb/toggle_flaps()
+	set category = null
+	set src in usr
+	if (type != /obj/item/clothing/head/ww2/britishoffcap)
+		return
+	else
+		if (toggled)
+			item_state = "ww2_british_officer"
+			worn_state = "ww2_british_officer"
+			item_state_slots["slot_w_uniform"] = "ww2_british_officer"
+			usr << "<span class = 'danger'>You put down your cap's flaps.</span>"
+			toggled = FALSE
+		else if (!toggled)
+			item_state = "ww2_british_officer_flap"
+			worn_state = "ww2_british_officer_flap"
+			item_state_slots["slot_w_uniform"] = "ww2_british_officer_flap"
+			usr << "<span class = 'danger'>You put up your cap's flaps.</span>"
+			toggled = TRUE
+	update_clothing_icon()
+
+/obj/item/clothing/head/ww2/britishoffcap_tropical
+	name = "british officer cap"
+	desc = "A cap worn by british officers, this one being a tropical green."
+	icon_state = "ww2_british_officer_tropical"
+	item_state = "ww2_british_officer_tropical"
+	worn_state = "ww2_british_officer_tropical"
+	var/toggled = FALSE
+
+/obj/item/clothing/head/ww2/britishoffcap_tropical/verb/toggle_flaps()
+	set category = null
+	set src in usr
+	if (type != /obj/item/clothing/head/ww2/britishoffcap_tropical)
+		return
+	else
+		if (toggled)
+			item_state = "ww2_british_officer_tropical"
+			worn_state = "ww2_british_officer_tropical"
+			item_state_slots["slot_w_uniform"] = "ww2_british_officer_tropical"
+			usr << "<span class = 'danger'>You put down your cap's flaps.</span>"
+			toggled = FALSE
+		else if (!toggled)
+			item_state = "ww2_british_officer_tropical_flap"
+			worn_state = "ww2_british_officer_tropical_flap"
+			item_state_slots["slot_w_uniform"] = "ww2_british_officer_tropical_flap"
+			usr << "<span class = 'danger'>You put up your cap's flaps.</span>"
+			toggled = TRUE
+	update_clothing_icon()
+
+/obj/item/clothing/under/ww2/british
+	name = "british uniform"
+	desc = "A khaki british uniform."
+	icon_state = "ww2_british_tropical"
+	item_state = "ww2_british_tropical"
+	worn_state = "ww2_british_tropical"
+	var/rolled = FALSE
+
+/obj/item/clothing/under/ww2/british/verb/roll_sleeves()
+	set category = null
+	set src in usr
+	if (type != /obj/item/clothing/under/ww2/british)
+		return
+	else
+		if (rolled)
+			item_state = "ww2_british_tropical"
+			worn_state = "ww2_british_tropical"
+			item_state_slots["slot_w_uniform"] = "ww2_british_tropical"
+			usr << "<span class = 'danger'>You roll down your uniform's sleeves.</span>"
+			rolled = FALSE
+		else if (!rolled)
+			item_state = "ww2_british_tropical_rolled"
+			worn_state = "ww2_british_tropical_rolled"
+			item_state_slots["slot_w_uniform"] = "ww2_british_tropical_rolled"
+			usr << "<span class = 'danger'>You roll up your uniform's sleeves.</span>"
+			rolled = TRUE
+	update_clothing_icon()
+
+/obj/item/clothing/under/ww2/british_off
+	name = "british officer uniform"
+	desc = "A tropical green british officer uniform."
+	icon_state = "ww2_british_off_tropical"
+	item_state = "ww2_british_off_tropical"
+	worn_state = "ww2_british_off_tropical"
+	var/rolled = FALSE
+
+/obj/item/clothing/under/ww2/british_off/verb/roll_sleeves()
+	set category = null
+	set src in usr
+	if (type != /obj/item/clothing/under/ww2/british_off)
+		return
+	else
+		if (rolled)
+			item_state = "ww2_british_off_tropical"
+			worn_state = "ww2_british_off_tropical"
+			item_state_slots["slot_w_uniform"] = "ww2_british_off_tropical"
+			usr << "<span class = 'danger'>You roll down your uniform's sleeves.</span>"
+			rolled = FALSE
+		else if (!rolled)
+			item_state = "ww2_british_off_tropical_rolled"
+			worn_state = "ww2_british_off_tropical_rolled"
+			item_state_slots["slot_w_uniform"] = "ww2_british_off_tropical_rolled"
+			usr << "<span class = 'danger'>You roll up your uniform's sleeves.</span>"
+			rolled = TRUE
+	update_clothing_icon()
+
+/obj/item/clothing/head/ww2/british_hat
+	name = "british hat"
+	desc = "A brown hat sometimes worn by british soldiers."
+	icon_state = "ww2_aussie"
+	item_state = "ww2_aussie"
+	worn_state = "ww2_aussie"
+
+/obj/item/clothing/head/ww2/british_tropical_hat
+	name = "tropical british hat"
+	desc = "A khaki hat worn by british soldiers in tropical climates."
+	icon_state = "ww2_british_tropical"
+	item_state = "ww2_british_tropical"
+	worn_state = "ww2_british_tropical"
+
+/obj/item/clothing/head/ww2/british_beret
+	name = "british beret"
+	desc = "A khaki beret worn by british soldiers."
+	icon_state = "ww2_british_beret"
+	item_state = "ww2_british_beret"
+	worn_state = "ww2_british_beret"
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /obj/item/clothing/under/ww2/chiuni
 	name = "chinese uniform"
 	desc = "A chinese army uniform."
@@ -541,6 +932,13 @@ obj/item/clothing/head/ww2/chicap2
 		..()
 		hold.can_hold = list(/obj/item/ammo_casing, /obj/item/ammo_magazine, /obj/item/weapon/grenade, /obj/item/weapon/attachment/bayonet,/obj/item/weapon/shovel/trench,/obj/item/weapon/reagent_containers/food/drinks/bottle/canteen,/obj/item/weapon/reagent_containers/food/snacks/MRE,/obj/item/stack/medical/bruise_pack)
 
+/obj/item/clothing/accessory/storage/webbing/russian
+	name = "Russian"
+	desc = "4 green poly pouches."
+	icon_state = "russian_vest"
+	item_state = "russian_vest"
+	slots = 6
+
 /obj/item/clothing/accessory/storage/webbing/ww1/german
 	name = "german webbing"
 	icon_state = "german_vest"
@@ -597,13 +995,37 @@ obj/item/clothing/head/ww2/chicap2
 	item_state = "geruni_ww2"
 	worn_state = "geruni_ww2"
 	var/rolled = FALSE
-
+/*
+/obj/item/clothing/under/ww2/german/New()
+	..()
+	if (map && map.ID == MAP_STALINGRAD)
+		icon_state = "geruni_ww2_winter"
+		item_state = "geruni_ww2_winter"
+		worn_state = "geruni_ww2_winter"
+		item_state_slots["slot_w_uniform"] = "geruni_ww2_winter"
+*/
 /obj/item/clothing/under/ww2/german/verb/roll_sleeves()
 	set category = null
 	set src in usr
 	if (type != /obj/item/clothing/under/ww2/german)
 		return
 	else
+/*
+		if (map && map.ID == MAP_STALINGRAD)
+			if (rolled)
+				item_state = "geruni_ww2_winter"
+				worn_state = "geruni_ww2_winter"
+				item_state_slots["slot_w_uniform"] = "geruni_ww2_winter"
+				usr << "<span class = 'danger'>You roll down your uniform's sleeves.</span>"
+				rolled = FALSE
+			else if (!rolled)
+				item_state = "geruni_ww2_winter_rolled"
+				worn_state = "geruni_ww2_winter_rolled"
+				item_state_slots["slot_w_uniform"] = "geruni_ww2_winter_rolled"
+				usr << "<span class = 'danger'>You roll up your uniform's sleeves.</span>"
+				rolled = TRUE
+		else
+*/
 		if (rolled)
 			item_state = "geruni_ww2"
 			worn_state = "geruni_ww2"
@@ -695,6 +1117,28 @@ obj/item/clothing/under/ww2/soviet
 	item_state = "sovuni"
 	worn_state = "sovuni"
 
+	var/rolled = FALSE
+
+obj/item/clothing/under/ww2/soviet/verb/roll_sleeves()
+	set category = null
+	set src in usr
+	if (type != /obj/item/clothing/under/ww2/soviet)
+		return
+	else
+		if (rolled)
+			item_state = "sovuni"
+			worn_state = "sovuni"
+			item_state_slots["slot_w_uniform"] = "sovuni"
+			usr << "<span class = 'danger'>You roll down your uniform's sleeves.</span>"
+			rolled = FALSE
+		else if (!rolled)
+			item_state = "sovuni_rolled"
+			worn_state = "sovuni_rolled"
+			item_state_slots["slot_w_uniform"] = "sovuni_rolled"
+			usr << "<span class = 'danger'>You roll up your uniform's sleeves.</span>"
+			rolled = TRUE
+	update_clothing_icon()
+
 obj/item/clothing/under/ww2/soviet_tanker
 	name = "soviet tanker uniform"
 	desc = "A soviet tanker uniform, used by tank crewmen in the red army."
@@ -744,6 +1188,13 @@ obj/item/clothing/under/ww2/us
 	item_state = "usuni2"
 	worn_state = "usuni2"
 
+obj/item/clothing/under/ww2/us_navy
+	name = "U.S. Navy uniform"
+	desc = "An american uniform, used by sailors in the US navy during WW2."
+	icon_state = "us_navy"
+	item_state = "us_navy"
+	worn_state = "us_navy"
+
 obj/item/clothing/under/ww2/us_cap
 	name = "american captain uniform"
 	desc = "An american uniform, used by captains in the US army."
@@ -775,7 +1226,19 @@ obj/item/clothing/under/ww2/us_shirtless
 	cold_protection = UPPER_TORSO|ARM_LEFT|ARM_RIGHT
 	armor = list(melee = 10, arrow = 0, gun = FALSE, energy = 15, bomb = 5, bio = 30, rad = 25)
 	value = 65
-
+/*
+/obj/item/clothing/suit/storage/coat/ww2/german/New()
+	..()
+	if (map && map.ID == MAP_STALINGRAD)
+		icon_state = "gerparka_winter"
+		item_state = "gerparka_winter"
+		worn_state = "gerparka_winter"
+		item_state_slots["slot_w_uniform"] = "gerparka_winter"
+		name = "german coat"
+		desc = "A german coat, worn by soldaten in the Wehrmacht."
+		body_parts_covered = UPPER_TORSO||ARMS
+		cold_protection = UPPER_TORSO|ARM_LEFT|ARM_RIGHT|LOWER_TORSO
+*/
 /obj/item/clothing/suit/storage/coat/ww2/german/civ
 	name = "grey parka"
 	desc = "A grey parka, good for warmth in the winters."
@@ -871,6 +1334,13 @@ obj/item/clothing/head/ww2/us_nco_cap
 	item_state = "usnco_cap"
 	worn_state = "usnco_cap"
 
+obj/item/clothing/head/ww2/us_sailor_hat
+	name = "us sailor hat"
+	desc = "A hat worn by american sailors."
+	icon_state = "sailor_hat"
+	item_state = "sailor_hat"
+	worn_state = "sailor_hat"
+
 obj/item/clothing/head/ww2/german_tanker
 	name = "german tanker headset"
 	desc = "A cap and radio headset worn by german tank crewmen of the Wehrmacht."
@@ -957,6 +1427,21 @@ obj/item/clothing/head/ww2/german_fieldcap
 	item_state = "fieldcap1"
 	worn_state = "fieldcap1"
 
+obj/item/clothing/head/ww2/german_fieldcap/New()
+	..()
+	if (map && map.ID == MAP_STALINGRAD)
+		var/randhead = rand(1,2)
+		if (randhead == 1)
+			icon_state = "fieldcap1_winter"
+			item_state = "fieldcap1_winter"
+			worn_state = "fieldcap1_winter"
+			item_state_slots["slot_w_uniform"] = "fieldcap1_winter"
+		else if (randhead == 2)
+			icon_state = "fieldcap1_winter2"
+			item_state = "fieldcap1_winter2"
+			worn_state = "fieldcap1_winter2"
+			item_state_slots["slot_w_uniform"] = "fieldcap1_winter2"
+
 obj/item/clothing/head/ww2/soviet_fieldcap
 	name = "soviet field cap"
 	desc = "A cap and worn by soviets in the red army."
@@ -974,6 +1459,31 @@ obj/item/clothing/head/ww2/soviet_fieldcap
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
 
+/obj/item/clothing/head/helmet/ww2/gerhelm/New()
+	..()
+	if (map && map.ID == MAP_STALINGRAD)
+		var/randhead = rand(1,2)
+		if (randhead == 1)
+			icon_state = "gerhelm_winter"
+			item_state = "gerhelm_winter"
+			worn_state = "gerhelm_winter"
+			item_state_slots["slot_w_uniform"] = "gerhelm_winter"
+		else if (randhead == 2)
+			icon_state = "gerhelm_winter2"
+			item_state = "gerhelm_winter2"
+			worn_state = "gerhelm_winter2"
+			item_state_slots["slot_w_uniform"] = "gerhelm_winter2"
+
+/obj/item/clothing/head/helmet/ww2/gerhelm/winter
+	name = "german stahlhelm"
+	desc = "The typical rounded steel helmet of the Wehrmacht"
+	icon_state = "gerhelm_winter"
+	item_state = "gerhelm_winter"
+	worn_state = "gerhelm_winter"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
 /obj/item/clothing/head/helmet/ww2/gerhelm_medic
 	name = "german medic stahlhelm"
 	desc = "The typical rounded steel helmet of the Wehrmacht, this one belonging to a medic."
@@ -984,15 +1494,32 @@ obj/item/clothing/head/ww2/soviet_fieldcap
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
 
+/obj/item/clothing/head/helmet/ww2/gerhelm_mp
+	name = "german stahlhelm"
+	desc = "The typical rounded steel helmet of the Wehrmacht, this one specifically for MP's."
+	icon_state = "gerhelm_mp"
+	item_state = "gerhelm_mp"
+	worn_state = "gerhelm_mp"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
 /obj/item/clothing/head/helmet/ww2/ss
 	name = "german ss helmet"
-	desc = "The typical rounded steel helmet of the Schutzstaffel."
+	desc = "The typical rounded steel helmet of the Schutzstaffel. This one is prepared with camo."
 	icon_state = "sshelm"
 	item_state = "sshelm"
 	worn_state = "sshelm"
 	body_parts_covered = HEAD
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 42, arrow = 32, gun = 12, energy = 15, bomb = 42, bio = 20, rad = FALSE)
+
+/obj/item/clothing/head/helmet/ww2/ss/dark
+	name = "german ss helmet"
+	desc = "The typical rounded steel helmet of the Schutzstaffel."
+	icon_state = "sshelm_dark"
+	item_state = "sshelm_dark"
+	worn_state = "sshelm_dark"
 
 /obj/item/clothing/head/helmet/ww2/soviet
 	name = "soviet helmet"
@@ -1003,53 +1530,166 @@ obj/item/clothing/head/ww2/soviet_fieldcap
 	body_parts_covered = HEAD
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+/obj/item/clothing/head/helmet/ww2/soviet/New()
+	..()
+	if (map && map.ID == MAP_STALINGRAD)
+		icon_state = "sovhelm_winter"
+		item_state = "sovhelm_winter"
+		worn_state = "sovhelm_winter"
+		item_state_slots["sovhelm_winter"] = "sovhelm_winter"
 
-/obj/item/clothing/head/helmet/ww2/us
-	name = "american helmet"
+
+/obj/item/clothing/head/helmet/ww2/usm1
+	name = "M1 Helmet"
 	desc = "The typical rounded steel helmet of the US Army."
-	icon_state = "ushelmet"
-	item_state = "ushelmet"
-	worn_state = "ushelmet"
+	icon_state = "m1_standard"
+	item_state = "m1_standard"
+	worn_state = "m1_standard"
 	body_parts_covered = HEAD
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
+/obj/item/clothing/head/helmet/ww2/usm1/attackby(obj/item/W as obj, mob/user as mob)
+	if (!istype(W)) return//I really don't understand why this check is needed
+	if (istype(W, /obj/item/stack/material/rope))
+		playsound(loc, 'sound/machines/click.ogg', 75, TRUE)
+		user << "<span class='notice'>You put netting on the helmet.</span>"
+		new/obj/item/clothing/head/helmet/ww2/ustannet(user.loc)
+		qdel(src)
+		qdel(W)
+
+/obj/item/clothing/head/helmet/ww2/ustannet/verb/toggle_color()
+	set category = null
+	set src in usr
+	set name = "Toggle Color"
+	if (color)
+		icon_state = "m1_tan_netting"
+		item_state = "m1_tan_netting"
+		worn_state = "m1_tan_netting"
+		body_parts_covered = HEAD
+		item_state_slots["slot_wear_head"] = "m1_tan_netting"
+		usr << "<span class = 'danger'>You switch out your tan netting for green netting.</span>"
+		update_icon()
+		color = FALSE
+		usr.update_inv_head(1)
+	else if (!color)
+		icon_state = "m1_green_netting"
+		item_state = "m1_green_netting"
+		worn_state = "m1_green_netting"
+		body_parts_covered = HEAD
+		item_state_slots["slot_wear_head"] = "m1_green_netting"
+		usr << "<span class = 'danger'>You switch out your green netting for tan netting.</span>"
+		update_icon()
+		color = TRUE
+		usr.update_inv_head(1)
+
+/obj/item/clothing/head/helmet/ww2/usgreennet
+	name = "M1 Helmet with green netting"
+	desc = "The typical rounded steel helmet of the US Army, with green netting."
+	icon_state = "m1_green_netting"
+	item_state = "m1_green_netting"
+	worn_state = "m1_green_netting"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
+/obj/item/clothing/head/helmet/ww2/usgreennet/attackby(obj/item/W as obj, mob/user as mob)
+	if (!istype(W)) return//I really don't understand why this check is needed
+	if (istype(W, /obj/item/stack/material/hemp))
+		playsound(loc, 'sound/machines/click.ogg', 75, TRUE)
+		user << "<span class='notice'>You put foliage on the helmet.</span>"
+		new/obj/item/clothing/head/helmet/ww2/usm1camogreen(user.loc)
+		qdel(src)
+		qdel(W)
+
+/obj/item/clothing/head/helmet/ww2/usm1camogreen
+	name = "M1 Helmet with netting"
+	desc = "The typical rounded steel helmet of the US Army, with tan netting."
+	icon_state = "m1_greennet_leaves"
+	item_state = "m1_greennet_leaves"
+	worn_state = "m1_greennet_leaves"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
+/obj/item/clothing/head/helmet/ww2/ustannet
+	name = "M1 Helmet with netting"
+	desc = "The typical rounded steel helmet of the US Army, with tan netting."
+	icon_state = "m1_tan_netting"
+	item_state = "m1_tan_netting"
+	worn_state = "m1_tan_netting"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
+/obj/item/clothing/head/helmet/ww2/us_chaplain
+	name = "M1 Chaplain Helmet"
+	desc = "The typical rounded steel helmet of the US Army, this one brandishing a cross."
+	icon_state = "m1_chaplain"
+	item_state = "m1_chaplain"
+	worn_state = "m1_chaplain"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
+
+/obj/item/clothing/head/helmet/ww2/usm1mpblack
+	name = "Black M1 MP Helmet"
+	desc = "The typical rounded steel helmet of the US Army, this one for Military Police."
+	icon_state = "m1_mp_black"
+	item_state = "m1_mp_black"
+	worn_state = "m1_mp_black"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
+/obj/item/clothing/head/helmet/ww2/usm1mpgreen
+	name = "M1 MP Helmet"
+	desc = "The typical rounded steel helmet of the US Army, this one for Military Police."
+	icon_state = "m1_mp_green"
+	item_state = "m1_mp_green"
+	worn_state = "m1_mp_green"
+	body_parts_covered = HEAD
+	flags_inv = BLOCKHEADHAIR
+	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
+
 
 /obj/item/clothing/head/helmet/ww2/us_medic
-	name = "american medic helmet"
-	desc = "The typical rounded steel helmet of the US Army, this one bearing a medic symbol."
-	icon_state = "ushelmet_medical"
-	item_state = "ushelmet_medical"
-	worn_state = "ushelmet_medical"
+	name = "M1 Medic Helmet"
+	desc = "The typical rounded steel helmet of the US Army, this one for medics"
+	icon_state = "m1_medic"
+	item_state = "m1_medic"
+	worn_state = "m1_medic"
 	body_parts_covered = HEAD
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
 
-/obj/item/clothing/head/helmet/ww2/us_sgt
-	name = "american sergeant helmet"
-	desc = "The typical rounded steel helmet of the US Army, this one bearing the rank of Sergeant."
-	icon_state = "ushelmet_sgt"
-	item_state = "ushelmet_sgt"
-	worn_state = "ushelmet_sgt"
+/obj/item/clothing/head/helmet/ww2/us_2lt
+	name = "M1 2nd LT Helmet"
+	desc = "The typical rounded steel helmet of the US Army, this one bearing the rank of 2nd Lieutenant."
+	icon_state = "m1_2nd_lt"
+	item_state = "m1_2nd_lt"
+	worn_state = "m1_2nd_lt"
 	body_parts_covered = HEAD
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
 
-/obj/item/clothing/head/helmet/ww2/us_lt
-	name = "american lieutenant helmet"
-	desc = "The typical rounded steel helmet of the US Army, this one bearing the rank of Lieutenant."
-	icon_state = "ushelmet_lt"
-	item_state = "ushelmet_lt"
-	worn_state = "ushelmet_lt"
+/obj/item/clothing/head/helmet/ww2/us_1lt
+	name = "M1 1st LT Helmet"
+	desc = "The typical rounded steel helmet of the US Army, this one bearing the rank of 1st Lieutenant."
+	icon_state = "m1_1st_lt"
+	item_state = "m1_1st_lt"
+	worn_state = "m1_1st_lt"
 	body_parts_covered = HEAD
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
 
 /obj/item/clothing/head/helmet/ww2/us_cap
-	name = "american captain helmet"
+	name = "M1 Captain Helmet"
 	desc = "The typical rounded steel helmet of the US Army, this one bearing the rank of Captain."
-	icon_state = "ushelmet_cap"
-	item_state = "ushelmet_cap"
-	worn_state = "ushelmet_cap"
+	icon_state = "m1_cpt"
+	item_state = "m1_cpt"
+	worn_state = "m1_cpt"
 	body_parts_covered = HEAD
 	flags_inv = BLOCKHEADHAIR
 	armor = list(melee = 40, arrow = 30, gun = 10, energy = 15, bomb = 40, bio = 20, rad = FALSE)
@@ -1191,16 +1831,24 @@ obj/item/clothing/head/ww2/soviet_fieldcap
 	armor = list(melee = 10, arrow = 0, gun = FALSE, energy = 15, bomb = 5, bio = 30, rad = 30)
 	value = 100
 
-/obj/item/clothing/suit/storage/coat/oldyjacket
-	name = "red jacket"
-	desc = "A red jacket from the 80s."
-	icon_state = "jacket80s"
-	item_state = "jacket80s"
-	worn_state = "jacket80s"
+/obj/item/clothing/suit/storage/coat/ww2/biker //it may have started this 'era', but biker jackets became popular still long after
+	name = "biker jacket"
+	desc = "A black jacket, favoured by the bold and recreational thrill seekers."
+	icon_state = "biker"
+	item_state = "biker"
+	worn_state = "biker"
 	body_parts_covered = UPPER_TORSO||ARMS
 	cold_protection = UPPER_TORSO|ARM_LEFT|ARM_RIGHT
 	armor = list(melee = 10, arrow = 0, gun = FALSE, energy = 15, bomb = 5, bio = 30, rad = 30)
 	value = 100
+
+/obj/item/clothing/suit/storage/coat/ww2/biker/gator_jacket
+	name = "alligator scale jacket"
+	desc = "A sleek alligator scale jacket, bold and impression-setting like the people who wear it. 'See-ya later alligator'."
+	icon_state = "gator_jacket"
+	item_state = "gator_jacket"
+	worn_state = "gator_jacket"
+	value = 150
 
 /obj/item/weapon/storage/belt/gulagguard
 	name = "GULAG guard belt"

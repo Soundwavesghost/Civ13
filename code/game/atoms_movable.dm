@@ -3,7 +3,7 @@
 	plane = GAME_PLANE
 	var/last_move = null
 	var/anchored = FALSE
-	// var/elevation = 2    - not used anywhere
+	// var/elevation = 2	- not used anywhere
 	var/move_speed = 10
 	var/l_move_time = TRUE
 	var/m_flag = TRUE
@@ -52,12 +52,11 @@
 	. = ..()
 	for (var/atom/movable/AM in contents)
 		qdel(AM)
-	forceMove(null)
 	if (pulledby)
 		if (pulledby.pulling == src)
 			pulledby.pulling = null
 		pulledby = null
-
+	forceMove(null)
 
 // called by mobs when e.g. having the atom as their machine, pulledby, loc (AKA mob being inside the atom) or buckled var set.
 // see code/modules/mob/mob_movement.dm for more.

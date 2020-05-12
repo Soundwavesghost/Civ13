@@ -12,24 +12,42 @@
 	rank_abbreviation = "Si Quan"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJPCap"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
 	is_officer = TRUE
 	whitelisted = TRUE
-	// AUTOBALANCE
+
 	min_positions = 2
 	max_positions = 8
 
 /datum/job/vietnamese/vietcong_officer/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
 //shoes
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/leatherboots1(H), slot_shoes)
+	if (prob(60))
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/nlfsandal1(H), slot_shoes)
+	else if (prob(40))
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/nlfsandal2(H), slot_shoes)
 
 //clothes
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/vietcong(H), slot_w_uniform)
+	var/pickuni = rand(1,5)
+	if (pickuni == 1)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf1(H), slot_w_uniform)
+	if (pickuni == 2)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf2(H), slot_w_uniform)
+	if (pickuni == 3)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf3(H), slot_w_uniform)
+	if (pickuni == 4)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf4(H), slot_w_uniform)
+	if (pickuni == 5)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf5(H), slot_w_uniform)
 
 //head
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/modern/pith(H), slot_head)
+	if (prob(60))
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat(H), slot_head)
+	else if (prob(20))
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/jungle_hat/khaki(H), slot_head)
+	else
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/jungle_hat(H), slot_head)
 //back
 	if (prob(50))
 		H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/revolver/m1892(H), slot_l_hand)
@@ -62,34 +80,62 @@
 	rank_abbreviation = "Bac Si"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJP"
-	SL_check_independent = TRUE
+
+	is_medic = TRUE
 	is_coldwar = TRUE
-	// AUTOBALANCE
+
 	min_positions = 3
 	max_positions = 18
 
 /datum/job/vietnamese/vietcong_doctor/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
 //shoes
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H), slot_shoes)
+	if (prob(60))
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/nlfsandal1(H), slot_shoes)
+	else
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/nlfsandal2(H), slot_shoes)
 
 //clothes
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/vietcong(H), slot_w_uniform)
+	var/pickuni = rand(1,5)
+	if (pickuni == 1)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf1(H), slot_w_uniform)
+	if (pickuni == 2)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf2(H), slot_w_uniform)
+	if (pickuni == 3)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf3(H), slot_w_uniform)
+	if (pickuni == 4)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf4(H), slot_w_uniform)
+	if (pickuni == 5)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf5(H), slot_w_uniform)
 
 //head
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/jungle_hat/khaki(H), slot_head)
+	if (prob(60))
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat(H), slot_head)
+	else if (prob(20))
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/jungle_hat/khaki(H), slot_head)
+	else
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/jungle_hat(H), slot_head)
+
 //back
 	if (prob(50))
 		H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/revolver/m1892(H), slot_l_hand)
 	else
 		H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/pistol/luger(H), slot_l_hand)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/medical/full_vc(H), slot_belt)
-
 	var/obj/item/clothing/under/uniform = H.w_uniform
-	var/obj/item/clothing/accessory/custom/armband/white = new /obj/item/clothing/accessory/custom/armband(null)
-	uniform.attackby(white, H)
-	var/obj/item/clothing/accessory/armband/blue_scarf/bscarf = new /obj/item/clothing/accessory/armband/blue_scarf(null)
-	uniform.attackby(bscarf, H)
+	if (prob(40))
+		var/obj/item/clothing/accessory/storage/webbing/nlfchestrig = new /obj/item/clothing/accessory/storage/webbing/nlfchestrig(null)
+		uniform.attackby(nlfchestrig, H)
+	else if (prob(60))
+		var/obj/item/clothing/accessory/storage/webbing/nlfsmallpouches = new /obj/item/clothing/accessory/storage/webbing/nlfsmallpouches(null)
+		uniform.attackby(nlfsmallpouches, H)
+	var/pickscarf = rand(1,2)
+	if (pickscarf == 1)
+		var/obj/item/clothing/accessory/armband/khan_ran/black = new /obj/item/clothing/accessory/armband/khan_ran/black(null)
+		uniform.attackby(black, H)
+	else if (pickscarf == 2)
+		var/obj/item/clothing/accessory/armband/khan_ran/blue = new /obj/item/clothing/accessory/armband/khan_ran/blue(null)
+		uniform.attackby(blue, H)
 	var/obj/item/clothing/accessory/holster/hip/holsterh = new /obj/item/clothing/accessory/holster/hip(null)
 	uniform.attackby(holsterh, H)
 	give_random_name(H)
@@ -112,37 +158,60 @@
 	rank_abbreviation = "Tuy Phai"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJP"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+	is_squad_leader = TRUE
+
 	min_positions = 2
 	max_positions = 12
 
 /datum/job/vietnamese/vietcong_comms/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
 //shoes
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H), slot_shoes)
+	if (prob(60))
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/nlfsandal1(H), slot_shoes)
+	else if (prob(40))
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/nlfsandal2(H), slot_shoes)
 
 //clothes
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/vietcong(H), slot_w_uniform)
+	var/pickuni = rand(1,5)
+	if (pickuni == 1)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf1(H), slot_w_uniform)
+	if (pickuni == 2)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf2(H), slot_w_uniform)
+	if (pickuni == 3)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf3(H), slot_w_uniform)
+	if (pickuni == 4)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf4(H), slot_w_uniform)
+	if (pickuni == 5)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf5(H), slot_w_uniform)
 
 //head
-	if (prob(40))
+	if (prob(60))
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat(H), slot_head)
+	else if (prob(20))
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/jungle_hat/khaki(H), slot_head)
 	else
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/jungle_hat(H), slot_head)
 
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/smallpouches(H), slot_belt)
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/revolver/m1892(H), slot_l_hand)
 
 	H.equip_to_slot_or_del(new /obj/item/weapon/radio/faction2(H), slot_back)
-
 	var/obj/item/clothing/under/uniform = H.w_uniform
-	if (prob(60))
-		var/obj/item/clothing/accessory/armband/khan_ran_scarf/krscarf = new /obj/item/clothing/accessory/armband/khan_ran_scarf(null)
-		uniform.attackby(krscarf, H)
-	var/obj/item/clothing/accessory/holster/hip/holsterh = new /obj/item/clothing/accessory/holster/hip(null)
-	uniform.attackby(holsterh, H)
+	if (prob(40))
+		var/obj/item/clothing/accessory/storage/webbing/nlfchestrig = new /obj/item/clothing/accessory/storage/webbing/nlfchestrig(null)
+		uniform.attackby(nlfchestrig, H)
+	else if (prob(60))
+		var/obj/item/clothing/accessory/storage/webbing/nlfsmallpouches = new /obj/item/clothing/accessory/storage/webbing/nlfsmallpouches(null)
+		uniform.attackby(nlfsmallpouches, H)
+	var/pickscarf = rand(1,2)
+	if (pickscarf == 1)
+		var/obj/item/clothing/accessory/armband/khan_ran/black = new /obj/item/clothing/accessory/armband/khan_ran/black(null)
+		uniform.attackby(black, H)
+	else if (pickscarf == 2)
+		var/obj/item/clothing/accessory/armband/khan_ran/blue = new /obj/item/clothing/accessory/armband/khan_ran/blue(null)
+		uniform.attackby(blue, H)
 	give_random_name(H)
 	H.add_note("Role", "You are a <b>[title]</b>, in charge of the communications and also acting as a courier for ammunition, grenades, and so on. Keep the squads up to date and supplied!")
 	H.add_note("Vietcong Mechanics", "- Press <b>C</b> to place a booby trap while holding a grenade.<br><br>- The tunnel entrances connecting to your underground compound are only accessible by fellow Vietnamese and american commandos. Americans won't be able to crawl inside.<br><br>- Drag yourself to a Jungle Tree to hide on it.")
@@ -164,23 +233,39 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJP"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 20
 	max_positions = 200
 
 /datum/job/vietnamese/vietcong/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
 //shoes
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H), slot_shoes)
+	if (prob(60))
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/nlfsandal1(H), slot_shoes)
+	else
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/nlfsandal2(H), slot_shoes)
 
 //clothes
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/vietcong(H), slot_w_uniform)
+	var/pickuni = rand(1,5)
+	if (pickuni == 1)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf1(H), slot_w_uniform)
+	if (pickuni == 2)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf2(H), slot_w_uniform)
+	if (pickuni == 3)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf3(H), slot_w_uniform)
+	if (pickuni == 4)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf4(H), slot_w_uniform)
+	if (pickuni == 5)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/localnlf5(H), slot_w_uniform)
 
 //head
-	if (prob(40))
+	if (prob(60))
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat(H), slot_head)
+	else if (prob(20))
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/jungle_hat/khaki(H), slot_head)
 	else
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/jungle_hat(H), slot_head)
 //back
@@ -201,11 +286,19 @@
 	else
 		H.equip_to_slot_or_del(new /obj/item/weapon/attachment/bayonet/military(H), slot_l_store)
 	var/obj/item/clothing/under/uniform = H.w_uniform
-	var/obj/item/clothing/accessory/storage/webbing/ww1/leather/fullwebbing = new /obj/item/clothing/accessory/storage/webbing/ww1/leather(null)
-	uniform.attackby(fullwebbing, H)
-	if (prob(60))
-		var/obj/item/clothing/accessory/armband/khan_ran_scarf/krscarf = new /obj/item/clothing/accessory/armband/khan_ran_scarf(null)
-		uniform.attackby(krscarf, H)
+	if (prob(40))
+		var/obj/item/clothing/accessory/storage/webbing/nlfchestrig = new /obj/item/clothing/accessory/storage/webbing/nlfchestrig(null)
+		uniform.attackby(nlfchestrig, H)
+	else if (prob(60))
+		var/obj/item/clothing/accessory/storage/webbing/nlfsmallpouches = new /obj/item/clothing/accessory/storage/webbing/nlfsmallpouches(null)
+		uniform.attackby(nlfsmallpouches, H)
+	var/pickscarf = rand(1,2)
+	if (pickscarf == 1)
+		var/obj/item/clothing/accessory/armband/khan_ran/black = new /obj/item/clothing/accessory/armband/khan_ran/black(null)
+		uniform.attackby(black, H)
+	else if (pickscarf == 2)
+		var/obj/item/clothing/accessory/armband/khan_ran/blue = new /obj/item/clothing/accessory/armband/khan_ran/blue(null)
+		uniform.attackby(blue, H)
 	give_random_name(H)
 	H.add_note("Role", "You are a <b>[title]</b>, fighting guerilla warfare against the imperialists!")
 	H.add_note("Vietcong Mechanics", "- Press <b>C</b> to place a booby trap while holding a grenade.<br><br>- The tunnel entrances connecting to your underground compound are only accessible by fellow Vietnamese and american commandos. Americans won't be able to crawl inside.<br><br>- Drag yourself to a Jungle Tree to hide on it.")
@@ -236,12 +329,12 @@
 	rank_abbreviation = "Lt."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRNCap"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
 	is_officer = TRUE
 	is_commander = TRUE
 	whitelisted = TRUE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 2
 
@@ -281,11 +374,12 @@
 	rank_abbreviation = "Sgt."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRNCap"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
 	is_squad_leader = TRUE
+	uses_squads = TRUE
 	can_get_coordinates = TRUE
-	// AUTOBALANCE
+
 	min_positions = 2
 	max_positions = 8
 
@@ -327,10 +421,10 @@
 	rank_abbreviation = "Cpl."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
 	whitelisted = TRUE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 4
 
@@ -371,9 +465,10 @@
 	rank_abbreviation = "Cpl."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN"
-	SL_check_independent = TRUE
+
+	is_medic = TRUE
 	is_coldwar = TRUE
-	// AUTOBALANCE
+
 	min_positions = 2
 	max_positions = 8
 
@@ -417,10 +512,11 @@
 	rank_abbreviation = "Cpl."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
 	is_radioman = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 1
 	max_positions = 5
 
@@ -463,9 +559,10 @@
 	rank_abbreviation = "Spc."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 2
 	max_positions = 12
 
@@ -506,9 +603,10 @@
 	rank_abbreviation = "Spc."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 2
 	max_positions = 8
 
@@ -552,9 +650,10 @@
 	rank_abbreviation = "Pvt."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 10
 	max_positions = 100
 
@@ -601,13 +700,13 @@
 	rank_abbreviation = "Lt."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
 	is_specops = TRUE
 	whitelisted = TRUE
 	is_officer = TRUE
 	is_commander = TRUE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -644,10 +743,11 @@
 	rank_abbreviation = "Sfc."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN"
-	SL_check_independent = TRUE
+
+	is_medic = TRUE
 	is_coldwar = TRUE
 	is_specops = TRUE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 3
 
@@ -678,10 +778,10 @@
 	rank_abbreviation = "Sgt."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateRN"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
 	is_specops = TRUE
-	// AUTOBALANCE
+
 	min_positions = 6
 	max_positions = 33
 
@@ -716,12 +816,14 @@
 	rank_abbreviation = "Leader"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateAR"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
 	is_officer = TRUE
 	is_specops = TRUE
 	is_modernday = TRUE
-	// AUTOBALANCE
+	is_squad_leader = TRUE
+	uses_squads = TRUE
+
 	min_positions = 2
 	max_positions = 8
 
@@ -788,11 +890,12 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateAR"
-	SL_check_independent = TRUE
+
 	is_coldwar = TRUE
 	is_specops = TRUE
 	is_modernday = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 22
 	max_positions = 66
 
@@ -830,7 +933,6 @@
 
 	H.equip_to_slot_or_del(new /obj/item/weapon/material/kitchen/utensil/knife/bowie(H), slot_belt)
 	H.equip_to_slot_or_del(new /obj/item/weapon/key/insurgent(H), slot_l_store)
-	H.equip_to_slot_or_del(new /obj/item/flashlight/flashlight(H), slot_l_hand)
 	H.equip_to_slot_or_del(new /obj/item/weapon/radio/walkietalkie/faction2(H), slot_wear_id)
 
 	var/obj/item/clothing/under/uniform = H.w_uniform

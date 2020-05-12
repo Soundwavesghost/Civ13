@@ -22,7 +22,7 @@
 	var/maxpower = 50
 	var/list/speedlist = list(1=6,2=5,3=4,4=3,5=2)
 	powerneeded = 0
-	var/obj/structure/engine/internal/engine = null
+	var/obj/structure/engine/engine = null
 	var/moving = FALSE
 	var/vehicle_m_delay = 1
 	var/obj/item/vehicleparts/wheel/modular/wheel = null
@@ -67,7 +67,7 @@
 /obj/structure/vehicleparts/axis/heavy/t34
 	name = "T-34"
 	speeds = 4
-	speedlist = list(1=12,2=8,3=6,3=5)
+	speedlist = list(1=12,2=8,3=6,4=5)
 	color_code = ""
 	color = "#3d5931"
 	New()
@@ -95,6 +95,18 @@
 		..()
 		var/pickedname = pick(tank_names_german)
 		tank_names_german -= pickedname
+		name = "[name] \'[pickedname]\'"
+
+/obj/structure/vehicleparts/axis/heavy/i_go
+	name = "Type 89 I-Go"
+	speeds = 4
+	speedlist = list(1=10,2=7,3=5,4=4)
+	color = "#6a5a3d"
+	turret_type = "jap_turret"
+	New()
+		..()
+		var/pickedname = pick(tank_names_japanese)
+		tank_names_japanese -= pickedname
 		name = "[name] \'[pickedname]\'"
 /obj/structure/vehicleparts/axis/car
 	name = "car axis"
@@ -273,7 +285,7 @@
 	nothrow = TRUE
 	throw_speed = 1
 	throw_range = 1
-	var/obj/structure/engine/internal/engine = null
+	var/obj/structure/engine/engine = null
 	var/obj/item/weapon/reagent_containers/glass/barrel/fueltank/fueltank = null
 	var/step = 0
 	var/maxstep = 3
@@ -327,7 +339,8 @@
 			user << "<span class = 'notice'>You attach the [W] to the [src].</span>"
 			user.drop_from_inventory(W)
 			qdel(W)
-			new/obj/structure/vehicle/boat/sailboat(get_turf(user))
+			var/obj/structure/vehicle/boat/sailboat/N = new/obj/structure/vehicle/boat/sailboat(get_turf(user))
+			N.name = name
 			qdel(src)
 			return
 

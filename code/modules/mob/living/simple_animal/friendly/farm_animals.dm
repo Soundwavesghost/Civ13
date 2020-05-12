@@ -11,7 +11,7 @@
 	emote_hear = list("brays")
 	emote_see = list("shakes its head")
 	speak_chance = TRUE
-	turns_per_move = 5
+	move_to_delay = 5
 	see_in_dark = 6
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 6
@@ -27,6 +27,7 @@
 	var/overpopulationCountdown = 0
 	mob_size = MOB_LARGE
 	herbivore = 1
+	wandersounds = list('sound/animals/cow/cow_1.ogg','sound/animals/cow/cow_2.ogg','sound/animals/cow/cow_3.ogg')
 
 /mob/living/simple_animal/bull
 	name = "bull"
@@ -40,7 +41,7 @@
 	emote_hear = list("brays")
 	emote_see = list("shakes its head")
 	speak_chance = TRUE
-	turns_per_move = 5
+	move_to_delay = 5
 	see_in_dark = 6
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 6
@@ -52,15 +53,28 @@
 	health = 65
 	mob_size = MOB_LARGE
 	herbivore = 1
+	wandersounds = list('sound/animals/cow/cow_1.ogg','sound/animals/cow/cow_2.ogg','sound/animals/cow/cow_3.ogg')
 
+/mob/living/simple_animal/cow/death()
+	if (!removed_from_list)
+		removed_from_list=TRUE
+		cow_count -= 1
+	..()
 /mob/living/simple_animal/cow/Destroy()
+	if (!removed_from_list)
+		removed_from_list=TRUE
+		cow_count -= 1
 	..()
-	cow_count -= 1
-
+/mob/living/simple_animal/bull/death()
+	if (!removed_from_list)
+		removed_from_list=TRUE
+		cow_count -= 1
+	..()
 /mob/living/simple_animal/bull/Destroy()
+	if (!removed_from_list)
+		removed_from_list=TRUE
+		cow_count -= 1
 	..()
-	cow_count -= 1
-
 /mob/living/simple_animal/bull/New()
 	cow_count += 1
 	..()
@@ -183,7 +197,7 @@
 	speak = list("OINK!","SQWEEEL!")
 	emote_see = list("rolls on the ground", "lays with it's belly up", "snorts")
 	speak_chance = 1
-	turns_per_move = 5
+	move_to_delay = 5
 	see_in_dark = 6
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 5
@@ -203,6 +217,7 @@
 	granivore = 1 //if it will be attracted to crops (i.e. rabbits, mice, birds)
 	scavenger = 1 //if it will be attracted to trash, rotting meat, etc (mice, mosquitoes)
 	carnivore = 1 //if it will be attracted to meat and dead bodies. Wont attack living animals by default.
+	wandersounds = list('sound/animals/pig/pig_1.ogg','sound/animals/pig/pig_2.ogg')
 
 /mob/living/simple_animal/pig_gilt
 	name = "pig gilt"
@@ -213,7 +228,7 @@
 	speak = list("OINK!","SQWEEEL!")
 	emote_see = list("rolls on the ground", "lays with it's belly up", "snorts")
 	speak_chance = 1
-	turns_per_move = 5
+	move_to_delay = 5
 	see_in_dark = 6
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 6
@@ -232,15 +247,28 @@
 	granivore = 1 //if it will be attracted to crops (i.e. rabbits, mice, birds)
 	scavenger = 1 //if it will be attracted to trash, rotting meat, etc (mice, mosquitoes)
 	carnivore = 1 //if it will be attracted to meat and dead bodies. Wont attack living animals by default.
+	wandersounds = list('sound/animals/pig/pig_1.ogg','sound/animals/pig/pig_2.ogg')
 
+/mob/living/simple_animal/pig_gilt/death()
+	if (!removed_from_list)
+		removed_from_list=TRUE
+		pig_count -= 1
+	..()
+/mob/living/simple_animal/pig_boar/death()
+	if (!removed_from_list)
+		removed_from_list=TRUE
+		pig_count -= 1
+	..()
 /mob/living/simple_animal/pig_gilt/Destroy()
+	if (!removed_from_list)
+		removed_from_list=TRUE
+		pig_count -= 1
 	..()
-	pig_count -= 1
-
 /mob/living/simple_animal/pig_boar/Destroy()
+	if (!removed_from_list)
+		removed_from_list=TRUE
+		pig_count -= 1
 	..()
-	pig_count -= 1
-
 /mob/living/simple_animal/pig_boar/New()
 	pig_count += 1
 	..()
@@ -350,7 +378,7 @@
 	emote_hear = list("brays")
 	emote_see = list("shakes its head", "stamps a foot", "glares around")
 	speak_chance = 1
-	turns_per_move = 5
+	move_to_delay = 5
 	see_in_dark = 6
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 3
@@ -369,6 +397,7 @@
 	mob_size = MOB_MEDIUM
 	var/lamb = FALSE
 	herbivore = 1
+	wandersounds = list('sound/animals/goat/goat_1.ogg','sound/animals/goat/goat_2.ogg','sound/animals/goat/goat_3.ogg')
 
 /mob/living/simple_animal/goat/New()
 	goat_count += 1
@@ -378,6 +407,7 @@
 			icon_state = "goat_lamb"
 			icon_living = "goat_lamb"
 			icon_dead = "goat_lamb_dead"
+			wandersounds = list('sound/animals/goat/baby_goat_1.ogg','sound/animals/goat/baby_goat_2.ogg')
 			meat_amount = 2
 			mob_size = MOB_SMALL
 			spawn(3000)
@@ -386,6 +416,7 @@
 				icon_living = "goat_ram"
 				icon_dead = "goat_ram_dead"
 				mob_size = MOB_MEDIUM
+				wandersounds = list('sound/animals/goat/goat_1.ogg','sound/animals/goat/goat_2.ogg','sound/animals/goat/goat_3.ogg')
 
 /mob/living/simple_animal/goat/female
 	name = "goat ewe"
@@ -397,10 +428,16 @@
 	var/birthCountdown = 0
 	var/overpopulationCountdown = 0
 
-/mob/living/simple_animal/goat/Destroy()
+/mob/living/simple_animal/goat/death()
+	if (!removed_from_list)
+		removed_from_list=TRUE
+		goat_count -= 1
 	..()
-	goat_count -= 1
-
+/mob/living/simple_animal/goat/Destroy()
+	if (!removed_from_list)
+		removed_from_list=TRUE
+		goat_count -= 1
+	..()
 /mob/living/simple_animal/goat/female/New()
 	udder = new(50)
 	udder.my_atom = src
@@ -486,7 +523,7 @@
 	emote_hear = list("brays")
 	emote_see = list("shakes its head", "stamps a foot", "glares around")
 	speak_chance = 1
-	turns_per_move = 5
+	move_to_delay = 5
 	see_in_dark = 6
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 3
@@ -506,6 +543,7 @@
 	var/lamb = FALSE
 	herbivore = 1
 	var/sheared = FALSE
+	wandersounds = list('sound/animals/sheep/sheep_1.ogg','sound/animals/sheep/sheep_2.ogg')
 
 /mob/living/simple_animal/sheep/update_icons()
 	..()
@@ -538,9 +576,16 @@
 	var/pregnant = FALSE
 	var/birthCountdown = 0
 	var/overpopulationCountdown = 0
-/mob/living/simple_animal/sheep/Destroy()
+/mob/living/simple_animal/sheep/death()
+	if (!removed_from_list)
+		removed_from_list=TRUE
+		sheep_count -= 1
 	..()
-	sheep_count -= 1
+/mob/living/simple_animal/sheep/Destroy()
+	if (!removed_from_list)
+		removed_from_list=TRUE
+		sheep_count -= 1
+	..()
 /mob/living/simple_animal/sheep/New()
 	sheep_count += 1
 	..()
@@ -671,7 +716,7 @@
 	emote_hear = list("grunts")
 	emote_see = list("shakes its head")
 	speak_chance = TRUE
-	turns_per_move = 8
+	move_to_delay = 8
 	see_in_dark = 6
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 6

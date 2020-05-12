@@ -80,7 +80,8 @@
 
 /obj/screen/grab/Click()
 	var/obj/item/weapon/grab/G = master
-	G.s_click(src)
+	if (G)
+		G.s_click(src)
 	return TRUE
 
 /obj/screen/grab/attack_hand()
@@ -480,7 +481,7 @@
 		C.activate_hand("r")
 
 /obj/screen/inventory/hand/update_icon()
-	if (slot_id == (parentmob.hand ? slot_l_hand : slot_r_hand)) //Если данный элемент ХУДа отображает левую
+	if (slot_id == (parentmob.hand ? slot_l_hand : slot_r_hand)) //Еслe aaнныe элемент oУaa отоaрaжaет леaую
 		icon_state = "act_hand[slot_id==slot_l_hand ? "-l" : "-r"]"
 	else
 		icon_state = "hand[slot_id==slot_l_hand ? "-l" : "-r"]"
@@ -943,7 +944,7 @@ obj/screen/tactic
 	switch (parentmob.a_intent)
 		if (I_HELP)
 			icon_state = "help"
-		if (I_HURT)
+		if (I_HARM)
 			icon_state = "harm"
 		if (I_GRAB)
 			icon_state = "grab"
@@ -1002,7 +1003,7 @@ obj/screen/tactic
 	icon_state = "intent_harm"
 
 /obj/screen/fastintent/harm/Click()
-	parentmob.a_intent_change(I_HURT)
+	parentmob.a_intent_change(I_HARM)
 //	..()
 
 /obj/screen/fastintent/grab
@@ -1377,15 +1378,15 @@ obj/screen/tactic
 	var/mob/living/carbon/human/H = parentmob
 	switch (inv_elem.slot_id)
 		if (slot_head)
-			if (H.head)      H.head.screen_loc =     (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
+			if (H.head)	  H.head.screen_loc =	 (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
 		if (slot_shoes)
-			if (H.shoes)     H.shoes.screen_loc =     (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
+			if (H.shoes)	 H.shoes.screen_loc =	 (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
 		if (slot_l_ear)
-			if (H.l_ear)     H.l_ear.screen_loc =     (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
+			if (H.l_ear)	 H.l_ear.screen_loc =	 (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
 		if (slot_r_ear)
-			if (H.r_ear)     H.r_ear.screen_loc =     (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
+			if (H.r_ear)	 H.r_ear.screen_loc =	 (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
 		if (slot_gloves)
-			if (H.gloves)    H.gloves.screen_loc =    (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
+			if (H.gloves)	H.gloves.screen_loc =	(inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
 		if (slot_w_uniform)
 			if (H.w_uniform) H.w_uniform.screen_loc = (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
 		if (slot_wear_suit)
@@ -1393,4 +1394,4 @@ obj/screen/tactic
 		if (slot_wear_mask)
 			if (H.wear_mask) H.wear_mask.screen_loc = (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
 		if (slot_eyes)
-			if (H.eyes)      H.eyes.screen_loc =      (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc
+			if (H.eyes)	  H.eyes.screen_loc =	  (inv_elem.invisibility == 101) ? null : inv_elem.screen_loc

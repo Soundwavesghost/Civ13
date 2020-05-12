@@ -1,18 +1,18 @@
-#define NO_WINNER "The round is proceeding normally."
+
 /obj/map_metadata/jungle_colony
 	ID = MAP_JUNGLE_COLONY
 	title = "Jungle Colony (155x225x2)"
+	no_winner ="The round is proceeding normally."
 	lobby_icon_state = "imperial"
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall/)
 	respawn_delay = 7200 // 12 minutes!
-	squad_spawn_locations = FALSE
+
 	faction_organization = list(
 		INDIANS,
 		CIVILIAN,
 		PIRATES,
 		SPANISH)
-	available_subfactions = list(
-		)
+
 	roundend_condition_sides = list(
 		list(INDIANS) = /area/caribbean/british,
 		list(CIVILIAN) = /area/caribbean/british,
@@ -27,6 +27,7 @@
 	ambience = list('sound/ambience/jungle1.ogg')
 	faction1 = INDIANS
 	faction2 = CIVILIAN
+	is_RP = TRUE
 	songs = list(
 		"Nassau Shores:1" = 'sound/music/nassau_shores.ogg',)
 	gamemode = "Colony Building RP"
@@ -45,6 +46,8 @@ obj/map_metadata/jungle_colony/job_enabled_specialcheck(var/datum/job/J)
 		if (J.is_pioneer == TRUE)
 			. = FALSE
 		if (J.is_prison == TRUE)
+			. = FALSE
+		if (J.is_civil_war == TRUE)
 			. = FALSE
 	else if (istype(J, /datum/job/spanish/civilian))
 		. = FALSE
@@ -75,4 +78,3 @@ obj/map_metadata/jungle_colony/job_enabled_specialcheck(var/datum/job/J)
 	return ""
 
 
-#undef NO_WINNER

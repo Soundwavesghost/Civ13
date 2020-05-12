@@ -27,7 +27,7 @@
 		product_records is specified
 	*/
 	var/list/products	= list() // For each, use the following pattern:
-	var/list/prices     = list() // Prices for each item, list(/type/path = price), items not in the list don't have a price.
+	var/list/prices	 = list() // Prices for each item, list(/type/path = price), items not in the list don't have a price.
 
 	// List of vending_product items available.
 	var/list/product_records = list()
@@ -142,8 +142,6 @@
 
 
 /obj/structure/vending/attack_hand(mob/user as mob)
-	if (stat & BROKEN) //|| user.blacklisted == TRUE
-		return
 
 	ui_interact(user)
 
@@ -186,9 +184,6 @@
 		ui.open()
 
 /obj/structure/vending/Topic(href, href_list)
-	if (stat & BROKEN)
-		return
-
 	if (isliving(usr))
 		if (usr.stat || usr.restrained())
 			return
@@ -238,19 +233,17 @@
  * Checks if item is vendable in this machine should be performed before
  * calling. W is the item being inserted, R is the associated vending_product entry.
  */
-/obj/structure/vending/proc/stock(obj/item/weapon/W, var/datum/data/vending_product/R, var/mob/user)
+/obj/structure/vending/proc/stock(obj/item/W, var/datum/data/vending_product/R, var/mob/user)
 	if (!user.unEquip(W))
 		return
 
 	user << "<span class='notice'>You insert \the [W] in \the [src].</span>"
-	R.add_product(W)
+	R.amount++
 	qdel(W)
 
 	nanomanager.update_uis(src)
 
 /obj/structure/vending/process()
-	if (stat & (BROKEN|NOPOWER))
-		return
 
 	if (!active)
 		return

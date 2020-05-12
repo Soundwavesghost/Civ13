@@ -3,7 +3,6 @@
 	desc = "A gun that fires bullets."
 	icon_state = "musket"
 	w_class = 3
-	matter = list(DEFAULT_WALL_MATERIAL = 1000)
 	recoil = 1
 
 	var/caliber = "musketball"		//determines which casings will fit
@@ -37,7 +36,6 @@
 	attachment_slots = ATTACH_IRONSIGHTS
 
 	var/load_shell_sound = 'sound/weapons/empty.ogg'
-	var/load_magazine_sound = 'sound/weapons/flipblade.ogg'
 
 	var/executing = FALSE
 
@@ -135,10 +133,8 @@
 	switch(handle_casings)
 		if (EJECT_CASINGS) //eject casing onto ground.
 			#ifndef DISABLE_CASINGS
-			var/area/src_area = get_area(src)
-			if (!src_area.lift_master())
-				chambered.loc = get_turf(src)
-				chambered.randomrotation()
+			chambered.loc = get_turf(src)
+			chambered.randomrotation()
 			#endif
 
 			playsound(loc, casing_sound, 50, TRUE)
@@ -148,6 +144,10 @@
 				ammo_magazine.stored_ammo += chambered
 			else
 				loaded += chambered
+
+		if (REMOVE_CASINGS) //deletes the casing (arrows, for example, where the casing is effectively the projectile)
+			qdel(chambered)
+			chambered = null
 
 	if (handle_casings != HOLD_CASINGS)
 		chambered = null
@@ -217,7 +217,10 @@
 
 	else if (istype(A, /obj/item/ammo_casing))
 		var/obj/item/ammo_casing/C = A
-		if (!(load_method & SINGLE_CASING) || caliber != C.caliber)
+		if (!(load_method & SINGLE_CASING))
+			user << "<span class='warning'>You can't load \the [src] with a single casing!</span>"
+			return
+		if (caliber != C.caliber)
 			user << "<span class='warning'>\The [C] is of the wrong caliber!</span>"
 			return //incompatible
 		if (loaded.len >= max_shells)

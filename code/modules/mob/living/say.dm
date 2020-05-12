@@ -1,75 +1,7 @@
-var/list/department_radio_keys = list(
-	  //":r" = "right ear",	".r" = "right ear",
-	//  ":l" = "left ear",	".l" = "left ear",
-	  ":i" = "intercom",	".i" = "intercom",
-	//  ":b" = "harness", 	".b" = "harness",
-	  ":h" = "department",	".h" = "department",
-	  ":+" = "special",		".+" = "special", //activate radio-specific special functions
-	  ":c" = "Command",		".c" = "Command",
-	  ":n" = "Science",		".n" = "Science",
-	  ":m" = "Medical",		".m" = "Medical",
-	  ":e" = "crafting", ".e" = "crafting",
-	  ":s" = "Security",	".s" = "Security",
-	  ":w" = "whisper",		".w" = "whisper",
-	  ":t" = "Mercenary",	".t" = "Mercenary",
-	  ":u" = "Supply",		".u" = "Supply",
-	  ":v" = "Service",		".v" = "Service",
-	  ":p" = "AI Private",	".p" = "AI Private",
-	  ":z" = "Entertainment",".z" = "Entertainment",
 
-	  ":R" = "right ear",	".R" = "right ear",
-	  ":L" = "left ear",	".L" = "left ear",
-	  ":I" = "intercom",	".I" = "intercom",
-	  ":B" = "harness", 	".B" = "harness",
-	  ":H" = "department",	".H" = "department",
-	  ":C" = "Command",		".C" = "Command",
-	  ":N" = "Science",		".N" = "Science",
-	  ":M" = "Medical",		".M" = "Medical",
-	  ":E" = "crafting",	".E" = "crafting",
-	  ":S" = "Security",	".S" = "Security",
-	  ":W" = "whisper",		".W" = "whisper",
-	  ":T" = "Mercenary",	".T" = "Mercenary",
-	  ":U" = "Supply",		".U" = "Supply",
-	  ":V" = "Service",		".V" = "Service",
-	  ":P" = "AI Private",	".P" = "AI Private",
-	  ":Z" = "Entertainment",".Z" = "Entertainment",
-
-	  //kinda localization -- rastaf0
-	  //same keys as above, but on russian keyboard layout. This file uses cp1251 as encoding.
-	  ":ê" = "right ear",	".ê" = "right ear",
-	  ":ä" = "left ear",	".ä" = "left ear",
-	  ":ø" = "intercom",	".ø" = "intercom",
-	 // ":b" = "harness", 	".b" = "harness", someone russian needs to handle this
-	  ":ð" = "department",	".ð" = "department",
-	  ":ñ" = "Command",		".ñ" = "Command",
-	  ":ò" = "Science",		".ò" = "Science",
-	  ":ü" = "Medical",		".ü" = "Medical",
-	  ":ó" = "crafting",	".ó" = "crafting",
-	  ":û" = "Security",	".û" = "Security",
-	  ":ö" = "whisper",		".ö" = "whisper",
-	  ":å" = "Mercenary",	".å" = "Mercenary",
-	  ":ã" = "Supply",		".ã" = "Supply",
-	  ":ì" = "Service",		".ì" = "Service",
-	  ":ç" = "AI Private",	".ç" = "AI Private",
-	  ":z" = "Entertainment",".z" = "Entertainment",
-)
 
 var/list/radio_prefixes = list(";", ":b", ":l", ":r", ":t", ":f",
 	":B", ":L", ":R", ":T", ":F")
-
-var/list/channel_to_radio_key = new
-proc/get_radio_key_from_channel(var/channel)
-	var/key = channel_to_radio_key[channel]
-	if (!key)
-		for (var/radio_key in department_radio_keys)
-			if (department_radio_keys[radio_key] == channel)
-				key = radio_key
-				break
-		if (!key)
-			key = ""
-		channel_to_radio_key[channel] = key
-
-	return key
 
 /mob/living/proc/binarycheck()
 	return FALSE
@@ -85,8 +17,8 @@ proc/get_radio_key_from_channel(var/channel)
 	var/prefix = ""
 	for (var/rp in radio_prefixes)
 		if (dd_hasprefix(message, rp))
-			prefix = copytext(message, 1, lentext(rp)+1)
-			message = copytext(message, lentext(rp)+1, lentext(message)+1)
+			prefix = copytext(message, 1, length(rp)+1)
+			message = copytext(message, length(rp)+1, length(message)+1)
 
 	var/list/returns[3]
 	var/speech_problem_flag = FALSE
@@ -121,7 +53,7 @@ proc/get_radio_key_from_channel(var/channel)
 		return "asks"
 	return verb
 
-/mob/living/say(var/message, var/datum/language/speaking = null, var/verb="says", var/alt_name="", var/alt_message=null, var/animal = FALSE, var/howl = FALSE)
+/mob/living/say(var/message, var/datum/language/speaking = null, var/verb="says", var/alt_name="", var/alt_message=null, var/animal = FALSE, var/howl = FALSE, var/original_message = "")
 	if (client)
 		if (client.prefs.muted & MUTE_IC)
 			src << "<span class = 'red'>You cannot speak in IC (Muted).</span>"
@@ -132,18 +64,9 @@ proc/get_radio_key_from_channel(var/channel)
 			return say_dead(message)
 		return
 
-	var/message_mode = parse_message_mode(message, "headset")
-
 	switch(copytext(message,1,2))
 		if ("*") return emote(copytext(message,2))
 		if ("^") return custom_emote(1, copytext(message,2))
-
-	//parse the radio code and consume it
-	if (message_mode)
-		if (message_mode == "headset")
-			message = copytext(message,2)	//it would be really nice if the parse procs could do this for us.
-		else
-			message = copytext(message,3)
 
 	message = trim_left(message)
 
@@ -167,6 +90,7 @@ proc/get_radio_key_from_channel(var/channel)
 	if (is_muzzled())
 		src << "<span class='danger'>You're muzzled and cannot speak!</span>"
 		return
+	original_message = message
 
 	message = trim_left(message)
 
@@ -238,7 +162,7 @@ proc/get_radio_key_from_channel(var/channel)
 		if (howl)
 			verb = "howls"
 		M << speech_bubble
-		M.hear_say(message, verb, speaking, alt_name, italics, src, speech_sound, sound_vol, alt_message, animal)
+		M.hear_say(message, verb, speaking, alt_name, italics, src, speech_sound, sound_vol, alt_message, animal, original_message)
 
 	for (var/obj/O in listening_obj)
 		spawn(0)

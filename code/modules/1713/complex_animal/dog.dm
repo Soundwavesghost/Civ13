@@ -7,6 +7,7 @@
 	icon_state = null
 	resting_state = null
 	wander = FALSE
+	can_be_tamed = TRUE
 
 	// COMMANDS
 	// format is "word;jobtitle&jobtitle;proc"
@@ -189,7 +190,7 @@
 		return
 	if (!dd_hassuffix(message, "!"))
 		return
-	message = copytext(message, TRUE, lentext(message))
+	message = copytext(message, TRUE, length(message))
 //	world << "1. [message]"
 	// parse message into a command
 	if (stat == CONSCIOUS)
@@ -395,9 +396,9 @@ s
 					if (prob(5) && world.time >= next_bork)
 						visible_message("<span class = 'danger'>\The [src] starts barking! It smells an enemy!</span>")
 						if (prob(50))
-							playsound(src.loc, 'sound/animals/dogbark1.ogg', 100, TRUE, 3)
+							playsound(src.loc, 'sound/animals/dog/dogbark1.ogg', 100, TRUE, 3)
 						else
-							playsound(src.loc, 'sound/animals/dogbark2.ogg', 100, TRUE, 3)
+							playsound(src.loc, 'sound/animals/dog/dogbark2.ogg', 100, TRUE, 3)
 						next_bork = world.time + 500 // shut the fuck up dogs - kachnov
 						return
 
@@ -425,7 +426,7 @@ s
 /mob/living/simple_animal/complex_animal/dog/onTouchedBy(var/mob/living/carbon/human/H, var/intent = I_HELP)
 	if (..(H, intent) && stat == CONSCIOUS && !resting)
 		switch (intent)
-			if (I_HURT)
+			if (I_HARM)
 
 				enemies |= H
 

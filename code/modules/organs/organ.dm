@@ -46,11 +46,25 @@ var/list/organ_cache = list()
 
 	return ..()
 
+/obj/item/organ/proc/organ_check()
+	if (!src)
+		return
+	if (!loc || isturf(loc))
+		spawn(3000)
+			if (src)
+				if (!loc || isturf(loc))
+					qdel(src)
+					return
+	spawn(3000)
+		if (src)
+			organ_check()
+
 /obj/item/organ/proc/update_health()
 	return
 
 /obj/item/organ/New(var/mob/living/carbon/holder, var/internal)
 	..(holder)
+	organ_check()
 	organ_list += src
 	create_reagents(5)
 	if (!max_damage)
@@ -108,13 +122,6 @@ var/list/organ_cache = list()
 
 	//dead already, no need for more processing
 	if (status & ORGAN_DEAD)
-		return
-	// Don't process if we're in a freezer, an MMI or a stasis bag.or a freezer or something I dunno
-//	if (istype(loc,/obj/item/mmi))
-	//	return
-	//Process infections
-	if (owner && owner.species && (owner.species.flags & IS_PLANT))
-		germ_level = FALSE
 		return
 
 	if (!owner)
@@ -273,11 +280,11 @@ var/list/organ_cache = list()
 	var/datum/reagent/blood/transplant_blood = locate(/datum/reagent/blood) in reagents.reagent_list
 	transplant_data = list()
 	if (!transplant_blood)
-		transplant_data["species"] =    target.species.name
+		transplant_data["species"] =	target.species.name
 		transplant_data["blood_type"] = target.dna.b_type
 		transplant_data["blood_DNA"] =  target.dna.unique_enzymes
 	else
-		transplant_data["species"] =    transplant_blood.data["species"]
+		transplant_data["species"] =	transplant_blood.data["species"]
 		transplant_data["blood_type"] = transplant_blood.data["blood_type"]
 		transplant_data["blood_DNA"] =  transplant_blood.data["blood_DNA"]
 

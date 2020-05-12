@@ -35,6 +35,7 @@
 
 /obj/item/ammo_casing/Destroy()
 	bullet_casings -= src
+	BB = null
 	..()
 /obj/item/ammo_casing/proc/randomrotation()
 	transform = matrixangle(rand(1,360))
@@ -69,7 +70,6 @@
 	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	item_state = "syringe_kit"
-	matter = list(DEFAULT_WALL_MATERIAL = 500)
 	throwforce = 5
 	w_class = 2
 	throw_speed = 4
@@ -174,6 +174,15 @@
 	max_ammo = 15
 	weight = 0.2
 	multiple_sprites = TRUE
+
+
+/obj/item/ammo_magazine/emptymagazine/pistol/filled
+	name = "pistol magazine (9mm)"
+	caliber = "pistol9"
+	ammo_type = /obj/item/ammo_casing/pistol9
+	max_ammo = 17
+	weight = 0.34
+
 /obj/item/ammo_magazine/emptymagazine/pistol/a45
 	name = "pistol magazine (8)"
 	mag_type = MAGAZINE

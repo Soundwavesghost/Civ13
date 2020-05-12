@@ -4,6 +4,7 @@
 /obj/structure/window/snowwall
 	name = "snow barricade"
 	icon_state = "snow_wall"
+	icon = 'icons/obj/structures.dmi'
 	layer = MOB_LAYER + 0.01 //just above mobs
 	anchored = TRUE
 	climbable = TRUE
@@ -201,6 +202,7 @@
 	wood = FALSE
 	wall = TRUE
 	flammable = FALSE
+	buildstack = /obj/item/weapon/snowwall
 
 /obj/covers/snow_wall/blocks/incomplete
 	name = "snow blocks wall"
@@ -233,10 +235,11 @@
 		else if (stage <= 2)
 			user << "You start adding snow to the wall..."
 			if (do_after(user, 20, src))
-				user << "You finish adding snow to the wall."
-				stage = (stage+1)
-				icon_state = "igloo_wall_inc[stage]"
-				health = (20*stage)
-				qdel(W)
-				return
+				if (stage <= 2)
+					user << "You finish adding snow to the wall."
+					stage = (stage+1)
+					icon_state = "igloo_wall_inc[stage]"
+					health = (20*stage)
+					qdel(W)
+					return
 	..()

@@ -14,7 +14,7 @@
 			return
 		else
 			input = uppertext(input)
-			if (lentext(input) != 6)
+			if (length(input) != 6)
 				return
 			var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 			for (var/i = 1, i <= 6, i++)
@@ -48,7 +48,7 @@
 			return
 		else
 			input = uppertext(input)
-			if (lentext(input) != 6)
+			if (length(input) != 6)
 				return
 			var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 			for (var/i = 1, i <= 6, i++)
@@ -76,7 +76,7 @@
 			return
 		else
 			input = uppertext(input)
-			if (lentext(input) != 6)
+			if (length(input) != 6)
 				return
 			var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 			for (var/i = 1, i <= 6, i++)
@@ -120,6 +120,7 @@
 	icon_state = "customshendyt"
 	item_state = "customshendyt"
 	worn_state = "customshendyt"
+	heat_protection = LOWER_TORSO
 
 /obj/item/clothing/under/custom/celtic
 	name = "celtic trousers"
@@ -127,6 +128,7 @@
 	icon_state = "customceltic"
 	item_state = "customceltic"
 	worn_state = "customceltic"
+	heat_protection = LOWER_TORSO|LEGS
 
 /obj/item/clothing/under/custom/toga/purple
 	name = "purple toga"
@@ -136,6 +138,7 @@
 	worn_state = "customtoga"
 	uncolored = FALSE
 	color = "#66023C"
+	heat_protection = LOWER_TORSO|LEGS|UPPER_TORSO
 
 ///////////////MEDIEVAL//////////////////////////////////////
 /obj/item/clothing/under/custom/tunic
@@ -144,13 +147,29 @@
 	icon_state = "customtunic"
 	item_state = "customtunic"
 	worn_state = "customtunic"
+	heat_protection = LOWER_TORSO|LEGS|UPPER_TORSO|ARMS
 
+/obj/item/clothing/under/custom/haori
+	name = "haori"
+	desc = "A light, loose fitting bit of clothes, worn in japan."
+	icon_state = "haori_custom"
+	item_state = "haori_custom"
+	worn_state = "haori_custom"
+	uncolored = TRUE
+/obj/item/clothing/suit/storage/jacket/custom/haori_jacket
+	name = "haori jacket"
+	desc = "A simple jacket worn over a haori outfit."
+	icon_state = "haori_jacket_custom"
+	item_state = "haori_jacket_custom"
+	worn_state = "haori_jacket_custom"
+	uncolored = TRUE
 /obj/item/clothing/under/custom/arabictunic
 	name = "arabic tunic"
 	desc = "A light cloth tunic, in arabic style."
 	icon_state = "customarabictunic"
 	item_state = "customarabictunic"
 	worn_state = "customarabictunic"
+	heat_protection = LOWER_TORSO|LEGS|UPPER_TORSO|ARMS
 
 /obj/item/clothing/suit/storage/jacket/custom/poncho
 	name = "poncho"
@@ -158,6 +177,7 @@
 	icon_state = "customponcho"
 	item_state = "customponcho"
 	worn_state = "customponcho"
+	heat_protection = LOWER_TORSO|LEGS|UPPER_TORSO|ARMS
 
 /obj/item/clothing/under/customren
 	name = "renaissance outfit"
@@ -183,7 +203,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -202,7 +222,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -227,17 +247,17 @@
 	else
 		..()
 
-/obj/item/clothing/under/custompontificial
+/obj/item/clothing/under/custompontifical
 	name = "renaissance outfit"
-	desc = "A renaissance-style pontificial outfit."
+	desc = "A renaissance-style pontifical outfit."
 	var/uncolored = FALSE
 	var/topcolor = 0
 	var/undercolor = 0
 	var/linescolor = 0
 	var/handcolor = 0
-	item_state = "custom_pontificial"
-	icon_state = "custom_pontificial"
-	worn_state = "custom_pontificial"
+	item_state = "custom_pontifical"
+	icon_state = "custom_pontifical"
+	worn_state = "custom_pontifical"
 	color = "#FFFFFF"
 	New()
 		..()
@@ -245,7 +265,7 @@
 			uncolored = TRUE
 
 
-/obj/item/clothing/under/custompontificial/attack_self(mob/user as mob)
+/obj/item/clothing/under/custompontifical/attack_self(mob/user as mob)
 	if (uncolored)
 		if (!topcolor)
 			var/input = input(user, "Top Decore - Choose a hex color (without the #):", "Top Decore Color" , "FFFFFF")
@@ -253,7 +273,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -272,7 +292,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -290,7 +310,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -308,7 +328,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -364,7 +384,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -383,7 +403,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -401,7 +421,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -454,7 +474,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -473,7 +493,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -523,7 +543,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -542,7 +562,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -560,7 +580,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -612,7 +632,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -631,7 +651,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -667,6 +687,7 @@
 	item_state = "tribalrobe"
 	icon_state = "tribalrobe"
 	worn_state = "tribalrobe"
+	heat_protection = LOWER_TORSO|LEGS|UPPER_TORSO|ARMS
 	color = "#FFFFFF"
 	New()
 		..()
@@ -682,7 +703,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -701,7 +722,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -734,11 +755,14 @@
 	desc = "A victorian Era uniform."
 	var/uncolored = FALSE
 	var/shirtcolor = 0
+	var/buttonscolor = 0
+	var/beltcolor = 0
+	var/bucklecolor = 0
 	var/pantscolor = 0
-	var/epaulettescolor = 0
 	item_state = "customuni"
 	icon_state = "customuni"
 	worn_state = "customuni"
+	heat_protection = LOWER_TORSO|LEGS|UPPER_TORSO|ARMS
 	color = "#FFFFFF"
 	New()
 		..()
@@ -754,7 +778,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -767,13 +791,67 @@
 						return
 				shirtcolor = addtext("#",input)
 	//			user << "Color: [color]"
+		if (!buttonscolor)
+			var/input = input(user, "Buttons - Choose a hex color (without the #):", "Buttons Color" , "FFFFFF")
+			if (input == null || input == "")
+				return
+			else
+				input = uppertext(input)
+				if (length(input) != 6)
+					return
+				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
+				for (var/i = 1, i <= 6, i++)
+					var/numtocheck = 0
+					if (i < 6)
+						numtocheck = copytext(input,i,i+1)
+					else
+						numtocheck = copytext(input,i,0)
+					if (!(numtocheck in listallowed))
+						return
+				buttonscolor = addtext("#",input)
+		if (!beltcolor)
+			var/input = input(user, "Belt - Choose a hex color (without the #):", "Belt Color" , "FFFFFF")
+			if (input == null || input == "")
+				return
+			else
+				input = uppertext(input)
+				if (length(input) != 6)
+					return
+				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
+				for (var/i = 1, i <= 6, i++)
+					var/numtocheck = 0
+					if (i < 6)
+						numtocheck = copytext(input,i,i+1)
+					else
+						numtocheck = copytext(input,i,0)
+					if (!(numtocheck in listallowed))
+						return
+				beltcolor = addtext("#",input)
+		if (!bucklecolor)
+			var/input = input(user, "Buckle - Choose a hex color (without the #):", "Buckle Color" , "FFFFFF")
+			if (input == null || input == "")
+				return
+			else
+				input = uppertext(input)
+				if (length(input) != 6)
+					return
+				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
+				for (var/i = 1, i <= 6, i++)
+					var/numtocheck = 0
+					if (i < 6)
+						numtocheck = copytext(input,i,i+1)
+					else
+						numtocheck = copytext(input,i,0)
+					if (!(numtocheck in listallowed))
+						return
+				bucklecolor = addtext("#",input)
 		if (!pantscolor)
 			var/input = input(user, "Pants - Choose a hex color (without the #):", "Pants Color" , "FFFFFF")
 			if (input == null || input == "")
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -785,37 +863,23 @@
 					if (!(numtocheck in listallowed))
 						return
 				pantscolor = addtext("#",input)
-		if (!epaulettescolor)
-			var/input = input(user, "Epaulettes - Choose a hex color (without the #):", "Epaulettes Color" , "FFFFFF")
-			if (input == null || input == "")
-				return
-			else
-				input = uppertext(input)
-				if (lentext(input) != 6)
-					return
-				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
-				for (var/i = 1, i <= 6, i++)
-					var/numtocheck = 0
-					if (i < 6)
-						numtocheck = copytext(input,i,i+1)
-					else
-						numtocheck = copytext(input,i,0)
-					if (!(numtocheck in listallowed))
-						return
-				epaulettescolor = addtext("#",input)
-		if (shirtcolor && pantscolor && epaulettescolor)
+		if (shirtcolor && buttonscolor && beltcolor && bucklecolor && pantscolor)
 			uncolored = FALSE
-			var/image/pants = image("icon" = 'icons/obj/clothing/uniforms.dmi', "icon_state" = "customuni_pants")
-			pants.color = pantscolor
 			var/image/shirt = image("icon" = 'icons/obj/clothing/uniforms.dmi', "icon_state" = "customuni_shirt")
 			shirt.color = shirtcolor
-			var/image/belt = image("icon" = 'icons/obj/clothing/uniforms.dmi', "icon_state" = "customuni_over")
-			var/image/epaulettes = image("icon" = 'icons/obj/clothing/uniforms.dmi', "icon_state" = "customuni_epaulettes")
-			epaulettes.color = epaulettescolor
-			overlays += pants
+			var/image/buttons = image("icon" = 'icons/obj/clothing/uniforms.dmi', "icon_state" = "customuni_buttons")
+			buttons.color = buttonscolor
+			var/image/belt = image("icon" = 'icons/obj/clothing/uniforms.dmi', "icon_state" = "customuni_belt")
+			belt.color = beltcolor
+			var/image/buckle = image("icon" = 'icons/obj/clothing/uniforms.dmi', "icon_state" = "customuni_buckle")
+			buckle.color = bucklecolor
+			var/image/pants = image("icon" = 'icons/obj/clothing/uniforms.dmi', "icon_state" = "customuni_pants")
+			pants.color = pantscolor
 			overlays += shirt
+			overlays += buttons
 			overlays += belt
-			overlays += epaulettes
+			overlays += buckle
+			overlays += pants
 			return
 	else
 		..()
@@ -848,7 +912,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -867,7 +931,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -885,7 +949,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -928,7 +992,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -962,6 +1026,7 @@
 	icon_state = "modern_camo_custom"
 	worn_state = "modern_camo_custom"
 	color = "#FFFFFF"
+	heat_protection = LOWER_TORSO|LEGS|UPPER_TORSO|ARMS
 	New()
 		..()
 		spawn(5)
@@ -976,7 +1041,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -994,7 +1059,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -1012,7 +1077,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -1059,7 +1124,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -1106,6 +1171,63 @@
 	item_state = "customnoblehat_hat"
 	worn_state = "customnoblehat_hat"
 
+/obj/item/clothing/head/custom/customhood
+	name = "wool_hood"
+	desc = "A wool hood."
+	icon_state = "wool_hood"
+	item_state = "wool_hood"
+	worn_state = "wool_hood"
+	cold_protection = HEAD
+
+/obj/item/clothing/head/custom/custom_beanie
+	name = "beanie"
+	desc = "A warm winter beanie."
+	icon_state = "custom_beanie"
+	item_state = "custom_beanie"
+	worn_state = "custom_beanie"
+	cold_protection = HEAD
+
+/obj/item/clothing/head/custom_keffiyeh
+	name = "keffiyeh"
+	desc = "A headdress fashioned from a scarf with a checkered pattern."
+	icon_state = "keffiyeh_custom"
+	item_state = "keffiyeh_custom"
+	worn_state = "keffiyeh_custom"
+	heat_protection = HEAD
+	var/uncolored1 = TRUE
+	var/patterncolor = 0
+
+/obj/item/clothing/head/custom_keffiyeh/attack_self(mob/user as mob)
+	if (uncolored1)
+		if (!patterncolor)
+			var/input = input(user, "Pattern - Choose a hex color (without the #):", "Cap Color" , "FFFFFF")
+			if (input == null || input == "")
+				return
+			else
+				input = uppertext(input)
+				if (length(input) != 6)
+					return
+				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
+				for (var/i = 1, i <= 6, i++)
+					var/numtocheck = 0
+					if (i < 6)
+						numtocheck = copytext(input,i,i+1)
+					else
+						numtocheck = copytext(input,i,0)
+					if (!(numtocheck in listallowed))
+						return
+				patterncolor = addtext("#",input)
+	//			user << "Color: [color]"
+
+		if (patterncolor)
+			uncolored1 = FALSE
+			var/image/pattern = image("icon" = 'icons/obj/clothing/hats.dmi', "icon_state" = "keffiyeh_custom_color")
+			pattern.color = patterncolor
+			overlays += pattern
+			return
+	else
+		..()
+
 /obj/item/clothing/head/custom_feathered_hat
 	name = "feathered cap"
 	desc = "A feathered cap."
@@ -1130,7 +1252,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -1149,7 +1271,7 @@
 				return
 			else
 				input = uppertext(input)
-				if (lentext(input) != 6)
+				if (length(input) != 6)
 					return
 				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 				for (var/i = 1, i <= 6, i++)
@@ -1169,6 +1291,119 @@
 			cap.color = capcolor
 			overlays += band
 			overlays += cap
+			return
+	else
+		..()
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/obj/item/clothing/under/crinoline_dress
+	name = "crinoine dress"
+	desc = "A laced dress."
+	var/uncolored = FALSE
+	var/topcolor = 0
+	var/undercolor = 0
+	item_state = "crinoline_dress"
+	icon_state = "crinoline_dress"
+	worn_state = "crinoline_dress"
+	color = "#FFFFFF"
+	New()
+		..()
+		spawn(5)
+			uncolored = TRUE
+
+
+/obj/item/clothing/under/crinoline_dress/attack_self(mob/user as mob)
+	if (uncolored)
+		if (!topcolor)
+			var/input = input(user, "Top - Choose a hex color (without the #):", "Dress Color" , "FFFFFF")
+			if (input == null || input == "")
+				return
+			else
+				input = uppertext(input)
+				if (length(input) != 6)
+					return
+				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
+				for (var/i = 1, i <= 6, i++)
+					var/numtocheck = 0
+					if (i < 6)
+						numtocheck = copytext(input,i,i+1)
+					else
+						numtocheck = copytext(input,i,0)
+					if (!(numtocheck in listallowed))
+						return
+				topcolor = addtext("#",input)
+
+		if (!undercolor)
+			var/input = input(user, "Under Bottom - Choose a hex color (without the #):", "Vest/Skirt Line Color" , "FFFFFF")
+			if (input == null || input == "")
+				return
+			else
+				input = uppertext(input)
+				if (length(input) != 6)
+					return
+				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
+				for (var/i = 1, i <= 6, i++)
+					var/numtocheck = 0
+					if (i < 6)
+						numtocheck = copytext(input,i,i+1)
+					else
+						numtocheck = copytext(input,i,0)
+					if (!(numtocheck in listallowed))
+						return
+				undercolor = addtext("#",input)
+		if (topcolor && undercolor)
+			uncolored = FALSE
+			var/image/top = image("icon" = 'icons/obj/clothing/uniforms.dmi', "icon_state" = "crinoline_dress_dress")
+			top.color = topcolor
+			var/image/under = image("icon" = 'icons/obj/clothing/uniforms.dmi', "icon_state" = "crinoline_dress_under")
+			under.color = undercolor
+			var/image/lining = image("icon" = 'icons/obj/clothing/uniforms.dmi', "icon_state" = "crinoline_dress_lining")
+			overlays += top
+			overlays += under
+			overlays += lining
+			return
+	else
+		..()
+///////////////////////////////////////////////////////////////////////////////////////
+/obj/item/clothing/head/custom_hennin
+	name = "hennin"
+	desc = "A headdress fashioned from cloth with a nice lining."
+	icon_state = "custom_hennin"
+	item_state = "custom_hennin"
+	worn_state = "custom_hennin"
+	heat_protection = HEAD
+	var/uncolored1 = TRUE
+	var/patterncolor = 0
+
+/obj/item/clothing/head/custom_hennin/attack_self(mob/user as mob)
+	if (uncolored1)
+		if (!patterncolor)
+			var/input = input(user, "Pattern - Choose a hex color (without the #):", "Cap Color" , "FFFFFF")
+			if (input == null || input == "")
+				return
+			else
+				input = uppertext(input)
+				if (length(input) != 6)
+					return
+				var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
+				for (var/i = 1, i <= 6, i++)
+					var/numtocheck = 0
+					if (i < 6)
+						numtocheck = copytext(input,i,i+1)
+					else
+						numtocheck = copytext(input,i,0)
+					if (!(numtocheck in listallowed))
+						return
+				patterncolor = addtext("#",input)
+	//			user << "Color: [color]"
+
+		if (patterncolor)
+			uncolored1 = FALSE
+			var/image/pattern = image("icon" = 'icons/obj/clothing/hats.dmi', "icon_state" = "custom_hennin_point")
+			pattern.color = patterncolor
+			overlays += pattern
 			return
 	else
 		..()

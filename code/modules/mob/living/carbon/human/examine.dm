@@ -81,6 +81,14 @@
 		else
 			msg += "[T.He] [T.has] \icon[back] \a [back] on [T.his] back.\n"
 
+	//shoulder
+	if (shoulder)
+		if (shoulder.blood_DNA)
+			msg += "<span class='warning'>[T.He] [T.has] \icon[shoulder] [shoulder.gender==PLURAL?"some":"a"] [(shoulder.blood_color != "#030303") ? "blood" : "oil"]-stained [shoulder] on [T.his] shoulder.</span>\n"
+		else
+			msg += "[T.He] [T.has] \icon[shoulder] \a [shoulder] on [T.his] shoulder.\n"
+
+
 	//left hand
 	if (l_hand)
 		if (l_hand.blood_DNA)
@@ -187,7 +195,7 @@
 	if (fire_stacks)
 		msg += "[T.He] [T.is] covered in some liquid.\n"
 	if (on_fire)
-		msg += "<span class='warning'>[T.He] [T.is] on fire!.</span>\n"
+		msg += "<span class='warning'>[T.He] [T.is] on fire!</span>\n"
 	msg += "<span class='warning'>"
 
 	msg += "</span>"
@@ -270,7 +278,7 @@
 
 	msg += "*---------*</span>"
 	if (pose)
-		if ( findtext(pose,".",lentext(pose)) == FALSE && findtext(pose,"!",lentext(pose)) == FALSE && findtext(pose,"?",lentext(pose)) == FALSE )
+		if ( findtext(pose,".",length(pose)) == FALSE && findtext(pose,"!",length(pose)) == FALSE && findtext(pose,"?",length(pose)) == FALSE )
 			pose = addtext(pose,".") //Makes sure all emotes end with a period.
 		msg += "\n[T.He] [T.is] [pose]"
 	if (!map.civilizations && map.ID != MAP_LITTLE_CREEK && map.ID != MAP_GULAG13)
@@ -325,6 +333,20 @@
 
 			else
 				msg += "<br><i>[T.He] is a nomad. [T.He] has no faction</b>.</i>"
+			if (user.find_trait("Empathetic"))
+				var/md
+				switch(mood)
+					if(-5000000 to 20)
+						md = "seems to be in a horrible mood!"
+					if(20 to 40)
+						md = "seems to be in a bad mood."
+					if(40 to 60)
+						md = "seems to be in a neutral mood."
+					if(60 to 80)
+						md = "seems to be in a good mood."
+					if(80 to 10000)
+						md = "seems to be in an excellent mood!"
+				msg += "<br><i>[T.He] [md]</b>.</i>"
 		else if (isobserver(user))
 			if (civilization != "none")
 				msg += "<br><i>[T.He] [T.is] a member of <b>[civilization]</b>.</i>"
@@ -337,7 +359,10 @@
 				msg += "<br><i>You belong to <b>[H.civilization]</b>.</i>"
 				if (map && map.custom_civs[H.civilization][4] && map.custom_civs[H.civilization][4].real_name == H.real_name)
 					msg += "<br><b>You are the leader of your group.</b>"
-
+		if (left_factions.len && ishuman(user))
+			for (var/i in left_factions)
+				if (i[2]>world.realtime)
+					msg += "<br><font color='red'>[T.He] has abandoned <b>[i[1]]</b> recently!</font>"
 	for (var/v in TRUE to embedded.len)
 		msg += "<a href='?src=\ref[user];remove_embedded=[v]'>Remove [embedded[v]]</a>"
 

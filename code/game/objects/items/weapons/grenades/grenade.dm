@@ -14,7 +14,8 @@
 	var/loadable = TRUE
 	flammable = TRUE
 	value = 5
-
+	var/explosion_sound = 'sound/weapons/Explosives/HEGrenade.ogg'
+	var/mob/living/carbon/human/firer = null
 /obj/item/weapon/grenade/examine(mob/user)
 	if (..(user, FALSE))
 		if (det_time > 1)
@@ -25,6 +26,7 @@
 /obj/item/weapon/grenade/attack_self(mob/user as mob)
 	if (!active)
 		user << "<span class='warning'>You light \the [name]! [det_time/10] seconds!</span>"
+		firer = user
 		activate(user)
 		add_fingerprint(user)
 
@@ -40,7 +42,7 @@
 
 	if (user)
 		msg_admin_attack("[user.name] ([user.ckey]) primed \a [src] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-
+		firer = user
 	icon_state = initial(icon_state) + "_active"
 	active = TRUE
 	playsound(loc, 'sound/weapons/armbomb.ogg', 75, TRUE, -3)
@@ -89,7 +91,7 @@
 	if(!O) return
 
 	if(explosion_size)
-		explosion(O,0,1,3,1)
+		explosion(O,0,1,3,1,sound=explosion_sound)
 		qdel(src)
 
 
@@ -103,6 +105,7 @@
 	throw_range = 2
 	flags = CONDUCT
 	slot_flags = SLOT_BELT
+	explosion_sound = 'sound/weapons/Explosives/Dynamite.ogg'
 /obj/item/weapon/grenade/bomb/New()
 	..()
 	det_time = rand(80,120)
@@ -114,7 +117,7 @@
 	if(!O) return
 
 	if(explosion_size)
-		explosion(O,1,2,3,1)
+		explosion(O,1,2,3,1,sound=explosion_sound)
 		qdel(src)
 
 
@@ -123,6 +126,7 @@
 	desc = "Light it and run."
 	icon_state = "dynamite0"
 	det_time = 40
+	explosion_sound = 'sound/weapons/Explosives/Dynamite.ogg'
 	var/explosion_size = 2
 	var/state = 0
 
@@ -134,18 +138,20 @@
 	if(!O) return
 
 	if(explosion_size)
-		explosion(O,0,2,4,2)
+		explosion(O,0,2,4,2,sound=explosion_sound)
 		qdel(src)
 
 /obj/item/weapon/grenade/dynamite/attack_self(mob/user as mob)
 	if (state == 2)
 		activate()
+		firer = user
 	return
 
 /obj/item/weapon/grenade/dynamite/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (state == 2 && istype(W, /obj/item/flashlight))
 		var/obj/item/flashlight/F = W
 		if (F.on)
+			firer = user
 			activate(user)
 			add_fingerprint(user)
 			name = "lighted dynamite stick"
@@ -209,9 +215,10 @@
 	var/fragment_type = /obj/item/projectile/bullet/pellet/fragment
 	var/num_fragments = 30  //total number of fragments produced by the grenade
 	var/fragment_damage = 15
-	var/damage_step = 2      //projectiles lose a fragment each time they travel this distance. Can be a non-integer.
+	var/damage_step = 2	  //projectiles lose a fragment each time they travel this distance. Can be a non-integer.
 	var/big_bomb = FALSE
 	var/spread_range = 7
+	explosion_sound = 'sound/weapons/Explosives/FragGrenade.ogg'
 /obj/item/weapon/grenade/modern/prime()
 	set waitfor = 0
 	..()
@@ -220,7 +227,7 @@
 	if(!T) return
 
 	if(explosion_size)
-		explosion(T,0,1,3,1)
+		explosion(T,0,1,3,1,sound=explosion_sound)
 	if (!ismob(loc))
 
 		var/list/target_turfs = getcircle(T, spread_range)
@@ -233,6 +240,7 @@
 			P.range_step = damage_step
 			P.shot_from = name
 			P.launch_fragment(TT)
+			P.firer_loc = get_turf(src)
 
 			// any mob on the source turf, lying or not, absorbs 100% of shrapnel now
 			for (var/mob/living/L in T)
@@ -247,6 +255,7 @@
 	icon_state = "mills"
 	det_time = 70
 	throw_range = 7
+	explosion_sound = 'sound/weapons/Explosives/FragGrenade.ogg'
 
 /obj/item/weapon/grenade/ww2/mills2
 	name = "mills bomb no. 36M"
@@ -302,7 +311,7 @@
 	icon_state = "type91"
 	det_time = 80
 	throw_range = 10
-
+	explosion_sound = 'sound/weapons/Explosives/FragGrenade.ogg'
 
 /obj/item/weapon/grenade/coldwar/m26
 	name = "M26 grenade"
@@ -310,7 +319,7 @@
 	icon_state = "m26"
 	det_time = 50
 	throw_range = 9
-
+	explosion_sound = 'sound/weapons/Explosives/FragGrenade.ogg'
 
 /obj/item/weapon/grenade/coldwar/m67
 	name = "M67 grenade"
@@ -327,7 +336,7 @@
 	if(!T) return
 
 	if(explosion_size)
-		explosion(T,0,1,3,1)
+		explosion(T,0,1,3,1,sound=explosion_sound)
 	if (!ismob(loc))
 
 		var/list/target_turfs = getcircle(T, spread_range)
@@ -356,7 +365,7 @@
 	if(!T) return
 
 	if(explosion_size)
-		explosion(T,0,1,3,1)
+		explosion(T,0,1,3,1,sound=explosion_sound)
 	if (!ismob(loc))
 
 		var/list/target_turfs = getcircle(T, spread_range)
@@ -392,14 +401,14 @@
 	if(!T) return
 
 	if(explosion_size)
-		explosion(T,1,3,3,1)
+		explosion(T,1,3,3,1,sound=explosion_sound)
 		qdel(src)
 
 /obj/item/weapon/grenade/ww2
 	var/fragment_type = /obj/item/projectile/bullet/pellet/fragment
 	var/num_fragments = 37  //total number of fragments produced by the grenade
 	var/fragment_damage = 15
-	var/damage_step = 2      //projectiles lose a fragment each time they travel this distance. Can be a non-integer.
+	var/damage_step = 2	  //projectiles lose a fragment each time they travel this distance. Can be a non-integer.
 	var/big_bomb = FALSE
 	secondary_action = TRUE
 	var/explosion_size = 2
@@ -410,7 +419,7 @@
 	var/fragment_type = /obj/item/projectile/bullet/pellet/fragment
 	var/num_fragments = 37  //total number of fragments produced by the grenade
 	var/fragment_damage = 15
-	var/damage_step = 2      //projectiles lose a fragment each time they travel this distance. Can be a non-integer.
+	var/damage_step = 2	  //projectiles lose a fragment each time they travel this distance. Can be a non-integer.
 	var/big_bomb = FALSE
 
 	//The radius of the circle used to launch projectiles. Lower values mean less projectiles are used but if set too low gaps may appear in the spread pattern
@@ -427,6 +436,7 @@
 					user << "You successfully place the booby trap here using \the [src]."
 					var/obj/item/mine/boobytrap/BT = new /obj/item/mine/boobytrap(get_turf(user))
 					BT.origin = src.type
+					firer = user
 					qdel(src)
 		else
 			return
@@ -539,6 +549,140 @@
 		prime()
 		return
 
+/obj/item/weapon/grenade/suicide_vest/kamikaze
+	name = "kamikaze vest"
+	desc = "An Antitank Mine Suicide Vest, deadly!"
+	icon_state = "kamikaze_vest"
+	nothrow = TRUE
+	throw_speed = 1
+	throw_range = 2
+	flags = CONDUCT
+	slot_flags = SLOT_BELT|SLOT_OCLOTHING
+	det_time = 1
+	heavy_armor_penetration = 22
+	var/armed1 = "disarmed"
+
+/obj/item/weapon/grenade/suicide_vest/kamikaze/examine(mob/user)
+	..()
+	user << "\The [src] is <b>[armed]</b>."
+	return
+
+/obj/item/weapon/grenade/suicide_vest/kamikaze/attack_self(mob/user as mob)
+	if (!active && armed1 == "armed")
+		user << "<span class='warning'>You switch \the [name]!</span>"
+		firer = user
+		activate(user)
+		add_fingerprint(user)
+
+/obj/item/weapon/grenade/suicide_vest/kamikaze/attack_hand(mob/user as mob)
+	if (!active && armed1 == "armed" && loc == user)
+		user << "<span class='warning'>You switch \the [name]!</span>"
+		firer = user
+		activate(user)
+		add_fingerprint(user)
+	else
+		..()
+
+/obj/item/weapon/grenade/suicide_vest/kamikaze/verb/arm1()
+	set category = null
+	set name = "Arm/Disarm"
+	set src in range(1, usr)
+
+	if (armed1 == "armed")
+		usr << "You disarm \the [src]."
+		armed1 = "disarmed"
+		firer = null
+		return
+	else
+		usr << "<span class='warning'>You arm \the [src]!</span>"
+		armed1 = "armed"
+		return
+
+/obj/item/weapon/grenade/suicide_vest/kamikaze/activate(mob/living/carbon/human/user as mob)
+	if (active)
+		return
+
+	if (user)
+		msg_admin_attack("[user.name] ([user.ckey]) primed \a [src] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+
+	if (user && user.faction_text == JAPANESE)
+		user.emote("charge")
+	active = TRUE
+	playsound(loc, 'sound/weapons/armbomb.ogg', 75, TRUE, -3)
+
+	spawn(det_time)
+		visible_message("<span class = 'warning'>\The [src] goes off!</span>")
+		prime()
+		return
+
+/obj/item/weapon/grenade/suicide_vest/kamikaze/prime()
+	set waitfor = 0
+
+	var/turf/T = get_turf(src.loc)
+	if(!T) return
+
+	if (active)
+		explosion(T,3,3,3,3)
+		for(var/obj/structure/vehicleparts/frame/F in range(1,T))
+			for (var/mob/M in F.axis.transporting)
+				shake_camera(M, 3, 3)
+			var/penloc = F.CheckPenLoc(src)
+			switch(penloc)
+				if ("left")
+					if (F.w_left[5] > 0)
+						F.w_left[5] -= heavy_armor_penetration
+						visible_message("<span class = 'danger'><big>The left hull gets damaged!</big></span>")
+				if ("right")
+					if (F.w_right[5] > 0)
+						F.w_right[5] -= heavy_armor_penetration
+						visible_message("<span class = 'danger'><big>The right hull gets damaged!</big></span>")
+				if ("front")
+					if (F.w_front[5] > 0)
+						F.w_front[5] -= heavy_armor_penetration
+						visible_message("<span class = 'danger'><big>The front hull gets damaged!</big></span>")
+				if ("back")
+					if (F.w_back[5] > 0)
+						F.w_back[5] -= heavy_armor_penetration
+						visible_message("<span class = 'danger'><big>The rear hull gets damaged!</big></span>")
+				if ("frontleft")
+					if (F.w_left[5] > 0 && F.w_front[5] > 0)
+						if (F.w_left[4] > F.w_front[4] && F.w_left[5]>0)
+							F.w_left[5] -= heavy_armor_penetration
+							visible_message("<span class = 'danger'><big>The left hull gets damaged!</big></span>")
+						else
+							F.w_front[5] -= heavy_armor_penetration
+							visible_message("<span class = 'danger'><big>The front hull gets damaged!</big></span>")
+				if ("frontright")
+					if (F.w_right[5] > 0 && F.w_front[5] > 0)
+						if (F.w_right[4] > F.w_front[4] && F.w_right[5]>0)
+							F.w_right[5] -= heavy_armor_penetration
+							visible_message("<span class = 'danger'><big>The right hull gets damaged!</big></span>")
+						else
+							F.w_front[5] -= heavy_armor_penetration
+							visible_message("<span class = 'danger'><big>The front hull gets damaged!</big></span>")
+				if ("backleft")
+					if (F.w_left[5] > 0 && F.w_back[5] > 0)
+						if (F.w_left[4] > F.w_back[4] && F.w_left[5]>0)
+							F.w_left[5] -= heavy_armor_penetration
+							visible_message("<span class = 'danger'><big>The left hull gets damaged!</big></span>")
+						else
+							F.w_back[5] -= heavy_armor_penetration
+							visible_message("<span class = 'danger'><big>The rear hull gets damaged!</big></span>")
+				if ("backright")
+					if (F.w_right[5] > 0 && F.w_back[5] > 0)
+						if (F.w_right[4] > F.w_back[4] && F.w_right[5]>0)
+							F.w_right[5] -= heavy_armor_penetration
+							visible_message("<span class = 'danger'><big>The right hull gets damaged!</big></span>")
+						else
+							F.w_back[5] -= heavy_armor_penetration
+							visible_message("<span class = 'danger'><big>The rear hull gets damaged!</big></span>")
+			F.try_destroy()
+			for(var/obj/structure/vehicleparts/movement/MV in F)
+				MV.broken = TRUE
+				MV.update_icon()
+			F.update_icon()
+		qdel(src)
+
 /obj/item/weapon/grenade/coldwar/nonfrag/custom
 	name = "explosive grenade"
 	desc = "An explosive grenade with no shrapnel."
@@ -574,7 +718,7 @@
 	var/turf/T = get_turf(src)
 	if(!T) return
 
-	explosion(T,2,2,2,2)
+	explosion(T,2,2,2,2,sound=explosion_sound)
 	for(var/obj/structure/vehicleparts/frame/F in range(1,T))
 		for (var/mob/M in F.axis.transporting)
 			shake_camera(M, 3, 3)
@@ -633,4 +777,6 @@
 			MV.broken = TRUE
 			MV.update_icon()
 		F.update_icon()
+		if (firer)
+			firer.awards["tank"]+=(heavy_armor_penetration/200)
 	qdel(src)

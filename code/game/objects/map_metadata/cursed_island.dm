@@ -1,16 +1,15 @@
-#define NO_WINNER "The crew is alive."
+
 /obj/map_metadata/cursed_island
 	ID = MAP_CURSED_ISLAND
 	title = "Cursed Island (100x100x1)"
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall,
 		/area/caribbean/no_mans_land/invisible_wall/inside)
 	respawn_delay = 0
-	squad_spawn_locations = FALSE
-//	min_autobalance_players = 90
+
+	no_winner ="The crew is alive."
+
 	faction_organization = list(
 		BRITISH,)
-	available_subfactions = list(
-		)
 	roundend_condition_sides = list(
 		list(BRITISH) = /area/caribbean/british
 		)
@@ -62,4 +61,3 @@ obj/map_metadata/cursed_island/job_enabled_specialcheck(var/datum/job/J)
 		show_global_battle_report(null)
 		win_condition_spam_check = TRUE
 		return FALSE
-#undef NO_WINNER

@@ -1,8 +1,3 @@
-//copy pasta of the space piano, don't hurt me -Pete
-
-#define MAX_CHARS_PER_LINE 200
-#define MAX_CHARS_TOTAL 20000
-
 /obj/item/violin
 	name = "Violin"
 	desc = "A classic violin. "
@@ -217,13 +212,13 @@
 					if (!playing || !isliving(loc))//If the violin is playing, or isn't held by a person
 						playing = FALSE
 						return
-					if (lentext(note) == FALSE)
+					if (length(note) == FALSE)
 						continue
 					//world << "Parse: [copytext(note,1,2)]"
 					var/cur_note = text2ascii(note) - 96
 					if (cur_note < 1 || cur_note > 7)
 						continue
-					for (var/i=2 to lentext(note))
+					for (var/i=2 to length(note))
 						var/ni = copytext(note,i,i+1)
 						if (!text2num(ni))
 							if (ni == "#" || ni == "b" || ni == "n")
@@ -324,7 +319,7 @@
 				return
 			if (song.lines.len > MAX_CHARS_PER_LINE)
 				return
-			if (lentext(newline) > MAX_CHARS_PER_LINE)
+			if (length(newline) > MAX_CHARS_PER_LINE)
 				newline = copytext(newline, TRUE, MAX_CHARS_PER_LINE)
 			song.lines.Add(newline)
 
@@ -339,7 +334,7 @@
 			var/content = rhtml_encode(input("Enter your line: ", "violin", song.lines[num]) as text|null)
 			if (!content)
 				return
-			if (lentext(content) > MAX_CHARS_PER_LINE)
+			if (length(content) > MAX_CHARS_PER_LINE)
 				content = copytext(content, TRUE, MAX_CHARS_PER_LINE)
 			if (num > song.lines.len || num < 1)
 				return
@@ -361,11 +356,11 @@
 				if (!in_range(src, usr))
 					return
 
-				if (lentext(t) >= MAX_CHARS_TOTAL)
+				if (length(t) >= MAX_CHARS_TOTAL)
 					var/cont = WWinput(usr, "Your song is too long! Would you like to continue editing it?", "Error", "Yes", list("Yes", "No"))
 					if (cont == "No")
 						break
-			while (lentext(t) > MAX_CHARS_TOTAL)
+			while (length(t) > MAX_CHARS_TOTAL)
 
 			//split into lines
 			spawn()
@@ -373,7 +368,7 @@
 				var/tempo = 5
 				if (!lines || !lines.len)
 					return
-				if (copytext(lines[1],1,6) == "BPM: ")
+				if (copytext(lines[1],1,6) == "BPM: " && text2num(copytext(lines[1],6)))
 					tempo = 600 / text2num(copytext(lines[1],6))
 					lines.Cut(1,2)
 				if (lines.len > MAX_CHARS_PER_LINE)
@@ -381,7 +376,7 @@
 					lines.Cut(MAX_CHARS_PER_LINE+1)
 				var/linenum = TRUE
 				for (var/l in lines)
-					if (lentext(l) > MAX_CHARS_PER_LINE)
+					if (length(l) > MAX_CHARS_PER_LINE)
 						usr << "Line [linenum] too long!"
 						lines.Remove(l)
 					else

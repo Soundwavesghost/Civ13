@@ -1,16 +1,16 @@
-#define NO_WINNER "The round is proceeding normally."
+
 /obj/map_metadata/nomads_ice_age
 	ID = MAP_NOMADS_ICE_AGE
 	title = "Nomads (Ice Age) (275x275x2)"
 	lobby_icon_state = "civ13"
+	no_winner ="The round is proceeding normally."
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall/)
 	respawn_delay = 6000 // 10 minutes!
-	squad_spawn_locations = FALSE
-//	min_autobalance_players = 90
+
+
 	faction_organization = list(
 		CIVILIAN,)
-	available_subfactions = list(
-		)
+
 	roundend_condition_sides = list(
 		list(CIVILIAN) = /area/caribbean/british
 		)
@@ -46,11 +46,11 @@
 /obj/map_metadata/nomads_ice_age/cross_message(faction)
 	return ""
 
-/obj/map_metadata/nomads_ice_age/proc/seasons()
+/obj/map_metadata/nomads_ice_age/seasons()
 	if (real_season == "SUMMER")
 		season = "WINTER"
 		world << "<big>It's getting very cold. <b>Winter</b> has started.</big>"
-			change_weather_somehow()
+		change_weather_somehow()
 		for (var/obj/structure/wild/tree/live_tree/TREES)
 			TREES.change_season()
 		for (var/obj/structure/wild/smallbush/SB)
@@ -66,7 +66,7 @@
 			if  (A.location != AREA_INSIDE)
 				G.ChangeTurf(/turf/floor/winter/grass)
 		spawn(100)
-			change_weather(WEATHER_SNOW)
+			change_weather(WEATHER_WET)
 		spawn(800)
 		for (var/turf/floor/beach/water/shallowsaltwater/W)
 			W.ChangeTurf(/turf/floor/beach/water/ice/salty)
@@ -74,7 +74,7 @@
 	else
 		season = "SUMMER"
 		world << "<big>The weather gets warmer. <b>Summer</b> has started.</big>"
-			change_weather_somehow()
+		change_weather_somehow()
 		for (var/obj/structure/wild/tree/live_tree/TREES)
 			TREES.change_season()
 		for (var/obj/structure/wild/smallbush/winter/SBW)
@@ -110,4 +110,3 @@
 		. = TRUE
 	else
 		. = FALSE
-#undef NO_WINNER

@@ -25,7 +25,6 @@
 	var/body_part = null
 	var/icon_position = FALSE
 	var/model
-	var/force_icon
 	var/damage_state = "00"
 	var/brute_dam = FALSE //sum of blunt, pierce and cut damage
 	var/burn_dam = FALSE
@@ -59,13 +58,13 @@
 	var/wound_update_accuracy = TRUE 	// how often wounds should be updated, a higher number means less often
 	var/joint = "joint"   // Descriptive string used in dislocation.
 	var/amputation_point  // Descriptive string used in amputation.
-	var/dislocated = FALSE    // If you target a joint, you can dislocate the limb, causing temporary damage to the organ.
+	var/dislocated = FALSE	// If you target a joint, you can dislocate the limb, causing temporary damage to the organ.
 	var/can_grasp //It would be more appropriate if these two were named "affects_grasp" and "affects_stand" at this point
 	var/can_stand
 	var/pain = FALSE
 	var/fracturetimer = 0
-	var/artery_name = "artery"         // Flavour text for carotid artery, aorta, etc.
-	var/arterial_bleed_severity = 1    // Multiplier for bleeding in a limb.
+	var/artery_name = "artery"		 // Flavour text for carotid artery, aorta, etc.
+	var/arterial_bleed_severity = 1	// Multiplier for bleeding in a limb.
 	var/prosthesis = FALSE
 	var/prosthesis_type = "none"
 	var/pain_disability_threshold
@@ -376,7 +375,11 @@
 	return created_wound
 
 
-/obj/item/organ/external/proc/heal_damage(brute, burn, internal = FALSE, robo_repair = FALSE)
+/obj/item/organ/external/proc/heal_damage(brute, burn, internal = FALSE, robo_repair = FALSE, var/mob/living/carbon/human/healer = null)
+
+	if (healer && healer != owner)
+		healer.awards["medic"]+=(brute+burn)
+		owner.awards["wounded"]+=(brute+burn)
 
 	//Heal damage on the individual wounds
 	for (var/datum/wound/W in wounds)
@@ -646,12 +649,15 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if (W.can_autoheal() && W.wound_damage() < 50)
 			heal_amt += 0.5
 
+		//salved wounds heal faster
+		if (W.salved)
+			heal_amt *= 1.2
 		//we only update wounds once in [wound_update_accuracy] ticks so have to emulate realtime
-		heal_amt = heal_amt * wound_update_accuracy
+		heal_amt *= wound_update_accuracy
 		//configurable regen speed woo, no-regen hardcore or instaheal hugbox, choose your destiny
-		heal_amt = heal_amt * config.organ_regeneration_multiplier
+		heal_amt *= config.organ_regeneration_multiplier
 		// amount of healing is spread over all the wounds
-		heal_amt = heal_amt / (wounds.len + 1)
+		heal_amt /= (wounds.len + 1)
 		// making it look prettier on scanners
 		heal_amt = round(heal_amt,0.1)
 		W.heal_damage(heal_amt)
@@ -793,7 +799,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/mob/living/carbon/human/victim = owner //Keep a reference for post-removed().
 	var/obj/item/organ/external/parent_organ = parent
 
-	if (disintegrate != DROPLIMB_BLUNT || !istype(src, /obj/item/organ/external/head))
+	if (disintegrate != DROPLIMB_BLUNT)
 		removed(null, ignore_children)
 
 		victim.traumatic_shock += 60
@@ -920,8 +926,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 /obj/item/organ/external/proc/salve()
 	var/rval = FALSE
 	for (var/datum/wound/W in wounds)
+		if (W.internal) continue
 		rval |= !W.salved
 		W.salved = TRUE
+		W.germ_level *= 0.5
 	return rval
 
 /obj/item/organ/external/proc/disinfect()
@@ -933,7 +941,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		W.germ_level = FALSE
 	return rval
 
-/obj/item/organ/external/proc/clamp()
+/obj/item/organ/external/proc/clamping()
 	var/rval = FALSE
 	status &= ~ORGAN_BLEEDING
 	for (var/datum/wound/W in wounds)
@@ -1253,8 +1261,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	joint = "jaw"
 	amputation_point = "neck"
 	artery_name = "carotid artery"
-//	gendered_icon = TRUE
-	var/list/teeth_list() = list()
+	var/list/teeth_list = list()
 	var/max_teeth = 32
 	var/eye_icon = "eyes_s"
 	var/eye_icon_location = 'icons/mob/human_face.dmi'

@@ -460,8 +460,14 @@
 			var/no_snow = FALSE
 			for (var/obj/covers/CV in get_turf(F))
 				no_snow = TRUE
-			if ((F_area.weather == WEATHER_RAIN || F_area.weather == WEATHER_STORM) && F.may_become_muddy)
-				F.muddy = TRUE
+			if ((F_area.weather == WEATHER_WET && findtext(F_area.icon_state,"rain")) || F_area.weather == WEATHER_EXTREME)
+				if (F.may_become_muddy)
+					if (F_area.climate != "semiarid" || F_area.climate != "jungle" || F_area.climate != "desert" || F_area.climate != "savanna" || season == "WINTER" || season == "SPRING")
+						F.muddy = TRUE
+					else
+						F.muddy = FALSE
+				else
+					F.muddy = FALSE
 			else
 				F.muddy = FALSE
 			for (var/obj/covers/CV in get_turf(F))
@@ -528,14 +534,36 @@
 					mob << "<span class = '[snow_span]'>[snow_message]</span>"
 					mob.next_snow_message = world.time+100
 
-			else if (F.muddy && !H.lizard)
-				if (F_area.weather == WEATHER_STORM)
+			else if (F.muddy && !H.lizard && F_area.icon_state != "")
+				if (F_area.weather == WEATHER_EXTREME && findtext(F_area.icon_state,"monsoon"))
 					standing_on_snow = rand(4,5)
 				else
 					standing_on_snow = rand(2,3)
 				if (world.time >= mob.next_mud_message)
 					mob << "<span class = 'warning'>The mud slows you down.</span>"
 					mob.next_mud_message = world.time+100
+					if (ishuman(mob))
+						var/mob/living/carbon/human/perp = mob
+						var/obj/item/organ/external/l_foot = perp.get_organ("l_foot")
+						var/obj/item/organ/external/r_foot = perp.get_organ("r_foot")
+						var/hasfeet = TRUE
+						if ((!l_foot || l_foot.is_stump()) && (!r_foot || r_foot.is_stump()))
+							hasfeet = FALSE
+						if (hasfeet && perp.shoes && !perp.buckled)//Adding blood to shoes
+							var/obj/item/clothing/shoes/S = perp.shoes
+							if (istype(S))
+								S.blood_color = "#70543E"
+								S.track_blood = max(5,S.track_blood)
+								if (!S.blood_overlay)
+									S.generate_blood_overlay()
+								if (!S.blood_DNA)
+									S.blood_DNA = list()
+									S.blood_overlay.color = "#70543E"
+									S.overlays += S.blood_overlay
+								if (S.blood_overlay && S.blood_overlay.color != "#70543E")
+									S.blood_overlay.color = "#70543E"
+									S.overlays.Cut()
+									S.overlays += S.blood_overlay
 			if (!H.crab)
 				move_delay += F.move_delay
 			if (istype(F, /turf/floor/trench/flooded))
@@ -554,7 +582,10 @@
 					H.nutrition -= 0.005
 					H.water -= 0.005
 					if (H.stats["stamina"][1] > 0)
-						--H.stats["stamina"][1]
+						if (H.find_trait("Flat Footed"))
+							H.stats["stamina"][1] -= 2
+						else
+					 	--H.stats["stamina"][1]
 					if (H.bodytemperature < H.species.body_temperature)
 						H.bodytemperature += 0.66
 			if ("walk")
@@ -705,7 +736,7 @@
 
 				//Step on nerds in our way
 				if (mob_is_human)
-					if (H.a_intent == I_HURT)
+					if (H.a_intent == I_HARM)
 						for (var/mob/living/L in mob.loc)
 							if (L.lying && L != H && !istype(L, /mob/living/simple_animal/mosquito)) // you could step on yourself, this fixes it - Kachnov
 								H.visible_message("<span class = 'danger'>[H] steps on [L]!</span>")
@@ -748,6 +779,13 @@
 
 		mob.last_movement = world.time
 
+		var/t_movement_speed_multiplier = mob.movement_speed_multiplier
+		if (mob.find_trait("Slowness"))
+			t_movement_speed_multiplier *= 1.15
+		else if (mob.find_trait("Agile"))
+			t_movement_speed_multiplier /= 1.15
+		if (mob.find_trait("Gigantism"))
+			t_movement_speed_multiplier *= 1.25
 		if (move_delay > world.time)
 			move_delay -= world.time
 		if (istype(src, /mob/living/carbon/human))
@@ -755,9 +793,9 @@
 			if (HH.riding == TRUE && !isnull(HH.riding_mob))
 				move_delay = 0.5
 			else
-				move_delay /= mob.movement_speed_multiplier
+				move_delay /= t_movement_speed_multiplier
 		else
-			move_delay /= mob.movement_speed_multiplier
+			move_delay /= t_movement_speed_multiplier
 			if (ordinal)
 				move_delay *= ROOT2_FAST
 		move_delay += world.time

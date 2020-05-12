@@ -6,8 +6,19 @@
 	flammable = TRUE
 	not_movable = FALSE
 	not_disassemblable = TRUE
-/obj/structure/loom/attackby(var/obj/item/stack/W as obj, var/mob/living/carbon/human/H as mob)
+/obj/structure/loom/attackby(var/obj/item/stack/W as obj, var/mob/living/carbon/human/H as mob) ///obj/item/stack/material/rettedfabric
 	if (istype(W, /obj/item/stack/material/cotton))
+		H.visible_message("You start to produce the cloth.")
+		icon_state = "loom1"
+		if (do_after(H, min(W.amount*20, 200), H.loc))
+			H.visible_message("You finish producing the cloth.")
+			icon_state = "loom"
+			var/obj/item/stack/material/cloth/clothes = new/obj/item/stack/material/cloth(H.loc)
+			clothes.amount = W.amount
+			qdel(W)
+		else
+			icon_state = "loom"
+	if (istype(W, /obj/item/stack/material/rettedfabric))
 		H.visible_message("You start to produce the cloth.")
 		icon_state = "loom1"
 		if (do_after(H, min(W.amount*20, 200), H.loc))
@@ -29,6 +40,7 @@
 			qdel(W)
 		else
 			icon_state = "loom"
+
 /obj/structure/mill
 	name = "mill"
 	desc = "A small mill, used to grind cereals into flour."
@@ -38,19 +50,25 @@
 	not_movable = FALSE
 	not_disassemblable = FALSE
 /obj/structure/mill/attackby(var/obj/item/stack/W as obj, var/mob/living/carbon/human/H as mob)
-	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat))
+	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat) || istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/oat) || istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/barley))
 		H.visible_message("You start to mill the [W.name].")
 		icon_state = "flour_mill1"
 		if (do_after(H, 20, H.loc))
 			H.visible_message("You finish milling the [W.name].")
 			var/obj/item/weapon/reagent_containers/food/condiment/flour/flour = new/obj/item/weapon/reagent_containers/food/condiment/flour(H.loc)
-			flour.reagents.remove_reagent("flour", 20)
+			if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/barley))
+				flour.reagents.remove_reagent("flour", 10)
+				flour.reagents.add_reagent("barleyflour", 10)
+			else if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/oat))
+				flour.reagents.remove_reagent("flour", 10)
+				flour.reagents.add_reagent("oatflour", 10)
+
 			icon_state = "flour_mill"
 			qdel(W)
 		else
 			icon_state = "flour_mill"
 
-	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/rice))
+	else if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/rice))
 		H.visible_message("You start to mill the [W.name].")
 		icon_state = "flour_mill1"
 		if (do_after(H, 20, H.loc))
@@ -60,6 +78,37 @@
 			qdel(W)
 		else
 			icon_state = "flour_mill"
+
+/obj/structure/mill/large
+	name = "mill"
+	desc = "A small mill, used to grind cereals into flour."
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "mill_large"
+	flammable = TRUE
+	not_movable = TRUE
+	not_disassemblable = TRUE
+/obj/structure/mill/large/attackby(var/obj/item/stack/W as obj, var/mob/living/carbon/human/H as mob)
+	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat))
+		H.visible_message("You start to mill the [W.name].")
+		icon_state = "mill_large1"
+		if (do_after(H, 36, H.loc))
+			H.visible_message("You finish milling the [W.name].")
+			new/obj/item/weapon/reagent_containers/food/condiment/flour(H.loc)
+			icon_state = "mill_large"
+			qdel(W)
+		else
+			icon_state = "mill_large"
+
+	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/rice))
+		H.visible_message("You start to mill the [W.name].")
+		icon_state = "mill_large1"
+		if (do_after(H, 36, H.loc))
+			H.visible_message("You finish milling the [W.name].")
+			new/obj/item/weapon/reagent_containers/food/snacks/rice(H.loc)
+			icon_state = "mill_large"
+			qdel(W)
+		else
+			icon_state = "mill_large"
 
 /obj/structure/dehydrator
 	name = "dehydrator"
@@ -122,19 +171,22 @@
 /obj/structure/dehydrator/proc/dry_obj(var/obj_type = null)
 	spawn(1200) //2 minutes
 		if (obj_type == /obj/item/weapon/reagent_containers/food/snacks/rawcutlet)
-			new/obj/item/weapon/reagent_containers/food/snacks/driedmeat(src.loc)
+			if (isturf(src.loc))
+				new/obj/item/weapon/reagent_containers/food/snacks/driedmeat(src.loc)
 			visible_message("The meat finishes drying.")
 			filled -= 1
 			icon_state = "wood_drier[filled]"
 			return
 		else if (obj_type == /obj/item/weapon/reagent_containers/food/snacks/fishfillet)
-			new/obj/item/weapon/reagent_containers/food/snacks/driedfish(src.loc)
+			if (isturf(src.loc))
+				new/obj/item/weapon/reagent_containers/food/snacks/driedfish(src.loc)
 			visible_message("The fish finishes drying.")
 			filled -= 1
 			icon_state = "wood_drier[filled]"
 			return
 		else if (obj_type == /obj/item/weapon/reagent_containers/food/snacks/driedsalmon)
-			new/obj/item/weapon/reagent_containers/food/snacks/driedsalmon(src.loc)
+			if (isturf(src.loc))
+				new/obj/item/weapon/reagent_containers/food/snacks/driedsalmon(src.loc)
 			visible_message("The salmon finishes drying.")
 			filled -= 1
 			icon_state = "wood_drier[filled]"
@@ -274,6 +326,7 @@
 	can_hold = list(
 		/obj/item/stack/ore,
 		/obj/item/stack/material/stone,
+		/obj/item/stack/material/sandstone,
 		)
 	flammable = TRUE
 
@@ -712,3 +765,88 @@
 			GS.satisfaction *= 1.5 //food that is already bad will taste worse when canned
 		tlist += GS
 	return tlist
+
+/obj/structure/compost
+	name = "compost bin"
+	desc = "A wood box, used to turn trash and scraps into fertilizer."
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "compostbin"
+	anchored = TRUE
+	density = TRUE
+	flammable = TRUE
+	not_movable = FALSE
+	not_disassemblable = FALSE
+	var/max = 10
+	var/current = 0
+
+/obj/structure/compost/attackby(var/obj/item/W as obj, var/mob/living/carbon/human/H as mob)
+	if (current >= max)
+		H << "<span class='warning'>The compost bin is full!</span>"
+		return
+
+	else if (istype(W, /obj/item/weapon/reagent_containers/food))
+		current+=0.5
+		H << "You place \the [W] in \the [src], composting it."
+		compost()
+		qdel(W)
+		return
+	else if (istype(W, /obj/item/weapon/leaves))
+		current+=0.25
+		H << "You place \the [W] in \the [src], composting it."
+		compost()
+		qdel(W)
+		return
+	else if (istype(W, /obj/item/stack/farming/seeds))
+		if (current >= max)
+			H << "<span class = 'warning'>You need to reduce the current stack of \ [W] first to fit inside \ the [src]!</span>"
+			return
+		else
+			current+=W.amount/10 	//divides (using /) by tenths from each plant input of 1, 0.10 gain per seed, 10 seeds = 1 unit. 100 seeds = 10
+			H << "You place \the [W] in \the [src], composting it."
+			compost()
+			qdel(W)
+	else if (istype(W, /obj/item/stack/material/poppy) || istype(W, /obj/item/stack/material/tobacco) || istype(W, /obj/item/stack/material/coca))
+		if (current >= max)
+			H << "<span class = 'warning'>You need to reduce the current stack of \ [W] first to fit inside \ the [src]!</span>"
+			return
+		else
+			current+=W.amount/4 	//by fourths from each stack plant input of 1, 0.25 gain per plant, 4 stackplants = 1 unit. 40 stackplants = 10
+			H << "You place \the [W] in \the [src], composting it."
+			compost()
+			qdel(W)
+	else if (istype(W, /obj/item/stack/material/flax) || istype(W, /obj/item/stack/material/hemp) || istype(W, /obj/item/stack/material/rettedfabric))
+		if (current >= max)
+			H << "<span class = 'warning'>You need to reduce the current stack of \ [W] first to fit inside \ the [src]!</span>"
+			return
+		else
+			current+=W.amount/4 	//by fourths from each stack plant input of 1, 0.25 gain per plant, 4 stackplants = 1 unit. 40 stackplants = 10
+			H << "You place \the [W] in \the [src], composting it."
+			compost()
+			qdel(W)
+			return
+
+	if (istype(W,/obj/item/weapon/wrench))
+		playsound(loc, 'sound/items/Ratchet.ogg', 100, TRUE)
+		H << (anchored ? "<span class='notice'r>You unfasten \the [src] from the floor.</span>" : "<span class='notice'>You secure \the [src] to the floor.</span>")
+		anchored = !anchored
+	else if (istype(W,/obj/item/weapon/hammer) || istype(W,/obj/item/weapon/hammer/modern))
+		playsound(loc, 'sound/items/Screwdriver.ogg', 75, TRUE)
+		H << "<span class='notice'>You begin dismantling \the [src].</span>"
+		if (do_after(H,40,src))
+			H << "<span class='notice'>You dismantle \the [src].</span>"
+			new /obj/item/stack/material/wood(loc)
+			new /obj/item/stack/material/wood(loc)
+			new /obj/item/stack/material/wood(loc)
+			new /obj/item/stack/material/wood(loc)
+			new /obj/item/stack/material/wood(loc)
+			qdel(src)
+
+/obj/structure/compost/proc/compost(mob/living/carbon/human/H as mob)
+	spawn(500)
+	visible_message(">>The composted material begins to degrade.")
+	if (current>=1)
+		current=max(0,current-1)
+		spawn(1500)
+			if (src)
+				new/obj/item/weapon/reagent_containers/food/snacks/poo/fertilizer(loc)
+				return

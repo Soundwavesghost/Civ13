@@ -1,16 +1,16 @@
-#define NO_WINNER "The ship is on the way."
+
 /obj/map_metadata/voyage
 	ID = MAP_VOYAGE
 	title = "Voyage (75x75x4)"
+	no_winner ="The ship is on the way."
 //	lobby_icon_state = "imperial"
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall/)
 	respawn_delay = 0
-	squad_spawn_locations = FALSE
-//	min_autobalance_players = 90
+
+
 	faction_organization = list(
 		BRITISH)
-	available_subfactions = list(
-		)
+
 	roundend_condition_sides = list(
 		list(BRITISH) = /area/caribbean/british/ship/lower,
 		)
@@ -20,6 +20,7 @@
 	battle_name = "Transatlantic Voyage"
 	mission_start_message = "<font size=4>The travel is starting. Hold the ship against the pirates!</font>"
 
+	is_RP = TRUE
 	var/first_event_done = FALSE
 	var/second_event_done = FALSE
 	var/third_event_done = FALSE
@@ -92,4 +93,3 @@
 	do_fourth_event = do_third_event  + rand(5000,8000)
 	do_fifth_event = do_fourth_event  + rand(4000,7000)
 
-#undef NO_WINNER

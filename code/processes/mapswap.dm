@@ -14,7 +14,7 @@
 		"Cold War Era (1958-1984)" = 0,
 		"Modern Era (1985-2020)" = 0,
 		"Civilization 13 (Nomads)" = 0,
-		"Civilization 13 (Colony & Pioneers)" = 6,
+		"Civilization 13 (Colony & Pioneers)" = 0,
 		"Civilization 13 (Prison Camps)" = 15,
 		"Civilization 13 (Others)" = 0,
 	)
@@ -33,6 +33,7 @@
 /process/epochswap/fire()
 	// no SCHECK here
 	if (is_ready())
+		map.save_awards()
 		if (config.allowedgamemodes == "TDM")
 			epochs = list(
 				//Stone Age (?-3000 B.C.)" = 0,
@@ -47,10 +48,11 @@
 				"Cold War Era (1958-1984)" = 0,
 				"Modern Era (1985-2020)" = 0,
 			)
-		else if (config.allowedgamemodes == "RP")
-			epochs = list("Civilization 13 (Nomads)" = 0,
-				"Civilization 13 (Colony & Pioneers)" = 6,
-//				"Civilization 13 (Prison Camps)" = 15,
+		else if (config.allowedgamemodes == "RP" || config.allowedgamemodes == "PERSISTENCE")
+			epochs = list(
+				"Civilization 13 (Nomads)" = 0,
+				"Civilization 13 (Colony & Pioneers)" = 0,
+				"Civilization 13 (Prison Camps)" = 15,
 				"Civilization 13 (Others)" = 0,)
 		ready = FALSE
 		vote.initiate_vote("epoch", "EpochSwap Process", TRUE, list(src, "swap"))
@@ -101,6 +103,7 @@
 			maps = list(
 				MAP_HOSTAGES = 0,
 				MAP_ARAB_TOWN = 0,
+				MAP_ARAB_TOWN_2 = 0,
 			)
 		if (epoch == "Cold War Era (1958-1984)")
 	// 1969 - TDM
@@ -115,22 +118,26 @@
 				MAP_KHALKHYN_GOL = 0,
 				MAP_OMAHA = 10,
 				MAP_KURSK = 10,
-				MAP_GULAG13 = 15,
-//				MAP_NANJING = 20,
+//				MAP_GULAG13 = 15,
+				MAP_STALINGRAD = 20,
+				MAP_NANJING = 20,
+//				MAP_IWO_JIMA = 70,
 			)
 
 		if (epoch == "Early Modern Era (1896-1933)")
 	// 1903 - TDM
 			maps = list(
-				MAP_HILL203 = 0,
+				MAP_HILL_203 = 0,
 				MAP_YPRES = 0,
 				MAP_TSARITSYN = 10,
+				MAP_PORT_ARTHUR = 10,
 			)
 
 		if (epoch == "Industrial Age (1850-1895)")
 	// 1873 - TDM
 			maps = list(
 				MAP_LITTLE_CREEK_TDM = 0,
+				MAP_MISSIONARY_RIDGE = 20,
 			)
 		if (epoch == "Imperial Age (1650-1780)")
 		//1713 - TDM
@@ -157,6 +164,7 @@
 			maps = list(
 				MAP_CAMP = 0,
 				MAP_KARAK = 0,
+				MAP_SAMMIRHAYEED = 20,
 			)
 		if (epoch == "Stone Age (?-3000 B.C.)")
 			maps = list(
@@ -169,16 +177,19 @@
 				MAP_NOMADS_DESERT = 0,
 				MAP_NOMADS_ICE_AGE = 0,
 				MAP_NOMADS_JUNGLE = 0,
-				MAP_NOMADS_DIVIDE = 0,
+				MAP_NOMADS_DIVIDE = 10,
 				MAP_NOMADS_CONTINENTAL = 20,
 				MAP_NOMADS_PANGEA = 10,
 				MAP_NOMADS_WASTELAND = 0,
 				MAP_NOMADS_NEW_WORLD = 10,
+				MAP_NOMADS_MEDITERRANEAN = 10,
+				MAP_NOMADS_ISLAND = 0,
+				MAP_NOMADS_KARAFUTO = 0,
 			)
 		if (epoch == "Civilization 13 (Colony & Pioneers)")
 			maps = list(
-				MAP_COLONY = 6,
-				MAP_JUNGLE_COLONY = 6,
+				MAP_COLONY = 0,
+				MAP_JUNGLE_COLONY = 4,
 				MAP_PIONEERS = 10,
 				MAP_FOUR_COLONIES = 35,
 			)
@@ -499,4 +510,25 @@
 		map.civd_research = list(customresearch,customresearch,customresearch,null)
 		map.cive_research = list(customresearch,customresearch,customresearch,null)
 		map.civf_research = list(customresearch,customresearch,customresearch,null)
+		return
+	else if (vote.voted_gamemode == "Normal")
+		world << "<font color='green'><big>Normal Mode</big><br>No respawn delays.</big></font>"
+		config.disable_fov = TRUE
+		config.no_respawn_delays = TRUE
+		map.gamemode = "Normal"
+		global_damage_modifier = 1
+		return
+	else if (vote.voted_gamemode == "Competitive")
+		world << "<font color='yellow'><big>Competitive Mode</big><br>Respawn delay enabled, increased damage.</big></font>"
+		config.disable_fov = TRUE
+		config.no_respawn_delays = FALSE
+		map.gamemode = "Competitive"
+		global_damage_modifier = 1.15
+		return
+	else if (vote.voted_gamemode == "Hardcore")
+		world << "<font color='red'><big>HARDCORE Mode</big><br>No respawns, increased damage. Field of View enabled. Awards active.</big></font>"
+		config.disable_fov = FALSE
+		config.no_respawn_delays = FALSE
+		map.gamemode = "Hardcore"
+		global_damage_modifier = 1.30
 		return

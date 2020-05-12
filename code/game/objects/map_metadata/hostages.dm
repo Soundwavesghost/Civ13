@@ -1,17 +1,17 @@
-#define NO_WINNER "The operation is still underway."
+
 /obj/map_metadata/hostages
 	ID = MAP_HOSTAGES
 	title = "Hostage Rescue (100x100x1)"
 	lobby_icon_state = "modern"
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall/)
 	respawn_delay = 1200
-	squad_spawn_locations = FALSE
+
 	min_autobalance_players = 100
+	no_winner ="The operation is still underway."
 	faction_organization = list(
 		AMERICAN,
 		ARAB)
-	available_subfactions = list(
-		)
+
 	roundend_condition_sides = list(
 		list(AMERICAN) = /area/caribbean/greek,
 		list(ARAB) = /area/caribbean/greek
@@ -23,7 +23,7 @@
 	mission_start_message = "<font size=4>The insurgents are holding <b>American</b> embassy staff hostage! The Special Forces must rescue them within <b>35 minutes</b>. If all of them die, both teams lose.<br>Each team gets <b>1</b> point per hostage kept alive and in their control by the end of the 20 minutes.</font>"
 	faction1 = AMERICAN
 	faction2 = ARAB
-	valid_weather_types = list(WEATHER_NONE, WEATHER_SANDSTORM)
+	valid_weather_types = list(WEATHER_NONE, WEATHER_EXTREME)
 	songs = list(
 		"Qom Nasheed:1" = 'sound/music/qom_nasheed.ogg',)
 	artillery_count = 0
@@ -212,4 +212,3 @@ obj/map_metadata/hostages/job_enabled_specialcheck(var/datum/job/J)
 		world << "<font size = 4><span class = 'notice'><b>Current Status:</b></font><br><font size = 3>Hostages Rescued: [rescued_hostages]/[total_hostages]<br>Hostages Held: [held_hostages]/[total_hostages]<br>Hostages Dead: [dead_hostages]/[total_hostages]<br>U.S. SOF Points: [faction1_points] - Insurgent Points: [faction2_points]</span></font>"
 	spawn(3000)
 		hostage_msg()
-#undef NO_WINNER

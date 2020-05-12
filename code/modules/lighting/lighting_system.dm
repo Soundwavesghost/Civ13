@@ -19,10 +19,7 @@
 
 			var/area/T_area = get_area(T)
 			if (T_area.is_void_area)
-				if (istype(T, /turf/wall/rockwall))
-					T.icon_state = "black"
-					continue
-				else if (istype(T, /turf/wall/indestructable))
+				if (istype(T, /turf/wall/indestructable))
 					var/turf/wall/W = T
 					W.icon = 'icons/turf/walls.dmi'
 					W.icon_state = "black"
@@ -43,8 +40,7 @@
 		if (!T.supports_lighting_overlays())
 			continue
 
-		var/area/T_area = get_area(T)
-		if (T_area.is_void_area && (istype(T, /turf/wall/rockwall) || istype(T, /turf/wall/indestructable)))
+		if (istype(T, /turf/wall/rockwall) || istype(T, /turf/wall/indestructable))
 			continue
 
 		for (var/i = 1 to 4)

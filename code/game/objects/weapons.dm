@@ -11,10 +11,16 @@
 	var/image/bayonet_ico
 	var/image/optics_ico
 	var/image/under_ico
-	..New()
+	var/training = FALSE
+	New()
 		maxhealth = health
 		..()
 		maxhealth = health
+
+/obj/item/weapon/New()
+	..()
+	force*=global_damage_modifier
+
 /obj/item/weapon/Bump(mob/M as mob)
 	spawn(0)
 		..()
@@ -33,6 +39,8 @@
 
 /obj/item/weapon/gun/projectile/New()
 	..()
-	bayonet_ico = image("icon" = 'icons/obj/gun.dmi', "icon_state" = "bayonet")
+	bayonet_ico = image("icon" = 'icons/obj/gun_att.dmi', "icon_state" = "bayonet")
+	bayonet_ico.pixel_x = 6
+	bayonet_ico.pixel_y = 6
 	optics_ico = image("icon" = 'icons/obj/gun_att.dmi', "icon_state" = "")
 	under_ico = image("icon" = 'icons/obj/gun_att.dmi', "icon_state" = "")

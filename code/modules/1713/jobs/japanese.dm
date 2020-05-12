@@ -15,9 +15,9 @@
 	is_officer = TRUE
 	is_commander = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 1
 
@@ -63,11 +63,11 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJPCap"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_commander = TRUE
 	is_officer = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -113,11 +113,11 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJPCap"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_commander = TRUE
 	is_officer = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -162,9 +162,9 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJP"
 	is_officer = TRUE
-	SL_check_independent = TRUE
+	is_squad_leader = TRUE
+	uses_squads = TRUE
 
-	// AUTOBALANCE
 	min_positions = 1
 	max_positions = 10
 
@@ -208,9 +208,10 @@
 	rank_abbreviation = "Gun-i"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJPDoc"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+	is_medic = TRUE
+
+
 	min_positions = 1
 	max_positions = 10
 
@@ -247,9 +248,9 @@
 	rank_abbreviation = "Shefu"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJP"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 1
 	max_positions = 10
 
@@ -291,9 +292,9 @@
 	rank_abbreviation = "Ni."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJP"
-	SL_check_independent = TRUE
 
-	// AUTOBALANCE
+
+
 	min_positions = 6
 	max_positions = 200
 
@@ -333,9 +334,9 @@
 	rank_abbreviation = "Itto."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJP"
-	SL_check_independent = TRUE
+	uses_squads = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 3
 	max_positions = 10
 
@@ -377,9 +378,9 @@
 	rank_abbreviation = "Ni."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJP"
-	SL_check_independent = TRUE
+	uses_squads = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 6
 	max_positions = 200
 
@@ -427,9 +428,8 @@
 	is_officer = TRUE
 	is_commander = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
 	is_ww2 = TRUE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -471,13 +471,12 @@
 	rank_abbreviation = "1lt."
 	head_position = TRUE
 	selection_color = "#2d2d63"
-	spawn_location = "JoinLateJPCap"
+	spawn_location = "JoinLateJPLT"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
 	is_commander = TRUE
 	is_officer = TRUE
 	is_ww2 = TRUE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -519,13 +518,12 @@
 	rank_abbreviation = "2lt."
 	head_position = TRUE
 	selection_color = "#2d2d63"
-	spawn_location = "JoinLateJPCap"
+	spawn_location = "JoinLateJPLT"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
 	is_commander = TRUE
 	is_officer = TRUE
 	is_ww2 = TRUE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -568,9 +566,9 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJP"
 	is_officer = TRUE
-	SL_check_independent = TRUE
+	uses_squads = TRUE
+	is_squad_leader = TRUE
 	is_ww2 = TRUE
-	// AUTOBALANCE
 	min_positions = 1
 	max_positions = 4
 
@@ -583,15 +581,15 @@
 //head
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/japcap(H), slot_head)
 //weapons
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/pistol/ww2/nambu(H), slot_l_hand)
+	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/pistol/ww2/nambu(H), slot_l_store)
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/c8mmnambu(H), slot_l_store)
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/submachinegun/type100(H), slot_shoulder)
+	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/boltaction/arisaka99(H), slot_shoulder)
 
-	H.equip_to_slot_or_del(new /obj/item/weapon/attachment/scope/adjustable/binoculars(H), slot_l_store)
-	H.equip_to_slot_or_del(new /obj/item/weapon/material/sword/katana(H), slot_belt)
+	H.equip_to_slot_or_del(new /obj/item/weapon/attachment/scope/adjustable/binoculars/binoculars(H), slot_r_store)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/jap/ww2soldier(H), slot_belt)
 	var/obj/item/clothing/under/uniform = H.w_uniform
-	var/obj/item/clothing/accessory/holster/hip/holsterh = new /obj/item/clothing/accessory/holster/hip(null)
-	uniform.attackby(holsterh, H)
+	var/obj/item/clothing/accessory/storage/sheath/katana/fullh = new /obj/item/clothing/accessory/storage/sheath/katana/full(null)
+	uniform.attackby(fullh, H)
 	give_random_name(H)
 	H.add_note("Role", "You are a <b>[title]</b>, a sergeant leading a squad. Organize your group according to the <b>Captain or Leiutenant's</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
@@ -612,10 +610,10 @@
 	rank_abbreviation = "Gun-i"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJPDoc"
-	SL_check_independent = TRUE
+
+	is_medic = TRUE
 	is_ww2 = TRUE
 
-	// AUTOBALANCE
 	min_positions = 2
 	max_positions = 4
 
@@ -646,16 +644,18 @@
 	H.setStat("bows", STAT_NORMAL) //not used
 	H.setStat("medical", STAT_VERY_HIGH)
 
-datum/job/japanese/ija_medic
+	return TRUE
+/datum/job/japanese/ija_medic
 	title = "Sento-i"
 	en_meaning = "Medic"
 	rank_abbreviation = "Sen-i"
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJPDoc"
-	SL_check_independent = TRUE
+	uses_squads = TRUE
 	is_ww2 = TRUE
 
-	// AUTOBALANCE
+
+	is_medic = TRUE
 	min_positions = 2
 	max_positions = 10
 
@@ -668,9 +668,9 @@ datum/job/japanese/ija_medic
 //head
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/ww2/japhelm_med(H), slot_head)
 //back
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/submachinegun/type100(H), slot_shoulder)
+	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/boltaction/arisaka99(H), slot_shoulder)
 
-	H.equip_to_slot_or_del(new 	/obj/item/weapon/storage/belt/jap/ww2soldier100(H), slot_belt)
+	H.equip_to_slot_or_del(new 	/obj/item/weapon/storage/belt/jap/ww2soldier(H), slot_belt)
 //other
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/adv(H), slot_l_hand)
 	H.equip_to_slot_or_del(new /obj/item/weapon/doctor_handbook(H), slot_l_store)
@@ -684,6 +684,7 @@ datum/job/japanese/ija_medic
 	H.setStat("pistol", STAT_MEDIUM_LOW)
 	H.setStat("bows", STAT_NORMAL) //not used
 	H.setStat("medical", STAT_VERY_HIGH)
+	return TRUE
 
 /datum/job/japanese/ija_ww2infantry
 	title = "Nitohei"
@@ -691,9 +692,9 @@ datum/job/japanese/ija_medic
 	rank_abbreviation = "Ni."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJP"
-	SL_check_independent = TRUE
+	uses_squads = TRUE
 	is_ww2 = TRUE
-	// AUTOBALANCE
+
 	min_positions = 20
 	max_positions = 100
 
@@ -735,15 +736,56 @@ datum/job/japanese/ija_medic
 
 	return TRUE
 
+/datum/job/japanese/ija_ww2ATunit
+	title = "Nitohei Taisensha"
+	en_meaning = "Anti Tank Unit"
+	rank_abbreviation = "Ni."
+	selection_color = "#2d2d63"
+	spawn_location = "JoinLateJP"
+	is_ww2 = TRUE
+	is_tanker = TRUE
+
+	min_positions = 4
+	max_positions = 100
+
+/datum/job/japanese/ija_ww2ATunit/equip(var/mob/living/carbon/human/H)
+	if (!H)	return FALSE
+//shoes
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/heavyboots/wrappedboots(H), slot_shoes)
+
+//clothes
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/ww2/japuni(H), slot_w_uniform)
+
+//head
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/jap_headband(H), slot_head)
+//back
+	H.equip_to_slot_or_del(new 	/obj/item/weapon/grenade/suicide_vest/kamikaze(H), slot_belt)
+
+	give_random_name(H)
+	H.add_note("Role", "You are a <b>[title]</b>, an Anti Tank Suicide Unit  employed by the Imperial Japanese Army. Follow your <b>Officer's</b> orders!")
+	H.setStat("strength", STAT_MEDIUM_HIGH)
+	H.setStat("crafting", STAT_MEDIUM_LOW)
+	H.setStat("rifle", STAT_MEDIUM_HIGH) //muskets
+	H.setStat("dexterity", STAT_NORMAL)
+	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("pistol", STAT_NORMAL)
+	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("medical", STAT_MEDIUM_LOW)
+
+
+	return TRUE
+
+
+
 /datum/job/japanese/ija_machinegunner
 	title = "Taiho"
 	en_meaning = "Machinegunner"
 	rank_abbreviation = "Itto."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJP"
-	SL_check_independent = TRUE
+	uses_squads = TRUE
 	is_ww2 = TRUE
-	// AUTOBALANCE
+
 	min_positions = 4
 	max_positions = 15
 
@@ -787,9 +829,9 @@ datum/job/japanese/ija_medic
 	rank_abbreviation = "Jo."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateJP"
-	SL_check_independent = TRUE
+	uses_squads = TRUE
 	is_ww2 = TRUE
-	// AUTOBALANCE
+
 	min_positions = 2
 	max_positions = 10
 
@@ -809,10 +851,8 @@ datum/job/japanese/ija_medic
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/ww2/japhelm_bandana(H), slot_head)
 	else if (randhead == 3)
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/japcap(H), slot_head)
-//pockets
-	H.equip_to_slot_or_del(new /obj/item/weapon/attachment/scope/adjustable/sniper_scope(H), slot_l_store)
 //back
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/boltaction/arisaka99(H), slot_shoulder)
+	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/boltaction/arisaka99/sniper(H), slot_shoulder)
 	H.equip_to_slot_or_del(new 	/obj/item/weapon/storage/belt/jap/ww2soldier(H), slot_belt)
 	give_random_name(H)
 	H.add_note("Role", "You are a <b>[title]</b>, a sniper, 1st class, employed by the Imperial Japanese Army. Follow your <b>Officer's</b> orders and take out valuable targets from a range!")
@@ -822,6 +862,287 @@ datum/job/japanese/ija_medic
 	H.setStat("dexterity", STAT_NORMAL)
 	H.setStat("swords", STAT_NORMAL) //not used
 	H.setStat("pistol", STAT_MEDIUM_HIGH)
+	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("medical", STAT_MEDIUM_LOW)
+
+
+	return TRUE
+/////////////////////////////////////////////////TANK CREW//////////////////////////////////////////////////////
+/datum/job/japanese/ija_sergeant_tanker
+	title = "Sensha Gunso"
+	en_meaning = "Tank Sergeant"
+	rank_abbreviation = "Gu."
+	selection_color = "#2d2d63"
+	spawn_location = "JoinLateJP"
+	is_officer = TRUE
+	is_tanker = TRUE
+	is_ww2 = TRUE
+	is_squad_leader = TRUE
+	uses_squads = TRUE
+
+	min_positions = 1
+	max_positions = 3
+
+/datum/job/japanese/ija_sergeant_tanker/equip(var/mob/living/carbon/human/H)
+	if (!H)	return FALSE
+//shoes
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/heavyboots/wrappedboots(H), slot_shoes)
+//clothes
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/ww2/japuni_tanker(H), slot_w_uniform)
+//head
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/japcap(H), slot_head)
+//weapons
+	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/pistol/ww2/nambu(H), slot_l_store)
+	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/c8mmnambu(H), slot_l_store)
+	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/boltaction/arisaka99(H), slot_shoulder)
+
+	H.equip_to_slot_or_del(new /obj/item/weapon/key/japanese(H), slot_r_store)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/jap/ww2soldier(H), slot_belt)
+	var/obj/item/clothing/under/uniform = H.w_uniform
+	var/obj/item/clothing/accessory/storage/sheath/katana/fullh = new /obj/item/clothing/accessory/storage/sheath/katana/full(null)
+	uniform.attackby(fullh, H)
+	give_random_name(H)
+	H.add_note("Role", "You are a <b>[title]</b>, a sergeant leading an armored squad. Organize your group according to the <b>Captain or Leiutenant's</b> orders!")
+	H.setStat("strength", STAT_MEDIUM_HIGH)
+	H.setStat("crafting", STAT_NORMAL)
+	H.setStat("rifle", STAT_NORMAL)
+	H.setStat("dexterity", STAT_NORMAL)
+	H.setStat("swords", STAT_HIGH)
+	H.setStat("pistol", STAT_MEDIUM_HIGH)
+	H.setStat("bows", STAT_NORMAL)
+	H.setStat("medical", STAT_MEDIUM_LOW)
+	H.setStat("machinegun", STAT_MEDIUM_HIGH)
+
+
+	return TRUE
+
+/datum/job/japanese/ija_ww2_tanker
+	title = "Senshahei"
+	en_meaning = "Tanker"
+	rank_abbreviation = ""
+	selection_color = "#2d2d63"
+	spawn_location = "JoinLateJP"
+	is_tanker = TRUE
+	is_ww2 = TRUE
+	uses_squads = TRUE
+
+	min_positions = 5
+	max_positions = 30
+
+/datum/job/japanese/ija_ww2_tanker/equip(var/mob/living/carbon/human/H)
+	if (!H)	return FALSE
+//shoes
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/heavyboots/wrappedboots(H), slot_shoes)
+
+//clothes
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/ww2/japuni_tanker(H), slot_w_uniform)
+
+//head
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/ww2/japhelm_tanker(H), slot_head)
+//back
+	H.equip_to_slot_or_del(new /obj/item/weapon/key/japanese(H), slot_r_store)
+	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/pistol/ww2/nambu(H), slot_belt)
+	var/obj/item/clothing/under/uniform = H.w_uniform
+	var/obj/item/clothing/accessory/holster/hip/holsterh = new /obj/item/clothing/accessory/holster/hip(null)
+	uniform.attackby(holsterh, H)
+	give_random_name(H)
+	H.add_note("Role", "You are a <b>[title]</b>, a tanker  employed by the Imperial Japanese Army. Follow your <b>Sergeant's</b> orders!")
+	H.setStat("strength", STAT_MEDIUM_HIGH)
+	H.setStat("crafting", STAT_MEDIUM_HIGH)
+	H.setStat("rifle", STAT_MEDIUM_HIGH) //muskets
+	H.setStat("dexterity", STAT_NORMAL)
+	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("pistol", STAT_MEDIUM_HIGH)
+	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("medical", STAT_MEDIUM_LOW)
+	H.setStat("machinegun", STAT_MEDIUM_HIGH)
+
+
+	return TRUE
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////WW2 JAPANESE PRISON//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/datum/job/japanese/ija_camp_director
+	title = "Horyoshuyojo-cho"
+	en_meaning = "POW Camp Director"
+	rank_abbreviation = "Ho-cho"
+	head_position = TRUE
+	selection_color = "#2d2d63"
+	spawn_location = "JoinLateJPCap"
+	is_officer = TRUE
+	is_commander = TRUE
+	whitelisted = TRUE
+
+	is_ww2 = TRUE
+	is_prison = TRUE
+
+	min_positions = 1
+	max_positions = 1
+
+/datum/job/japanese/ija_camp_director/equip(var/mob/living/carbon/human/H)
+	if (!H)	return FALSE
+//shoes
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/heavyboots/wrappedboots(H), slot_shoes)
+//clothes
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/ww2/japuni_summer(H), slot_w_uniform)
+//head
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/japoffcap(H), slot_head)
+//weapons
+	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/pistol/ww2/nambu(H), slot_l_hand)
+	H.equip_to_slot_or_del(new /obj/item/weapon/material/sword/katana(H), slot_r_hand)
+	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/c8mmnambu(H), slot_r_store)
+	H.equip_to_slot_or_del(new /obj/item/weapon/attachment/scope/adjustable/binoculars(H), slot_l_store)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/jap/camp_officer(H), slot_belt)
+	var/obj/item/clothing/under/uniform = H.w_uniform
+	var/obj/item/clothing/accessory/holster/hip/holsterh = new /obj/item/clothing/accessory/holster/hip(null)
+	uniform.attackby(holsterh, H)
+	var/obj/item/clothing/accessory/rank/jap_taiih = new /obj/item/clothing/accessory/rank/jap_taii(null)
+	uniform.attackby(jap_taiih, H)
+	give_random_name(H)
+	world << "<b><big>[H.real_name] is the Camp Director of the Japanese Forces!</big></b>"
+	H.add_note("Role", "You are a <b>[title]</b>, the highest ranking officer present. Your job is to command the guards and organize the POWs.")
+	H.setStat("strength", STAT_MEDIUM_HIGH)
+	H.setStat("crafting", STAT_NORMAL)
+	H.setStat("rifle", STAT_NORMAL)
+	H.setStat("dexterity", STAT_NORMAL)
+	H.setStat("swords", STAT_HIGH)
+	H.setStat("pistol", STAT_MEDIUM_HIGH)
+	H.setStat("bows", STAT_NORMAL)
+	H.setStat("medical", STAT_MEDIUM_LOW)
+
+
+	return TRUE
+
+/datum/job/japanese/camp_officer
+	title = "Horyoshuyojo Gunso"
+	en_meaning = "POW Camp Sergeant"
+	rank_abbreviation = "Gu."
+	selection_color = "#2d2d63"
+	spawn_location = "JoinLateJP"
+	is_officer = TRUE
+
+	is_ww2 = TRUE
+	is_prison = TRUE
+
+	min_positions = 1
+	max_positions = 4
+
+/datum/job/japanese/camp_officer/equip(var/mob/living/carbon/human/H)
+	if (!H)	return FALSE
+//shoes
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/heavyboots/wrappedboots(H), slot_shoes)
+//clothes
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/ww2/japuni_summer(H), slot_w_uniform)
+//head
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/japcap(H), slot_head)
+//weapons
+	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/c8mmnambu(H), slot_r_store)
+	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/submachinegun/type100(H), slot_shoulder)
+
+	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/pistol/ww2/nambu(H), slot_l_store)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/jap/camp_officer(H), slot_belt)
+	var/obj/item/clothing/under/uniform = H.w_uniform
+	var/obj/item/clothing/accessory/storage/sheath/katana/fullh = new /obj/item/clothing/accessory/storage/sheath/katana/full(null)
+	uniform.attackby(fullh, H)
+	var/obj/item/clothing/accessory/rank/jap_gunsoh = new /obj/item/clothing/accessory/rank/jap_gunso(null)
+	uniform.attackby(jap_gunsoh, H)
+	give_random_name(H)
+	H.add_note("Role", "You are a <b>[title]</b>, a sergeant leading a squad of guards. Organize your group according to the <b>Camp director's</b> orders!")
+	H.setStat("strength", STAT_MEDIUM_HIGH)
+	H.setStat("crafting", STAT_NORMAL)
+	H.setStat("rifle", STAT_NORMAL)
+	H.setStat("dexterity", STAT_NORMAL)
+	H.setStat("swords", STAT_HIGH)
+	H.setStat("pistol", STAT_NORMAL)
+	H.setStat("bows", STAT_NORMAL)
+	H.setStat("medical", STAT_MEDIUM_LOW)
+
+
+	return TRUE
+
+/datum/job/japanese/camp_medic
+	title = "Horyoshuyojo Sento-i"
+	en_meaning = "Camp Medic"
+	rank_abbreviation = "Sen-i"
+	selection_color = "#2d2d63"
+	spawn_location = "JoinLateJPDoc"
+
+	is_medic = TRUE
+	is_ww2 = TRUE
+	is_prison = TRUE
+
+
+	min_positions = 1
+	max_positions = 4
+
+/datum/job/japanese/camp_medic/equip(var/mob/living/carbon/human/H)
+	if (!H)	return FALSE
+//shoes
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/heavyboots/wrappedboots(H), slot_shoes)
+//clothes
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/ww2/japuni_summer(H), slot_w_uniform) // for now
+//head
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/japcap(H), slot_head)
+//back
+	H.equip_to_slot_or_del(new 	/obj/item/weapon/storage/belt/jap/camp_guard(H), slot_belt)
+//other
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/adv(H), slot_l_hand)
+	H.equip_to_slot_or_del(new /obj/item/weapon/doctor_handbook(H), slot_l_store)
+	var/obj/item/clothing/under/uniform = H.w_uniform
+	var/obj/item/clothing/accessory/rank/jap_jotoheih = new /obj/item/clothing/accessory/rank/jap_jotohei(null)
+	uniform.attackby(jap_jotoheih, H)
+
+	give_random_name(H)
+	H.add_note("Role", "You are a <b>[title]</b>, a medic, and you are in charge of keeping the guardss and POWs healthy.")
+	H.setStat("strength", STAT_NORMAL)
+	H.setStat("crafting", STAT_MEDIUM_LOW)
+	H.setStat("rifle", STAT_MEDIUM_LOW) //muskets
+	H.setStat("dexterity", STAT_NORMAL)
+	H.setStat("swords", STAT_MEDIUM_LOW)
+	H.setStat("pistol", STAT_MEDIUM_LOW)
+	H.setStat("bows", STAT_NORMAL) //not used
+	H.setStat("medical", STAT_VERY_HIGH)
+	return TRUE
+
+/datum/job/japanese/camp_guard
+	title = "Horyoshuyojo Anchisukiru"
+	en_meaning = "POW Camp Guard"
+	rank_abbreviation = ""
+	selection_color = "#2d2d63"
+	spawn_location = "JoinLateJP"
+
+	is_ww2 = TRUE
+	is_prison = TRUE
+
+	min_positions = 10
+	max_positions = 50
+
+/datum/job/japanese/camp_guard/equip(var/mob/living/carbon/human/H)
+	if (!H)	return FALSE
+//shoes
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/heavyboots/wrappedboots(H), slot_shoes)
+//clothes
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/ww2/japuni_summer(H), slot_w_uniform)
+//head
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/japcap(H), slot_head)
+//back
+	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/boltaction/arisaka99(H), slot_shoulder)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/jap/camp_guard(H), slot_belt)
+	var/obj/item/clothing/under/uniform = H.w_uniform
+	var/obj/item/clothing/accessory/rank/jap_ittoheih = new /obj/item/clothing/accessory/rank/jap_ittohei(null)
+	uniform.attackby(jap_ittoheih, H)
+
+	give_random_name(H)
+	H.add_note("Role", "You are a <b>[title]</b>, a simple POW camp guard. Keep the POWs docile and alive, follow your <b>Officer's</b> orders!")
+	H.setStat("strength", STAT_MEDIUM_HIGH)
+	H.setStat("crafting", STAT_MEDIUM_LOW)
+	H.setStat("rifle", STAT_MEDIUM_HIGH) //muskets
+	H.setStat("dexterity", STAT_NORMAL)
+	H.setStat("swords", STAT_NORMAL) //not used
+	H.setStat("pistol", STAT_NORMAL)
 	H.setStat("bows", STAT_NORMAL) //not used
 	H.setStat("medical", STAT_MEDIUM_LOW)
 

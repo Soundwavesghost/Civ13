@@ -78,9 +78,13 @@
 	var/useless = FALSE
 
 	var/can_hit_in_trench = 1
-
+	var/turf/firer_loc = null
 	var/btype = "normal" //normal, AP (armor piercing) and HP (hollow point)
 	var/atype = "normal"
+
+/obj/item/projectile/New()
+	..()
+	damage *=global_damage_modifier
 /obj/item/projectile/proc/checktype()
 	if (btype == "AP")
 		damage *= 0.70
@@ -163,6 +167,7 @@
 		return TRUE
 
 	firer = user
+	firer_loc = get_turf(src)
 	firer_original_dir = firer.dir
 	firedfrom = launcher
 
@@ -215,6 +220,7 @@
 
 	firer = null
 	firedfrom = null
+	firer_loc = get_turf(src)
 	def_zone = "chest"
 
 	if (targloc == curloc) //Shooting something in the same turf
@@ -248,6 +254,7 @@
 	loc = get_turf(user) //move the projectile out into the world
 
 	firer = user
+	firer_loc = get_turf(src)
 	firer_original_dir = firer.dir
 	firedfrom = launcher
 	shot_from = launcher.name
@@ -264,12 +271,18 @@
 	original = new_target
 	if (new_firer)
 		firer = src
+		firer_loc = get_turf(src)
 		firer_original_dir = firer.dir
 
 	setup_trajectory(starting_loc, new_target)
 
 //Called when the projectile intercepts a mob. Returns TRUE if the projectile hit the mob, FALSE if it missed and should keep flying.
 /obj/item/projectile/proc/attack_mob(var/mob/living/target_mob, var/distance, var/miss_modifier=0)
+	if (firer && istype(firer, /mob/living/simple_animal/hostile/human) && target_mob && istype(target_mob, /mob/living/simple_animal/hostile/human))
+		var/mob/living/simple_animal/hostile/human/HM = firer
+		var/mob/living/simple_animal/hostile/human/HM2 = target_mob
+		if(HM.faction == HM2.faction)
+			return
 
 	if (is_shrapnel)
 		var/hit_zone = "head"
@@ -419,6 +432,10 @@
 		if (istype(target_mob, /mob/living/simple_animal/hostile/zombie))
 			var/mob/living/simple_animal/hostile/zombie/Z = target_mob
 			Z.limb_hit(hit_zone)
+	if (istype(target_mob, /mob/living/simple_animal/hostile/human) && target_mob.stat != DEAD && prob(33))
+		var/list/screamlist = list('sound/voice/screams/scream1.ogg','sound/voice/screams/scream2.ogg','sound/voice/screams/scream3.ogg','sound/voice/screams/scream4.ogg','sound/voice/screams/scream5.ogg','sound/voice/screams/scream6.ogg',)
+		playsound(loc, pick(screamlist), 100, extrarange = 50)
+	..()
 	//admin logs
 	if (!no_attack_log)
 		if (istype(firer, /mob))
@@ -429,8 +446,9 @@
 
 			admin_attack_log(firer, target_mob, attacker_message, victim_message, admin_message)
 		else
-			target_mob.attack_log += "\[[time_stamp()]\] <b>UNKNOWN SUBJECT (No longer exists)</b> shot <b>[target_mob]/[target_mob.ckey]</b> with <b>\a [src]</b>"
-			msg_admin_attack("UNKNOWN shot [target_mob] ([target_mob.ckey]) with \a [src] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target_mob.x];Y=[target_mob.y];Z=[target_mob.z]'>JMP</a>)")
+			if (target_mob.ckey)
+				target_mob.attack_log += "\[[time_stamp()]\] <b>UNKNOWN SUBJECT (No longer exists)</b> shot <b>[target_mob]/[target_mob.ckey]</b> with <b>\a [src]</b>"
+				msg_admin_attack("UNKNOWN shot [target_mob] ([target_mob.ckey]) with \a [src] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target_mob.x];Y=[target_mob.y];Z=[target_mob.z]'>JMP</a>)")
 
 	//sometimes bullet_act() will want the projectile to continue flying
 	if (result == PROJECTILE_CONTINUE)
@@ -452,7 +470,7 @@
 
 	if (ismob(firer) && (istype(get_turf(firer), /turf/floor/trench) && firer.prone))
 		if (!istype(T,/turf/floor/trench) && get_dist(T, firer)>2)
-			world << "<span class = 'warning'>The [name] hits the trench wall!</span>"
+			T.visible_message("<span class = 'warning'>The [name] hits the trench wall!</span>")
 			qdel(src)
 			return
 	if(can_hit_in_trench == 1)
@@ -467,10 +485,10 @@
 		if(!istype(T, /turf/floor/trench) || can_hit_in_trench)
 			// needs to be its own loop for reasons
 			for (var/obj/O in T.contents)
-				if (istype(O, /obj/structure/vehicleparts/frame) && ((firer && firer.loc != O.loc) || (!firer && loc != O.loc)))
+				if (istype(O, /obj/structure/vehicleparts/frame) && ((firer_loc && firer_loc != O.loc) || (!firer_loc && loc != O.loc)))
 					var/obj/structure/vehicleparts/frame/NO = O
 					var/obj/structure/vehicleparts/axis/found = null
-					for (var/obj/structure/vehicleparts/frame/FM in firer.loc)
+					for (var/obj/structure/vehicleparts/frame/FM in firer_loc)
 						found = FM.axis
 					if (!found || found != NO.axis)
 						if (found != NO.axis)
@@ -532,7 +550,7 @@
 					var/skip = FALSE
 					if (firer)
 						for (var/obj/structure/vehicleparts/frame/VP1 in L.loc)
-							for (var/obj/structure/vehicleparts/frame/VP2 in firer.loc)
+							for (var/obj/structure/vehicleparts/frame/VP2 in firer_loc)
 								if (VP1.axis == VP2.axis && istype(firedfrom, /obj/item/weapon/gun/projectile/automatic/stationary))
 									skip = TRUE
 					if ((!skip) && (!L.lying || T == get_turf(original) || execution))
@@ -548,13 +566,13 @@
 							if (!G.affecting.lying)
 								passthrough = FALSE
 						else
-							if (!istype(T, /turf/floor/trench) || get_dist(firer,T)<=2 || (istype(get_turf(firer),/turf/floor/trench) && istype(T, /turf/floor/trench) && get_dist(firer,T)<=5) || prob(20))
+							if (!istype(T, /turf/floor/trench) || get_dist(firer,T)<=2 || (istype(get_turf(firer),/turf/floor/trench) && istype(T, /turf/floor/trench) && get_dist(firer,T)<=5) || prob(25))
 								if (L && !L.lying && !L.prone)
 									L.pre_bullet_act(src)
 									attack_mob(L)
 									passthrough = FALSE
 								else if (L.lying || L.prone)
-									if (prob(30) && !istype(T, /turf/floor/trench))
+									if (prob(50))
 										L.pre_bullet_act(src)
 										attack_mob(L)
 										passthrough = FALSE
@@ -566,7 +584,15 @@
 							if (O.bullet_act(src, def_zone) != PROJECTILE_CONTINUE)
 								if (O && !O.gcDestroyed)
 									if (O.density && !istype(O, /obj/structure))
-										passthrough = FALSE
+										if (istype(O, /obj/covers))
+											var/obj/covers/CVR = O
+											if (prob(100-CVR.hardness) && CVR.density)
+												passthrough = TRUE
+												passthrough_message = "<span class = 'warning'>The [name] penetrates through \the [CVR]!</span>"
+											else
+												passthrough = FALSE
+										else
+											passthrough = FALSE
 									else if (istype(O, /obj/structure))
 										var/obj/structure/S = O
 										if (!S.CanPass(src, original))

@@ -27,6 +27,17 @@
 	weakens = 5
 	flammable = TRUE
 
+/obj/item/weapon/melee/nightbaton
+	name = "police baton"
+	desc = "A stick used by police officers."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "nightbaton"
+	item_state = "nightbaton"
+	slot_flags = SLOT_BELT
+	force = WEAPON_FORCE_WEAK+2
+	weakens = 6
+	flammable = TRUE
+
 /obj/item/weapon/melee/classic_baton/club
 	name = "wood club"
 	desc = "One of the oldest weapons in the world. Good for when you need to knock people down."
@@ -35,11 +46,13 @@
 	slot_flags = SLOT_BACK
 	force = WEAPON_FORCE_WEAK
 	flammable = TRUE
+	weakens = FALSE
 
 /obj/item/weapon/melee/classic_baton/whip
 	name = "whip"
 	desc = "A leather whip. To keep your slaves in order."
 	icon = 'icons/obj/items.dmi'
+	hitsound = 'sound/weapons/whipcrack.ogg'
 	icon_state = "whip"
 	item_state = "whip"
 	slot_flags = SLOT_BELT
@@ -49,13 +62,13 @@
 /obj/item/weapon/melee/attack(mob/M as mob, mob/living/user as mob)
 
 	switch (user.a_intent) // harm intent lets us murder people, others not so much - Kachnov
-		if (I_HURT)
+		if (I_HARM)
 			force*=1.2
 		if (I_HELP, I_GRAB, I_DISARM)
 			force/=3
 
 	var/user_last_intent = user.a_intent
-	user.a_intent = I_HURT // so we actually hit people right
+	user.a_intent = I_HARM // so we actually hit people right
 
 	..(M, user)
 	if (weakens && prob(40))
@@ -68,13 +81,13 @@
 /obj/item/weapon/melee/classic_baton/club/attack(mob/M as mob, mob/living/user as mob)
 
 	switch (user.a_intent)
-		if (I_HURT)
+		if (I_HARM)
 			force*=1.2
 		if (I_HELP, I_GRAB, I_DISARM)
 			force/=3
 
 	var/user_last_intent = user.a_intent
-	user.a_intent = I_HURT
+	user.a_intent = I_HARM
 
 	..(M, user)
 	if (weakens && prob(20))
@@ -94,13 +107,13 @@
 /obj/item/weapon/melee/classic_baton/big_club/attack(mob/M as mob, mob/living/user as mob)
 
 	switch (user.a_intent) // harm intent lets us murder people, others not so much - Kachnov
-		if (I_HURT)
+		if (I_HARM)
 			force*=2.5
 		if (I_HELP, I_GRAB, I_DISARM)
 			force/=1.5
 
 	var/user_last_intent = user.a_intent
-	user.a_intent = I_HURT // so we actually hit people right
+	user.a_intent = I_HARM // so we actually hit people right
 
 	..(M, user)
 
@@ -111,6 +124,20 @@
 
 	force = initial(force)
 
+/obj/item/weapon/macuahuitl
+	name = "macuahuitl"
+	desc = "A Mesoamerican wooden club with obsidian blades."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "macuahuitl"
+	item_state = "macuahuitl"
+	attack_verb = list("smacked", "hit", "bludgeoned")
+	slot_flags = SLOT_BACK
+	force = WEAPON_FORCE_ROBUST
+	sharp = 1
+	edge = 1
+	sharpness = 15
+	w_class = 3.0
+	flammable = FALSE
 
 ////////////////GARROTE/////////////////////
 /obj/item/garrote
@@ -137,7 +164,7 @@
 	return ..()
 
 /obj/item/garrote/update_icon()
-    icon_state = "garrote[garroting ? "_w" : ""]"
+	icon_state = "garrote[garroting ? "_w" : ""]"
 
 /obj/item/garrote/attack(mob/living/carbon/human/target as mob, mob/living/carbon/human/user as mob)
 	if (garroting)

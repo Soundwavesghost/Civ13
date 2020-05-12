@@ -168,7 +168,7 @@
 /obj/structure/vehicleparts/frame/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 	if (istype(mover, /obj/effect/effect/smoke))
 		return FALSE
-	else
+	else if (mover)
 		switch(mover.dir)
 			if (NORTH)
 				switch(dir)
@@ -304,6 +304,8 @@
 	else if (istype(proj, /obj/item/missile))
 		var/obj/item/missile/miss = proj
 		startingturf = miss.startingturf
+	else if (istype(proj, /obj/item/weapon/grenade/suicide_vest))
+		startingturf = get_turf(proj.loc)
 	else if (istype(proj, /obj/item/weapon/grenade))
 		startingturf = get_turf(proj)
 	if (!startingturf)
@@ -422,6 +424,8 @@
 	var/turf/tloc = null
 	if (proj.firer)
 		tloc = proj.firer.loc
+	else if (proj.firer_loc)
+		tloc = proj.firer_loc
 	else
 		tloc = get_turf(src)
 	for (var/obj/structure/vehicleparts/frame/F in tloc)
@@ -550,7 +554,7 @@
 							visible_message("<span class = 'danger'><big>The right hull is damaged!</big></span>")
 						else
 							w_back[5] -= adjdam
-							visible_message("<span class = 'danger'><bigThe rear hull is damaged!</big></span>")
+							visible_message("<span class = 'danger'><big>The rear hull is damaged!</big></span>")
 		else
 			switch(penloc)
 				if ("left")
@@ -608,8 +612,10 @@
 		visible_message("<span class='danger'>The frame gets wrecked!</span>")
 		update_icon()
 		broken = TRUE
-	else if (!axis)
-		qdel(src)
+	else if (!axis in contents)
+		axis = null
+		mwheel = null
+		..()
 /obj/structure/vehicleparts/frame/ex_act(severity)
 	switch(severity)
 		if (1.0)

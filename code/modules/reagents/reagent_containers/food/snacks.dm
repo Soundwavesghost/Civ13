@@ -2,7 +2,7 @@
 /obj/item/weapon/reagent_containers/food/snacks
 	name = "snack"
 	desc = "yummy"
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food/food.dmi'
 	icon_state = null
 	var/bitesize = 1
 	var/bitecount = FALSE
@@ -24,7 +24,7 @@
 	if (nutriment_amt)
 		reagents.add_reagent("nutriment",nutriment_amt,nutriment_desc)
 	spawn (1)
-		if (reagents.total_volume)
+		if (reagents && reagents.total_volume)
 			bitesize = max(bitesize, ceil(reagents.total_volume/5))
 		else
 			bitesize = 2
@@ -82,11 +82,11 @@
 				if (blocked)
 					user << "<span class='warning'>\The [blocked] is in the way!</span>"
 					return
-				if (H.gorillaman)
+				if (H.gorillaman || H.find_trait("Vegan"))
 					if (non_vegetarian)
-						user << "<span class='warning'>You are an herbivore! You can't eat this!</span>"
+						user << "<span class='warning'>You are a vegan/herbivore! You can't eat this!</span>"
 						return
-				else if (H.wolfman || H.crab)
+				else if (H.wolfman || H.crab || H.find_trait("Carnivore"))
 					if (!non_vegetarian)
 						user << "<span class='warning'>You are a carnivore! You can't eat this!</span>"
 						return
@@ -156,7 +156,7 @@
 		user << "<span class='notice'>\The [src] was bitten multiple times!</span>"
 
 /obj/item/weapon/reagent_containers/food/snacks/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W,/obj/item/weapon/storage) && user.a_intent != I_HURT)
+	if (istype(W,/obj/item/weapon/storage) && user.a_intent != I_HARM)
 		..() // -> item/attackby()
 		return
 
@@ -190,37 +190,8 @@
 			return
 
 	else if (is_sliceable() && !istype(W, /obj/item/weapon/reagent_containers/food/drinks) && !istype(W, /obj/item/weapon/reagent_containers/glass))
-		//these are used to allow hiding edge items in food that is not on a table/tray
 
-		var/can_slice_here = FALSE
-		if (isturf(loc))
-			if (locate(/obj/structure/table) in loc)
-				can_slice_here = TRUE
-			else if (locate(/obj/structure/optable) in loc)
-				can_slice_here = TRUE
-
-		var/hide_item = (!W.edge || !can_slice_here)
-
-		if (hide_item)
-			if (contents.len)
-				user << "<span class='danger'>There's already something inside \the [src].</span>"
-				return
-			if (W.w_class >= w_class)
-				user << "<span class='warning'>\the [W] is too big to hide inside \the [src].</span>"
-				return
-
-			user << "<span class='warning'>You slip \the [W] inside \the [src].</span>"
-			user.remove_from_mob(W)
-			W.dropped(user)
-			add_fingerprint(user)
-			contents += W
-			return
-
-		else if (W.edge)
-			if (!can_slice_here)
-				user << "<span class='warning'>You cannot slice \the [src] here! You need a table or at least a tray to do it.</span>"
-				return
-
+		if (W.edge)
 			var/slices_lost = 0
 			if (W.w_class > 3)
 				user.visible_message("<span class='notice'>\The [user] crudely slices \the [src] with [W]!</span>", "<span class='notice'>You crudely slice \the [src] with your [W]!</span>")
@@ -307,7 +278,7 @@
 	nutriment_amt = 3
 	nutriment_desc = list("salt" = 3, "meat" = 1)
 	non_vegetarian = TRUE
-	decay = 0
+	decay = 180*600
 	New()
 		..()
 		bitesize = 2
@@ -320,7 +291,7 @@
 	nutriment_amt = 3
 	nutriment_desc = list("salt" = 3, "fish" = 1)
 	non_vegetarian = TRUE
-	decay = 0
+	decay = 180*600
 	New()
 		..()
 		bitesize = 2
@@ -332,7 +303,7 @@
 	center_of_mass = list("x"=17, "y"=18)
 	nutriment_amt = 3
 	nutriment_desc = list("salt" = 2, "fish" = 2)
-	decay = 0
+	decay = 180*600
 	New()
 		..()
 		bitesize = 2
@@ -389,11 +360,6 @@
 	satisfaction = 4
 	non_vegetarian = TRUE
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/New()
-	..()
-	spawn(50)
-		process()
-
 /obj/item/weapon/reagent_containers/food/snacks/egg/afterattack(obj/O as obj, mob/user as mob, proximity)
 /*	if (istype(O,/obj/structure/microwave))
 		return ..()*/
@@ -427,10 +393,6 @@
 	non_vegetarian = TRUE
 	decay = 90*600
 	satisfaction = 2
-/obj/item/weapon/reagent_containers/food/snacks/turkeyegg/New()
-	..()
-	spawn(50)
-		process()
 
 /obj/item/weapon/reagent_containers/food/snacks/turkeyegg/afterattack(obj/O as obj, mob/user as mob, proximity)
 	if (istype(O, /obj/structure/pot))
@@ -512,7 +474,8 @@
 	icon_state = "fishfillet"
 	filling_color = "#FFDEFE"
 	center_of_mass = list("x"=17, "y"=13)
-	var/rotten = FALSE
+	rotten_icon_state = "rottenfillet"
+	rots = TRUE
 	non_vegetarian = TRUE
 	decay = 12*600
 	satisfaction = 6
@@ -521,29 +484,14 @@
 		reagents.add_reagent("protein", 1)
 		reagents.add_reagent("food_poisoning", 1)
 		bitesize = 6
-		spawn(2400) //4 minutes
-			icon_state = "rottenfillet"
-			name = "rotten [name]"
-			rotten = TRUE
-			reagents.add_reagent("food_poisoning", 1)
-			spawn(1000)
-				if (isturf(loc) && prob(30))
-					var/scavengerspawn = rand(1,3)
-					if(scavengerspawn == 1)
-						new/mob/living/simple_animal/mouse(get_turf(src))
-					else if(scavengerspawn ==  2)
-						new/mob/living/simple_animal/cockroach(get_turf(src))
-					else
-						new/mob/living/simple_animal/fly(get_turf(src))
-			spawn(3000)
-				qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/salmonfillet
 	name = "salmon fillet"
 	desc = "A fillet of salmon."
 	icon_state = "salmonfillet"
+	rotten_icon_state = "rottensalmonfillet"
+	rots = TRUE
 	center_of_mass = list("x"=17, "y"=13)
-	var/rotten = FALSE
 	decay = 12*600
 	satisfaction = 6
 	non_vegetarian = TRUE
@@ -552,25 +500,6 @@
 		reagents.add_reagent("protein", 1)
 		reagents.add_reagent("food_poisoning", 1)
 		bitesize = 6
-		spawn(2400) //4 minutes
-			if (!src)
-				return
-			icon_state = "rottensalmonfillet"
-			name = "rotten [name]"
-			rotten = TRUE
-			if (reagents)
-				reagents.add_reagent("food_poisoning", 1)
-			spawn(1000)
-				if (isturf(loc) && prob(30))
-					var/scavengerspawn = rand(1,3)
-					if(scavengerspawn ==  1)
-						new/mob/living/simple_animal/mouse(get_turf(src))
-					else if(scavengerspawn ==  2)
-						new/mob/living/simple_animal/cockroach(get_turf(src))
-					else
-						new/mob/living/simple_animal/fly(get_turf(src))
-			spawn(3000)
-				qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/fishfingers
 	name = "Fish Fingers"
@@ -618,21 +547,6 @@
 	else
 		..()
 
-
-/obj/item/weapon/reagent_containers/food/snacks/meatball
-	name = "meatball"
-	desc = "A great meal all round."
-	icon_state = "meatball"
-	filling_color = "#DB0000"
-	center_of_mass = list("x"=16, "y"=16)
-	decay = 12*600
-	satisfaction = 8
-	non_vegetarian = TRUE
-	New()
-		..()
-		reagents.add_reagent("protein", 3)
-		bitesize = 2
-
 /obj/item/weapon/reagent_containers/food/snacks/sausage
 	name = "Sausage"
 	desc = "A piece of mixed, long meat."
@@ -652,7 +566,7 @@
 	name = "Omelette Du Fromage"
 	desc = "That's all you can say!"
 	icon_state = "omelette"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#FFF9A8"
 	satisfaction = 8
 	non_vegetarian = TRUE
@@ -696,7 +610,7 @@
 	name = "Meat-pie"
 	icon_state = "meatpie"
 	desc = "An old barber recipe, very delicious!"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#948051"
 	center_of_mass = list("x"=16, "y"=13)
 	decay = 20*600
@@ -710,7 +624,7 @@
 	name = "Tofu-pie"
 	icon_state = "meatpie"
 	desc = "A delicious tofu pie."
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#FFFEE0"
 	center_of_mass = list("x"=16, "y"=13)
 	nutriment_desc = list("tofu" = 2, "pie" = 8)
@@ -738,7 +652,7 @@
 	name = "Fries"
 	desc = "AKA: French Fries, Freedom Fries, etc."
 	icon_state = "fries"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#EDDD00"
 	center_of_mass = list("x"=16, "y"=11)
 	nutriment_desc = list("fresh fries" = 4)
@@ -797,7 +711,7 @@
 	name = "Meat steak"
 	desc = "A piece of hot spicy meat."
 	icon_state = "meatstake"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#7A3D11"
 	center_of_mass = list("x"=16, "y"=13)
 	decay = 15*600
@@ -856,26 +770,27 @@
 		bitesize = 5
 
 
-/obj/item/weapon/reagent_containers/food/snacks/baguette
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/baguette
 	name = "Baguette"
-	desc = "Bon appetit!"
+	icon_state = "Bon Appetite!."
 	icon_state = "baguette"
-	filling_color = "#E3D796"
-	center_of_mass = list("x"=18, "y"=12)
-	nutriment_desc = list("french bread" = 6)
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice
+	slices_num = 5
+	filling_color = "#FFE396"
+	center_of_mass = list("x"=16, "y"=9)
+	nutriment_desc = list("stale frenchness" = 6)
 	nutriment_amt = 6
-	decay = 15*600
+	decay = 22*600
+	satisfaction = 4
 	New()
 		..()
-		reagents.add_reagent("blackpepper", 1)
-		reagents.add_reagent("sodiumchloride", 1)
-		bitesize = 3
+		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sandwich
 	name = "Sandwich"
 	desc = "A grand creation of meat, cheese, bread, and several leaves of lettuce! Arthur Dent would be proud."
 	icon_state = "sandwich"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#D9BE29"
 	center_of_mass = list("x"=16, "y"=4)
 	nutriment_desc = list("bread" = 3, "cheese" = 3)
@@ -891,7 +806,7 @@
 	name = "Toasted Sandwich"
 	desc = "Now if you only had a pepper bar."
 	icon_state = "toastedsandwich"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#D9BE29"
 	center_of_mass = list("x"=16, "y"=4)
 	nutriment_desc = list("toasted bread" = 3, "cheese" = 3)
@@ -908,7 +823,7 @@
 	name = "Grilled Cheese Sandwich"
 	desc = "Goes great with Tomato soup!"
 	icon_state = "toastedsandwich"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#D9BE29"
 	nutriment_desc = list("toasted bread" = 3, "cheese" = 3)
 	satisfaction = 8
@@ -976,7 +891,7 @@
 	name = "Jellied Toast"
 	desc = "A slice of bread covered with delicious jam."
 	icon_state = "jellytoast"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#B572AB"
 	center_of_mass = list("x"=16, "y"=8)
 	nutriment_desc = list("toasted bread" = 2)
@@ -995,7 +910,7 @@
 	name = "Boiled Spaghetti"
 	desc = "A plain dish of noodles, this sucks."
 	icon_state = "spagettiboiled"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#FCEE81"
 	center_of_mass = list("x"=16, "y"=10)
 	nutriment_desc = list("noodles" = 2)
@@ -1046,7 +961,7 @@
 	name = "Spaghetti"
 	desc = "Spaghetti and crushed tomatoes. Just like your abusive father used to make!"
 	icon_state = "pastatomato"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#DE4545"
 	center_of_mass = list("x"=16, "y"=10)
 	nutriment_desc = list("tomato" = 3, "noodles" = 3)
@@ -1062,7 +977,7 @@
 	name = "Spaghetti & Meatballs"
 	desc = "Now thats a nic'e meatball!"
 	icon_state = "meatballspagetti"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#DE4545"
 	center_of_mass = list("x"=16, "y"=10)
 	nutriment_desc = list("noodles" = 4)
@@ -1117,7 +1032,7 @@
 	name = "Jelly Sandwich"
 	desc = "You wish you had some peanut butter to go with this..."
 	icon_state = "jellysandwich"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#9E3A78"
 	center_of_mass = list("x"=16, "y"=8)
 	nutriment_desc = list("bread" = 2)
@@ -1224,7 +1139,7 @@
 	name = "golden apple streusel tart"
 	desc = "A tasty dessert that won't make it through a metal detector."
 	icon_state = "gappletart"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#FFFF00"
 	center_of_mass = list("x"=16, "y"=18)
 	nutriment_desc = list("apple" = 8)
@@ -1264,7 +1179,7 @@
 	name = "meatbread slice"
 	desc = "A slice of delicious meatbread."
 	icon_state = "meatbreadslice"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#FF7575"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=13)
@@ -1291,7 +1206,7 @@
 	name = "Banana-nut bread slice"
 	desc = "A slice of delicious banana bread."
 	icon_state = "bananabreadslice"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#EDE5AD"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=8)
@@ -1317,7 +1232,7 @@
 	name = "Carrot Cake slice"
 	desc = "Carrotty slice of Carrot Cake, carrots are good for your eyes! Also not a lie."
 	icon_state = "carrotcake_slice"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#FFD675"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=14)
@@ -1341,7 +1256,7 @@
 	name = "Cheese Cake slice"
 	desc = "Slice of pure cheestisfaction"
 	icon_state = "cheesecake_slice"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#FAF7AF"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=14)
@@ -1361,7 +1276,7 @@
 	name = "Vanilla Cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "plaincake_slice"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#F7EDD5"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=14)
@@ -1381,7 +1296,7 @@
 	name = "Orange Cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "orangecake_slice"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#FADA8E"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=14)
@@ -1402,7 +1317,7 @@
 	name = "Lime Cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "limecake_slice"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#CBFA8E"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=14)
@@ -1423,7 +1338,7 @@
 	name = "Lemon Cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "lemoncake_slice"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#FAFA8E"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=14)
@@ -1443,7 +1358,7 @@
 	name = "Chocolate Cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "chocolatecake_slice"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#805930"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=14)
@@ -1522,7 +1437,7 @@
 	name = "Cream Cheese Bread slice"
 	desc = "A slice of yum!"
 	icon_state = "creamcheesebreadslice"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#FFF896"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=13)
@@ -1552,7 +1467,7 @@
 	name = "Apple Cake slice"
 	desc = "A slice of heavenly cake."
 	icon_state = "applecakeslice"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#EBF5B8"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=14)
@@ -1572,7 +1487,7 @@
 	name = "Pumpkin Pie slice"
 	desc = "A slice of pumpkin pie, with whipped cream on top. Perfection."
 	icon_state = "pumpkinpieslice"
-	trash = /obj/item/kitchen/plate
+	trash = null
 	filling_color = "#F5B951"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=12)
@@ -1593,7 +1508,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/dough
 	name = "dough"
 	desc = "A piece of dough."
-	icon = 'icons/obj/food_ingredients.dmi'
+	icon = 'icons/obj/food/food_ingredients.dmi'
 	icon_state = "dough"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=13)
@@ -1621,7 +1536,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/flatdough
 	name = "flat dough"
 	desc = "A flattened dough."
-	icon = 'icons/obj/food_ingredients.dmi'
+	icon = 'icons/obj/food/food_ingredients.dmi'
 	icon_state = "flat dough"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/doughslice
 	slices_num = 3
@@ -1636,7 +1551,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/doughslice
 	name = "dough slice"
 	desc = "A building block of an impressive dish."
-	icon = 'icons/obj/food_ingredients.dmi'
+	icon = 'icons/obj/food/food_ingredients.dmi'
 	icon_state = "doughslice"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/spaghetti
 	slices_num = 1
@@ -1650,7 +1565,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/bun
 	name = "bun"
 	desc = "A base for any self-respecting burger."
-	icon = 'icons/obj/food_ingredients.dmi'
+	icon = 'icons/obj/food/food_ingredients.dmi'
 	icon_state = "bun"
 	bitesize = 2
 	center_of_mass = list("x"=16, "y"=12)
@@ -1708,60 +1623,30 @@
 /obj/item/weapon/reagent_containers/food/snacks/rawcutlet
 	name = "raw cutlet"
 	desc = "A thin piece of raw meat."
-	icon = 'icons/obj/food_ingredients.dmi'
+	icon = 'icons/obj/food/food_ingredients.dmi'
 	icon_state = "rawcutlet"
 	bitesize = 1
 	center_of_mass = list("x"=17, "y"=20)
 	raw = TRUE
-	var/rotten = FALSE
+	rotten_icon_state = "rottencutlet"
+	rots = TRUE
 	decay = 15*600
 	satisfaction = -2
 	non_vegetarian = TRUE
 	New()
 		..()
 		reagents.add_reagent("protein", 1)
-		spawn(2400) //4 minutes
-			icon_state = "rottencutlet"
-			name = "rotten [name]"
-			rotten = TRUE
-			if (reagents)
-				reagents.remove_reagent("protein", 1)
-				reagents.add_reagent("food_poisoning", 1)
-			spawn(1000)
-				if (isturf(loc) && prob(30))
-					var/scavengerspawn = rand(1,3)
-					if(scavengerspawn ==  1)
-						new/mob/living/simple_animal/mouse(get_turf(src))
-					else if(scavengerspawn ==  2)
-						new/mob/living/simple_animal/cockroach(get_turf(src))
-					else
-						new/mob/living/simple_animal/fly(get_turf(src))
-			spawn(3000)
-				qdel(src)
+
 /obj/item/weapon/reagent_containers/food/snacks/cutlet
 	name = "cutlet"
 	desc = "A tasty meat slice."
-	icon = 'icons/obj/food_ingredients.dmi'
+	icon = 'icons/obj/food/food_ingredients.dmi'
 	icon_state = "cutlet"
 	bitesize = 2
 	center_of_mass = list("x"=17, "y"=20)
 	non_vegetarian = TRUE
 	decay = 12*600
 	satisfaction = 5
-	New()
-		..()
-		reagents.add_reagent("protein", 2)
-
-/obj/item/weapon/reagent_containers/food/snacks/rawmeatball
-	name = "raw meatball"
-	desc = "A raw meatball."
-	icon = 'icons/obj/food_ingredients.dmi'
-	icon_state = "rawmeatball"
-	satisfaction = -2
-	bitesize = 2
-	center_of_mass = list("x"=16, "y"=15)
-	decay = 17*600
-	non_vegetarian = TRUE
 	New()
 		..()
 		reagents.add_reagent("protein", 2)
@@ -1781,7 +1666,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/flatbread
 	name = "flatbread"
 	desc = "Bland but filling."
-	icon = 'icons/obj/food_ingredients.dmi'
+	icon = 'icons/obj/food/food_ingredients.dmi'
 	icon_state = "flatbread"
 	bitesize = 2
 	satisfaction = 4
@@ -1801,7 +1686,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/rawsticks
 	name = "raw potato sticks"
 	desc = "Raw fries, not very tasty."
-	icon = 'icons/obj/food_ingredients.dmi'
+	icon = 'icons/obj/food/food_ingredients.dmi'
 	icon_state = "rawsticks"
 	bitesize = 2
 	satisfaction = -2
@@ -1820,9 +1705,52 @@
 	w_class = 1
 	throw_speed = 3
 	throw_range = 7
+	var/decay = 15*600
+	var/decaytimer = 0
+
 	New()
 		..()
 		icon_state = pick("leaves1","leaves2","leaves3")
+		food_decay()
+
+/obj/item/weapon/leaves/attack_self(mob/living/user)
+	if (ishuman(user))
+		user << "You start arranging the leaves into a thatch roofing..."
+		if (do_after(user, 70, src))
+			user << "You finish the thatch roofing."
+			var/obj/item/weapon/roofbuilder/leaves/RB = new/obj/item/weapon/roofbuilder/leaves(loc)
+			user.drop_from_inventory(src)
+			user.put_in_hands(RB)
+			qdel(src)
+			return
+/obj/item/weapon/leaves/proc/food_decay()
+	spawn(600)
+		if (decay == 0)
+			return
+		if (istype(loc, /obj/structure/vending))
+			food_decay()
+			return
+
+		if (istype(loc, /obj/structure/closet/fridge))
+			var/obj/structure/closet/fridge/F = loc
+			if (F.powersource && F.powersource.powered)
+				decaytimer += 100 //much slower
+			else
+				decaytimer += 300
+		else if (isturf(loc) && !findtext(src.name, "canned")) //if on the floor (i.e. not stored inside something), decay faster
+			decaytimer += 600
+		else if (!istype(loc, /obj/item/weapon/can) && !findtext(src.name, "canned")) //if not canned, since canned food doesn't spoil
+			decaytimer += 300
+		if (istype(loc, /obj/item/weapon/can))
+			var/obj/item/weapon/can/C = loc
+			if (C.open)
+				decaytimer += 300
+		if (decaytimer >= decay)
+			qdel(src)
+			return
+		else
+			food_decay()
+			return
 
 /obj/item/weapon/leaves/attack(mob/living/carbon/human/M as mob, mob/living/carbon/human/user as mob)
 	if (!M || !ishuman(M) || !M.gorillaman)
@@ -1835,3 +1763,25 @@
 		M << "You eat the leaves."
 	M.nutrition = min(M.nutrition+40, M.max_nutrition)
 	qdel(src)
+
+/obj/item/weapon/leaves/palm_leaves
+	name = "palm leaves"
+	desc = "A bunch of palm leaves."
+	icon_state = "palm_leaves"
+	throwforce = 0
+	force = 0
+	w_class = 3
+	decay = 35*600
+	New()
+		..()
+		icon_state = "palm_leaves"
+/obj/item/weapon/leaves/palm_leaves/attack_self(mob/living/user)
+	if (ishuman(user))
+		user << "You start arranging the leaves into a palm roofing..."
+		if (do_after(user, 70, src))
+			user << "You finish the palm roofing."
+			var/obj/item/weapon/roofbuilder/palm/RB = new/obj/item/weapon/roofbuilder/palm(loc)
+			user.drop_from_inventory(src)
+			user.put_in_hands(RB)
+			qdel(src)
+			return

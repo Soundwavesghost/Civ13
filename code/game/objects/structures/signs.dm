@@ -72,6 +72,26 @@
 	desc = "The Intergalactic symbol of Medical institutions. You'll probably get help here."
 	icon_state = "redcross"
 
+/obj/structure/sign/mcd
+	name = "MC DONALDS"
+	desc = "A sign fat people usually like."
+	icon_state = "mcd"
+
+/obj/structure/sign/bar
+	name = "BAR"
+	desc = "A sign that says bar on it."
+	icon_state = "barsign"
+
+/obj/structure/sign/baily
+	name = "Baily post"
+	desc = "Protection service."
+	icon_state = "bailypost"
+
+/obj/structure/sign/baily2
+	name = "Baily post"
+	desc = "Protection service."
+	icon_state = "bailypost2"
+
 /obj/structure/sign/greencross
 	name = "medbay"
 	desc = "The Intergalactic symbol of Medical institutions. You'll probably get help here."
@@ -86,6 +106,11 @@
 	name = "\improper AI developers plaque"
 	desc = "Next to the extremely long list of names and job titles, there is a drawing of a little child. The child appears to be retarded. Beneath the image, someone has scratched the word \"PACKETS\""
 	icon_state = "kiddieplaque"
+
+/obj/structure/sign/armory
+	name = "Armory"
+	desc = "Armory this way."
+	icon_state = "armory1"
 
 /obj/structure/sign/exit
 	name = "Exit"
@@ -109,10 +134,38 @@
 		desc = "Exit to the south."
 
 /obj/structure/sign/custom
-	name = "Sign"
+	name = "sign"
 	desc = "Signs something."
 	icon_state = "woodsign2"
 
+/obj/structure/sign/signpost
+	name = "signpost"
+	desc = "Signs something."
+	icon_state = "signpost_pole"
+
+/obj/structure/sign/signpost/New()
+	..()
+	spawn(1)
+		if (findtext(desc, "<b>West:</b>"))
+			overlays += icon(icon, "signpost_west")
+		if (findtext(desc, "<b>North:</b>"))
+			overlays += icon(icon, "signpost_north")
+		if (findtext(desc, "<b>East:</b>"))
+			overlays += icon(icon, "signpost_east")
+		if (findtext(desc, "<b>South:</b>"))
+			overlays += icon(icon, "signpost_south")
+		update_icon()
+
+/obj/structure/sign/signpost/update_icon()
+	overlays.Cut()
+	if (findtext(desc, "<b>West:</b>"))
+		overlays += icon(icon, "signpost_west")
+	if (findtext(desc, "<b>North:</b>"))
+		overlays += icon(icon, "signpost_north")
+	if (findtext(desc, "<b>East:</b>"))
+		overlays += icon(icon, "signpost_east")
+	if (findtext(desc, "<b>South:</b>"))
+		overlays += icon(icon, "signpost_south")
 //numbers
 /obj/structure/sign/n1
 	desc = "A silver sign which reads 'I'."

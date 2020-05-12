@@ -57,9 +57,24 @@
 	item_state = "modern_gasmask"
 	filtered_gases = list("xylyl_bromide", "mustard_gas", "white_phosphorus_gas", "chlorine_gas", "zyklon_b", "phosgene_gas")
 
+/obj/item/clothing/mask/gas/military
+	icon_state = "military_gasmask"
+	item_state = "military_gasmask"
+	filtered_gases = list("xylyl_bromide", "mustard_gas", "white_phosphorus_gas", "chlorine_gas", "zyklon_b", "phosgene_gas")
+
 /obj/item/clothing/mask/gas/modern2
 	icon_state = "moderngasmask"
 	item_state = "moderngasmask"
+	filtered_gases = list("xylyl_bromide", "mustard_gas", "white_phosphorus_gas", "chlorine_gas", "zyklon_b", "phosgene_gas")
+
+/obj/item/clothing/mask/gas/russia
+	icon_state = "russiamask"
+	item_state = "russiamask"
+	filtered_gases = list("xylyl_bromide", "mustard_gas", "white_phosphorus_gas", "chlorine_gas", "zyklon_b", "phosgene_gas")
+
+/obj/item/clothing/mask/gas/swat
+	icon_state = "swatmask"
+	item_state = "swatmask"
 	filtered_gases = list("xylyl_bromide", "mustard_gas", "white_phosphorus_gas", "chlorine_gas", "zyklon_b", "phosgene_gas")
 
 /obj/item/clothing/mask/gas/modern

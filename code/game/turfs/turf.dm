@@ -32,11 +32,11 @@ var/list/interior_areas = list(/area/caribbean/houses,
 	var/heat_capacity = TRUE
 
 	//Properties for both
-	var/temperature = T20C      // Initial turf temperature.
+	var/temperature = T20C	  // Initial turf temperature.
 
 	// General properties.
 	var/icon_old = null
-	var/pathweight = TRUE          // How much does it cost to pathfind over this turf?
+	var/pathweight = TRUE		  // How much does it cost to pathfind over this turf?
 
 	var/list/decals
 	var/move_delay = 0
@@ -58,7 +58,6 @@ var/list/interior_areas = list(/area/caribbean/houses,
 	var/max_fire_temperature_sustained = FALSE //The max temperature of the fire which it was subjected to
 	var/dirt = FALSE
 
-	var/datum/scheduled_task/unwet_task
 //	var/datum/scheduled_task/flooding_task
 	var/interior = TRUE
 	var/stepsound = null
@@ -79,6 +78,8 @@ var/list/interior_areas = list(/area/caribbean/houses,
 		spawn( FALSE )
 			Entered(AM)
 			return
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		new_turfs |= src
 	turfs |= src
 
 
@@ -147,9 +148,11 @@ var/list/interior_areas = list(/area/caribbean/houses,
 			if (do_after(user, (160/(H.getStatCoeff("strength"))/1.5)))
 				U.collapse_check()
 				if (istype(src, /turf/floor/dirt/underground/empty))
+					var/turf/floor/dirt/underground/empty/T = src
+					T.mining_clear_debris()
 					return
 				else if (!istype(src, /turf/floor/dirt/underground/empty))
-					mining_proc(H, U.rocktype)
+					mining_proc(H)
 				return TRUE
 	if (world.time >= user.next_push)
 		if (ismob(user.pulling))
@@ -305,34 +308,6 @@ var/const/enterloopsanity = 100
 
 /turf/proc/update_blood_overlays()
 	return
-.
-/turf/proc/wet_floor(var/wet_val = TRUE)
-	if (wet_val < wet)
-		return
-
-	if (!wet)
-		wet = wet_val
-		overlays += wet_overlay
-
-	if (unwet_task)
-		unwet_task.trigger_task_in(8 SECONDS)
-	else
-		unwet_task = schedule_task_in(8 SECONDS)
-		task_triggered_event.register(unwet_task, src, /turf/proc/task_unwet_floor)
-
-/turf/proc/task_unwet_floor(var/triggered_task)
-	if (triggered_task == unwet_task)
-		unwet_task = null
-		unwet_floor(TRUE)
-
-/turf/proc/unwet_floor(var/check_very_wet)
-	if (check_very_wet && wet >= 2)
-		return
-
-	wet = FALSE
-	if (wet_overlay)
-		overlays -= wet_overlay
-		wet_overlay = null
 
 /turf/clean_blood()
 	for (var/obj/effect/decal/cleanable/blood/B in contents)
@@ -343,10 +318,6 @@ var/const/enterloopsanity = 100
 	..()
 	levelupdate()
 
-/turf/Destroy()
-	qdel(unwet_task)
-	unwet_task = null
-	return ..()
 
 /turf/proc/initialize()
 	return

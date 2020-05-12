@@ -15,10 +15,10 @@
 	is_officer = TRUE
 	is_commander = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_ww1 = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -61,12 +61,12 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGECap"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_commander = TRUE
 	is_officer = TRUE
 	is_ww1 = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -108,12 +108,12 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGECap"
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_commander = TRUE
 	is_officer = TRUE
 	is_ww1 = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -154,12 +154,13 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
 	is_officer = TRUE
-	SL_check_independent = TRUE
+	is_squad_leader = TRUE
+	uses_squads = TRUE
 	is_ww1 = TRUE
 
-	// AUTOBALANCE
-	min_positions = 1
-	max_positions = 10
+
+	min_positions = 2
+	max_positions = 12
 
 /datum/job/german/sergeant/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -198,10 +199,11 @@
 	rank_abbreviation = "Dr."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGEDoc"
-	SL_check_independent = TRUE
+
+	is_medic = TRUE
 	is_ww1 = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 10
 
@@ -236,15 +238,16 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /datum/job/german/shocktroop
-	title = "Stosstruppen"
+	title = "Stosstrupp"
 	en_meaning = "Shock Troop"
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE" //for testing!
-	SL_check_independent = TRUE
-	is_ww1 = TRUE
 
-	// AUTOBALANCE
+	is_ww1 = TRUE
+	uses_squads = TRUE
+
+
 	min_positions = 6
 	max_positions = 200
 
@@ -283,10 +286,11 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE" //for testing!
-	SL_check_independent = TRUE
-	is_ww1 = TRUE
 
-	// AUTOBALANCE
+	is_ww1 = TRUE
+	uses_squads = TRUE
+
+
 	min_positions = 12
 	max_positions = 400
 
@@ -330,11 +334,11 @@
 	is_officer = TRUE
 	is_commander = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -351,6 +355,7 @@
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/pistol/waltherp38(H), slot_l_hand)
 
 	H.equip_to_slot_or_del(new /obj/item/weapon/attachment/scope/adjustable/binoculars/binoculars(H), slot_r_store)
+
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/holster/hip/holsterh = new /obj/item/clothing/accessory/holster/hip(null)
 	var/obj/item/clothing/accessory/armband/nsdap/armband = new /obj/item/clothing/accessory/armband/nsdap(null)
@@ -378,10 +383,11 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
 	is_officer = TRUE
-	SL_check_independent = TRUE
+	is_squad_leader = TRUE
+	uses_squads = TRUE
 	is_ww2 = TRUE
 	is_reichstag = TRUE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 6
 
@@ -419,10 +425,11 @@
 	rank_abbreviation = "Dr."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGEDoc"
-	SL_check_independent = TRUE
+
+	is_medic = TRUE
 	is_ww2 = TRUE
 	is_reichstag = TRUE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 4
 
@@ -463,11 +470,12 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	whitelisted = TRUE
 	is_reichstag = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 6
 	max_positions = 30
 
@@ -520,10 +528,11 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 6
 	max_positions = 30
 
@@ -571,11 +580,12 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = TRUE
+	uses_squads = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 12
 	max_positions = 60
 
@@ -630,11 +640,12 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = TRUE
+	uses_squads = TRUE
 
-	// AUTOBALANCE
+
 	min_positions = 12
 	max_positions = 60
 
@@ -678,10 +689,10 @@
 	is_officer = TRUE
 	is_commander = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = FALSE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -696,7 +707,8 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/ger_officercap(H), slot_head)
 //weapons
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/pistol/waltherp38(H), slot_l_hand)
-
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/german_officer(H), slot_wear_suit)
 	H.equip_to_slot_or_del(new /obj/item/weapon/attachment/scope/adjustable/binoculars/binoculars(H), slot_r_store)
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/holster/hip/holsterh = new /obj/item/clothing/accessory/holster/hip(null)
@@ -727,10 +739,10 @@
 	spawn_location = "JoinLateGECap"
 	is_officer = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = FALSE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 1
 
@@ -745,7 +757,8 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/ger_officercap(H), slot_head)
 //weapons
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/pistol/waltherp38(H), slot_l_hand)
-
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/german_officer(H), slot_wear_suit)
 	H.equip_to_slot_or_del(new /obj/item/weapon/attachment/scope/adjustable/binoculars/binoculars(H), slot_r_store)
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/holster/hip/holsterh = new /obj/item/clothing/accessory/holster/hip(null)
@@ -775,10 +788,10 @@
 	spawn_location = "JoinLateGECap"
 	is_officer = TRUE
 	whitelisted = TRUE
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = FALSE
-	// AUTOBALANCE
+
 	min_positions = 1
 	max_positions = 2
 
@@ -793,7 +806,8 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/ger_officercap(H), slot_head)
 //weapons
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/pistol/waltherp38(H), slot_l_hand)
-
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/german_officer(H), slot_wear_suit)
 	H.equip_to_slot_or_del(new /obj/item/weapon/attachment/scope/adjustable/binoculars/binoculars(H), slot_r_store)
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/holster/hip/holsterh = new /obj/item/clothing/accessory/holster/hip(null)
@@ -821,12 +835,13 @@
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
 	is_officer = TRUE
-	SL_check_independent = TRUE
+	is_squad_leader = TRUE
 	is_ww2 = TRUE
 	is_reichstag = FALSE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 2
-	max_positions = 10
+	max_positions = 12
 
 /datum/job/german/gruppenfuhrer/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -838,7 +853,8 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/ger_officercap(H), slot_head)
 //weapons
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/submachinegun/mp40(H), slot_belt)
-
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/german(H), slot_wear_suit)
 	give_random_name(H)
 	H.add_note("Role", "You are a <b>[title]</b>, a sergeant leading a squad. Organize your group according to the <b>Hauptmann's</b> orders!")
 	H.setStat("strength", STAT_MEDIUM_HIGH)
@@ -854,17 +870,18 @@
 	return TRUE
 
 /datum/job/german/schutze_soldaten
-	title = "Schütze"
+	title = "Schutze"
 	en_meaning = "Soldier"
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = FALSE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 8
-	max_positions = 100
+	max_positions = 120
 
 /datum/job/german/schutze_soldaten/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -887,6 +904,8 @@
 			H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/semiautomatic/g43(H), slot_shoulder)
 		else
 			H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/boltaction/gewehr98/karabiner98k(H), slot_shoulder)
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/german(H), slot_wear_suit)
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/storage/webbing/ww1/german/webbing = new /obj/item/clothing/accessory/storage/webbing/ww1/german(null)
 	uniform.attackby(webbing, H)
@@ -905,105 +924,19 @@
 	return TRUE
 
 
-/datum/job/german/tank_crew_leader
-	title = "Panzerführer"
-	en_meaning = "Armored Squad Leader"
-	rank_abbreviation = "Pzf."
-	selection_color = "#2d2d63"
-	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
-	is_ww2 = TRUE
-	is_reichstag = FALSE
-	is_tanker = TRUE
-	whitelisted = TRUE
-	is_squad_leader = TRUE
-	is_officer = TRUE
-	// AUTOBALANCE
-	min_positions = 1
-	max_positions = 8
-
-/datum/job/german/tank_crew_leader/equip(var/mob/living/carbon/human/H)
-	if (!H)	return FALSE
-//shoes
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/jackboots(H), slot_shoes)
-
-//clothes
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/ww2/german_tanker(H), slot_w_uniform)
-//head
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/ger_officercap_tanker(H), slot_head)
-//back
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/submachinegun/mp40(H), slot_belt)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/thick(H), slot_gloves)
-	H.equip_to_slot_or_del(new /obj/item/weapon/key/german(H), slot_l_store)
-	H.equip_to_slot_or_del(new /obj/item/weapon/radio/faction1(H), slot_back)
-
-	give_random_name(H)
-	H.add_note("Role", "You are a <b>[title]</b>, the commander of a tank. Assemble your crew and lead your tank to victory!")
-	H.setStat("strength", STAT_MEDIUM_HIGH)
-	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_NORMAL)
-	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL)
-	H.setStat("pistol", STAT_NORMAL)
-	H.setStat("bows", STAT_NORMAL)
-	H.setStat("medical", STAT_MEDIUM_LOW)
-	return TRUE
-
-/datum/job/german/tank_crew
-	title = "Panzerschütze"
-	en_meaning = "Armored Crewman"
-	rank_abbreviation = ""
-	selection_color = "#2d2d63"
-	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
-	is_ww2 = TRUE
-	is_reichstag = FALSE
-	is_tanker = TRUE
-	// AUTOBALANCE
-	min_positions = 4
-	max_positions = 64
-
-/datum/job/german/tank_crew/equip(var/mob/living/carbon/human/H)
-	if (!H)	return FALSE
-//shoes
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/soldiershoes(H), slot_shoes)
-
-//clothes
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/ww2/german_tanker(H), slot_w_uniform)
-
-//head
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/german_tanker(H), slot_head)
-//back
-	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/pistol/waltherp38(H), slot_belt)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/thick(H), slot_gloves)
-	var/obj/item/clothing/under/uniform = H.w_uniform
-	var/obj/item/clothing/accessory/holster/hip/hip = new /obj/item/clothing/accessory/holster/hip(null)
-	H.equip_to_slot_or_del(new /obj/item/weapon/key/german(H), slot_l_store)
-	uniform.attackby(hip, H)
-	give_random_name(H)
-	H.add_note("Role", "You are a <b>[title]</b>, a member of an armored vehicle crew. Get your role assigned and follow your Commander!")
-	H.setStat("strength", STAT_MEDIUM_HIGH)
-	H.setStat("crafting", STAT_MEDIUM_LOW)
-	H.setStat("rifle", STAT_NORMAL)
-	H.setStat("dexterity", STAT_NORMAL)
-	H.setStat("swords", STAT_NORMAL)
-	H.setStat("pistol", STAT_NORMAL)
-	H.setStat("bows", STAT_NORMAL)
-	H.setStat("medical", STAT_MEDIUM_LOW)
-	return TRUE
-
 /datum/job/german/machine_gunner
-	title = "Machinengewehr Schütze"
+	title = "MG-Schutze"
 	en_meaning = "Machine Gunner"
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = FALSE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 2
-	max_positions = 8
+	max_positions = 12
 
 /datum/job/german/machine_gunner/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -1020,6 +953,8 @@
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/ww2/german_fieldcap(H), slot_head)
 //back
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/automatic/mg34(H), slot_shoulder)
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/german(H), slot_wear_suit)
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/storage/webbing/ww1/german/webbing = new /obj/item/clothing/accessory/storage/webbing/ww1/german(null)
 	uniform.attackby(webbing, H)
@@ -1039,17 +974,18 @@
 	return TRUE
 
 /datum/job/german/sniper_schutze
-	title = "Scharfschützen"
+	title = "Scharfschutze"
 	en_meaning = "Sniper"
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = FALSE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 2
-	max_positions = 8
+	max_positions = 12
 
 /datum/job/german/sniper_schutze/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -1070,6 +1006,8 @@
 	H.equip_to_slot_or_del(new /obj/item/weapon/attachment/scope/adjustable/sniper_scope(H), slot_l_store)
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/storage/webbing/ww1/german/webbing = new /obj/item/clothing/accessory/storage/webbing/ww1/german(null)
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/german(H), slot_wear_suit)
 	uniform.attackby(webbing, H)
 	give_random_name(H)
 	H.add_note("Role", "You are a <b>[title]</b>, a sniper of the Wehrmacht forces.Provide suppressing fire, support your comrades, take out high value targets, and follow your <b>Sergeant's</b> orders!")
@@ -1091,11 +1029,12 @@
 	rank_abbreviation = "Dr."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGEDoc"
-	SL_check_independent = TRUE
+
+	is_medic = TRUE
 	is_ww2 = TRUE
 	is_reichstag = FALSE
 
-	// AUTOBALANCE
+
 	min_positions = 2
 	max_positions = 4
 
@@ -1131,17 +1070,19 @@
 	return TRUE
 
 /datum/job/german/sanitater
-	title = "Sanitäter"
+	title = "Sanitater"
 	en_meaning = "Medic"
 	rank_abbreviation = "Obrgf."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGEDoc"
-	SL_check_independent = TRUE
+
+	is_medic = TRUE
 	is_ww2 = TRUE
 	is_reichstag = FALSE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 2
-	max_positions = 8
+	max_positions = 12
 
 /datum/job/german/sanitater/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -1155,6 +1096,8 @@
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/adv(H), slot_back)
 	H.equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/combat(H), slot_belt)
 
+	if (map.ID == MAP_STALINGRAD)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/coat/ww2/german(H), slot_wear_suit)
 
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/armband/redcross/armband = new /obj/item/clothing/accessory/armband/redcross(null)
@@ -1175,21 +1118,23 @@
 
 ////////////////////////////////TANKERS AND PANZERGRANADIERS///////////////////////////
 /datum/job/german/tank_crew_leader
-	title = "Panzerführer"
+	title = "Panzerfuhrer"
 	en_meaning = "Armored Squad Leader"
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = FALSE
 	is_tanker = TRUE
 	whitelisted = TRUE
 	is_squad_leader = TRUE
+	uses_squads = TRUE
 	is_officer = TRUE
-	// AUTOBALANCE
-	min_positions = 1
-	max_positions = 8
+	uses_squads = TRUE
+
+	min_positions = 2
+	max_positions = 6
 
 /datum/job/german/tank_crew_leader/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -1219,18 +1164,19 @@
 	return TRUE
 
 /datum/job/german/tank_crew
-	title = "Panzerschütze"
+	title = "Panzerschutze"
 	en_meaning = "Armored Crewman"
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
 	is_reichstag = FALSE
 	is_tanker = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 4
-	max_positions = 64
+	max_positions = 32
 
 /datum/job/german/tank_crew/equip(var/mob/living/carbon/human/H)
 	if (!H)	return FALSE
@@ -1262,17 +1208,19 @@
 	return TRUE
 
 /datum/job/german/ss_panzergrenadier_squad_leader
-	title = "Waffen-SS Unterscharführer Panzergrenadier"
+	title = "Waffen-SS Unterscharfuhrer Panzergrenadier"
 	en_meaning = "Waffen-SS Mechanized Infantry"
 	rank_abbreviation = "Uscha."
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
+
 	is_ww2 = TRUE
-	is_tanker = TRUE
 	is_squad_leader = TRUE
+	uses_squads = TRUE
 	is_officer = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+	is_ss_panzer = TRUE
+
 	min_positions = 2
 	max_positions = 6
 
@@ -1310,10 +1258,11 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGE"
-	SL_check_independent = TRUE
+	is_ss_panzer = TRUE
+
 	is_ww2 = TRUE
-	is_tanker = TRUE
-	// AUTOBALANCE
+	uses_squads = TRUE
+
 	min_positions = 6
 	max_positions = 30
 
@@ -1361,10 +1310,9 @@
 	rank_abbreviation = ""
 	selection_color = "#2d2d63"
 	spawn_location = "JoinLateGESap"
-	SL_check_independent = TRUE
+	is_ss_panzer = TRUE
 	is_ww2 = TRUE
-	is_tanker = TRUE
-	// AUTOBALANCE
+
 	min_positions = 2
 	max_positions = 12
 
@@ -1381,7 +1329,7 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/glasses/pilot(H), slot_eyes)
 //back
 	H.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/submachinegun/mp40(H), slot_belt)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/sapper(H), slot_back)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/ww2/german/sapper(H), slot_back)
 
 	var/obj/item/clothing/under/uniform = H.w_uniform
 	var/obj/item/clothing/accessory/storage/webbing/ww1/german/webbing = new /obj/item/clothing/accessory/storage/webbing/ww1/german(null)

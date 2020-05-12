@@ -153,6 +153,14 @@
 	worn_state = "apron"
 	slot = "overcloth"
 
+/obj/item/clothing/accessory/custom/priest_band
+	name = "priest band"
+	desc = "A priest band."
+	icon_state = "customizable_priest_band"
+	item_state = "customizable_priest_band"
+	worn_state = "customizable_priest_band"
+	slot = "decor"
+
 /obj/item/clothing/accessory/custom/cape
 	name = "cape"
 	desc = "A cloth cape."
@@ -185,6 +193,30 @@
 	worn_state = "patch_marksman"
 	slot = "armband"
 
+/obj/item/clothing/accessory/patch/russia
+	name = "Russia patch"
+	desc = "A patch with the flag of Russia."
+	icon_state = "patch_russia"
+	item_state = "patch_russia"
+	worn_state = "patch_russia"
+	slot = "armband"
+
+/obj/item/clothing/accessory/patch/spetsgruppaa
+	name = "Spetsgruppa A patch"
+	desc = "A special forces patch, this one is of spetsnaz."
+	icon_state = "patch_spets"
+	item_state = "patch_marksman"
+	worn_state = "patch_marksman"
+	slot = "armband"
+
+/obj/item/clothing/accessory/patch/swat
+	name = "SWAT patch"
+	desc = "A SWAT tag."
+	icon_state = "swat"
+	item_state = "swat"
+	worn_state = "swat"
+	slot = "armband"
+
 /obj/item/clothing/accessory/patch/specialforce
 	name = "special forces patch"
 	desc = "A patch used by special forces."
@@ -193,6 +225,21 @@
 	worn_state = "patch_specialforces"
 	slot = "armband"
 
+/obj/item/clothing/accessory/patch/police
+	name = "POLICE"
+	desc = "A tag used by police."
+	icon_state = "policetag"
+	item_state = "policetag"
+	worn_state = "policetag"
+	slot = "armband"
+
+/obj/item/clothing/accessory/patch/security
+	name = "SECURITY"
+	desc = "A tag used by security forces."
+	icon_state = "policetag"
+	item_state = "policetag"
+	worn_state = "policetag"
+	slot = "armband"
 
 /obj/item/clothing/accessory/custom/attack_self(mob/user as mob)
 	if (uncolored)
@@ -201,7 +248,7 @@
 			return
 		else
 			input = uppertext(input)
-			if (lentext(input) != 6)
+			if (length(input) != 6)
 				return
 			var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
 			for (var/i = 1, i <= 6, i++)
@@ -244,3 +291,22 @@
 		NI.color = color
 		return NI
 	return inv_overlay
+
+/obj/item/clothing/accessory/wearable_sign
+	name = "wearable sign"
+	desc = "A wooden sign with a string, wearable over the clothing."
+	icon_state = "wearable_sign"
+	item_state = "wearable_sign"
+	worn_state = "wearable_sign"
+	slot = "overcloth"
+
+/obj/item/clothing/accessory/wearable_sign/attackby(obj/item/W as obj, mob/user as mob)
+	if (istype(W, /obj/item/weapon/pen))
+		var/newtext = input("What do you want to write on the sign? (Up to 30 characters)","Sign", "") as text
+		if (newtext == null)
+			newtext = ""
+		newtext = sanitize(newtext, 30, FALSE)
+		name = "wooden sign: [newtext]"
+		return
+	else
+		..()

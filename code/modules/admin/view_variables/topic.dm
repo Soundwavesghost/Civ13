@@ -116,6 +116,16 @@
 		if (usr.client)
 			usr.client.cmd_assume_direct_control(M)
 
+	else if (href_list["findrefs"])
+		if (!check_rights(R_DEBUG))	return
+
+		var/mob/M = locate(href_list["findrefs"])
+		if (!istype(M))
+			usr << "This can only be used on instances of type /mob"
+			return
+
+		M.find_references()
+
 	else if (href_list["delall"])
 		if (!check_rights(R_DEBUG|R_SERVER))	return
 
@@ -283,7 +293,7 @@
 			usr << "Mob doesn't know that language."
 
 	else if (href_list["addverb"])
-		if (!check_rights(R_DEBUG))      return
+		if (!check_rights(R_DEBUG))	  return
 
 		var/mob/living/H = locate(href_list["addverb"])
 
@@ -309,7 +319,7 @@
 			H.verbs += verb
 
 	else if (href_list["remverb"])
-		if (!check_rights(R_DEBUG))      return
+		if (!check_rights(R_DEBUG))	  return
 
 		var/mob/H = locate(href_list["remverb"])
 

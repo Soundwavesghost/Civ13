@@ -127,9 +127,9 @@
 	for (var/obj/item/clothing/C in list(wear_suit,w_uniform,shoes))
 		if (C)
 			if (C.blood_DNA)
-				C.dirtyness += 0.08
+				C.dirtyness += 0.04
 			else
-				C.dirtyness += 0.05
+				C.dirtyness += 0.025
 			if (C.dirtyness > 100)
 				C.dirtyness = 100
 			if (C.dirtyness > 90)
@@ -138,7 +138,7 @@
 	if (fleas_found)
 		img_nasties.overlays += fleas
 		mood -= 0.02
-		if (prob(0.2) && !disease && !inducedSSD)
+		if ((prob(0.2) || (prob(0.5) && find_trait("Weak Immune System"))) && !disease && !inducedSSD)
 			disease = TRUE
 			disease_type = "typhus"
 			disease_progression = 0

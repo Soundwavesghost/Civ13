@@ -2,13 +2,13 @@
 				BLOOD SYSTEM
 ****************************************************/
 //Blood levels. These are percentages based on the species blood_volume far.
-var/const/BLOOD_VOLUME_SAFE =    85
-var/const/BLOOD_VOLUME_OKAY =    75
-var/const/BLOOD_VOLUME_BAD =     60
+var/const/BLOOD_VOLUME_SAFE =	85
+var/const/BLOOD_VOLUME_OKAY =	75
+var/const/BLOOD_VOLUME_BAD =	 60
 var/const/BLOOD_VOLUME_SURVIVE = 20
 
 /mob/living/carbon/human/var/datum/reagents/vessel // Container for blood and BLOOD ONLY. Do not transfer other chems here.
-/mob/living/carbon/human/var/var/pale = FALSE          // Should affect how mob sprite is drawn, but currently doesn't.
+/mob/living/carbon/human/var/var/pale = FALSE		  // Should affect how mob sprite is drawn, but currently doesn't.
 
 //Initializes blood vessels
 /mob/living/carbon/human/proc/make_blood()
@@ -41,9 +41,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 20
 /mob/living/carbon/human/handle_blood()
 
 	make_blood()
-
-	if (in_stasis)
-		return
 
 	if (!species.has_organ["heart"])
 		return
@@ -79,6 +76,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 20
 					bloodloss += W.damage / 1000
 		if (temp.open)
 			++bloodloss  //Yer stomach is cut open
+	if(istype(buckled, /obj/structure/cross))
+		bloodloss = max(1.5,bloodloss*1.2)
 	bloodloss = min(bloodloss, 4)
 
 	if (bloodloss) // we're bleeding
@@ -98,8 +97,10 @@ var/const/BLOOD_VOLUME_SURVIVE = 20
 
 	if (!amt)
 		return
-
-	vessel.remove_reagent("blood",amt)
+	var/dmod = 1
+	if (find_trait("Hemophilia"))
+		dmod = 1.25
+	vessel.remove_reagent("blood",amt*dmod)
 
 	// don't splatter blood all the time
 	if (prob(amt * 100))
@@ -261,8 +262,8 @@ proc/blood_incompatible(donor,receiver,donor_species,receiver_species)
 		if (donor_species != receiver_species)
 			return TRUE
 
-	var/donor_antigen = copytext(donor,1,lentext(donor))
-	var/receiver_antigen = copytext(receiver,1,lentext(receiver))
+	var/donor_antigen = copytext(donor,1,length(donor))
+	var/receiver_antigen = copytext(receiver,1,length(receiver))
 	var/donor_rh = (findtext(donor,"+")>0)
 	var/receiver_rh = (findtext(receiver,"+")>0)
 

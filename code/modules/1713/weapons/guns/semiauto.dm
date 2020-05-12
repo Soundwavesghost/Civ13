@@ -1,5 +1,6 @@
 /obj/item/weapon/gun/projectile/semiautomatic
-	fire_sound = 'sound/weapons/mosin_shot.ogg'
+	maxhealth = 60
+	fire_sound = 'sound/weapons/guns/fire/rifle.ogg'
 	// pistol accuracy, rifle skill & decent KD chance
 	accuracy_list = list(
 
@@ -62,6 +63,8 @@
 	var/base_icon = "semiautomatic"
 	equiptimer = 12
 	gun_safety = TRUE
+	reload_sound = 'sound/weapons/guns/interact/semiauto_magin.ogg'
+	unload_sound = 'sound/weapons/guns/interact/semiauto_magout.ogg'
 
 /obj/item/weapon/gun/projectile/semiautomatic/update_icon()
 	if (sniper_scope)
@@ -95,13 +98,13 @@
 
 /obj/item/weapon/gun/projectile/semiautomatic/handle_post_fire()
 	..()
-
+	var/reverse_health_percentage = (1-(health/maxhealth)+0.25)*100
 	if (world.time - last_fire > 50)
 		jamcheck = 0
 	else
 		jamcheck += 0.4
 
-	if (prob(jamcheck))
+	if (prob(jamcheck*reverse_health_percentage))
 		jammed_until = max(world.time + (jamcheck * 4), 40)
 		jamcheck = 0
 
@@ -133,16 +136,16 @@
 	attachment_slots = ATTACH_IRONSIGHTS|ATTACH_SCOPE|ATTACH_BARREL
 
 /obj/item/weapon/gun/projectile/semiautomatic/avtomat
-	name = "fedorov avtomat"
-	desc = "Russian automatic rifle, used in ww1."
+	name = "Fedorov Avtomat"
+	desc = "Russian automatic rifle, used during WWI."
 	icon_state = "avtomat"
 	item_state = "svt"
 	base_icon = "avtomat"
 	w_class = 4
 	load_method = SINGLE_CASING|SPEEDLOADER|MAGAZINE
 	max_shells = 25
-	caliber = "a762x54"
-	ammo_type = /obj/item/ammo_casing/a762x54
+	caliber = "a65x50"
+	ammo_type = /obj/item/ammo_casing/a65x50
 	slot_flags = SLOT_SHOULDER
 	magazine_type = /obj/item/ammo_magazine/avtomat
 	weight = 3.85
@@ -159,7 +162,7 @@
 	attachment_slots = ATTACH_IRONSIGHTS|ATTACH_SCOPE|ATTACH_BARREL
 
 /obj/item/weapon/gun/projectile/semiautomatic/remington11
-	name = "remington 11"
+	name = "Remington 11"
 	desc = "American semi-automatic shotgun."
 	icon_state = "remington11"
 	item_state = "remington11"
@@ -180,20 +183,77 @@
 
 /obj/item/weapon/gun/projectile/semiautomatic/sks
 	name = "SKS"
-	desc = "Soviet semi-automatic rifle chambered in 7.62x54mmR."
+	desc = "Soviet semi-automatic rifle chambered in 7.62x39mm."
 	icon_state = "sks"
-	item_state = "ks"
+	item_state = "sks"
 	base_icon = "sks"
+	fire_sound = 'sound/weapons/guns/fire/SKS.ogg'
 	w_class = 4
 	load_method = SINGLE_CASING|SPEEDLOADER
 	max_shells = 10
+	caliber = "a762x39"
+	ammo_type = /obj/item/ammo_casing/a762x39
+	damage_modifier = 1.2
+	slot_flags = SLOT_SHOULDER
+	magazine_type = /obj/item/ammo_magazine/mosin
+	weight = 3.85
+	firemodes = list(
+		list(name="single shot",burst=1, move_delay=2, fire_delay=4)
+		)
+
+	gun_type = GUN_TYPE_RIFLE
+	force = 10
+	throwforce = 20
+	effectiveness_mod = 1.03
+	attachment_slots = ATTACH_IRONSIGHTS|ATTACH_SCOPE|ATTACH_BARREL
+
+/obj/item/weapon/gun/projectile/semiautomatic/svd
+	name = "SVD"
+	desc = "Soviet designated marksman's rifle, feeding from detachable 10-round magazines. Chambered in 7.62x54mmR."
+	icon_state = "svd"
+	item_state = "svd"
+	base_icon = "svd"
+	w_class = 4
+	load_method = SINGLE_CASING|SPEEDLOADER|MAGAZINE
+	max_shells = 10
+	caliber = "a762x54"
+	ammo_type = /obj/item/ammo_casing/a762x54
+	damage_modifier = 1.2
+	fire_sound = 'sound/weapons/guns/fire/SVD.ogg'
+	slot_flags = SLOT_SHOULDER
+	magazine_type = /obj/item/ammo_magazine/svd
+	weight = 3.85
+	firemodes = list(
+		list(name="single shot",burst=1, move_delay=2, fire_delay=8)
+		)
+
+	gun_type = GUN_TYPE_RIFLE
+	force = 10
+	throwforce = 20
+	effectiveness_mod = 1.03
+	attachment_slots = ATTACH_IRONSIGHTS|ATTACH_SCOPE|ATTACH_BARREL
+
+/obj/item/weapon/gun/projectile/semiautomatic/svd/New()
+	..()
+	var/obj/item/weapon/attachment/scope/adjustable/sniper_scope/SP = new/obj/item/weapon/attachment/scope/adjustable/sniper_scope(src)
+	SP.attached(null,src,TRUE)
+
+/obj/item/weapon/gun/projectile/semiautomatic/makeshiftaksniper
+	name = "Makeshift AKD"
+	desc = "Some retarded fake shit invented by Re1taz."
+	icon_state = "makeshiftaksniper"
+	item_state = "makeshiftaksniper"
+	base_icon = "makeshiftaksniper"
+	w_class = 4
+	load_method = SINGLE_CASING|SPEEDLOADER
+	max_shells = 5
 	caliber = "a762x54"
 	ammo_type = /obj/item/ammo_casing/a762x54
 	slot_flags = SLOT_SHOULDER
 	magazine_type = /obj/item/ammo_magazine/mosin
 	weight = 3.85
 	firemodes = list(
-		list(name="single shot",burst=1, move_delay=2, fire_delay=4)
+		list(name="single shot",burst=1, move_delay=2, fire_delay=8)
 		)
 
 	gun_type = GUN_TYPE_RIFLE
@@ -212,7 +272,7 @@
 	load_method = SINGLE_CASING|SPEEDLOADER
 	max_shells = 10
 	caliber = "a792x57"
-	fire_sound = 'sound/weapons/kar_shot.ogg'
+	fire_sound = 'sound/weapons/guns/fire/Garand.ogg'
 	slot_flags = SLOT_SHOULDER
 	ammo_type = /obj/item/ammo_casing/a792x57
 	magazine_type = /obj/item/ammo_magazine/gewehr98
@@ -236,7 +296,7 @@
 	max_shells = 10
 	load_delay = 8
 	caliber = "a792x57"
-	fire_sound = 'sound/weapons/kar_shot.ogg'
+	fire_sound = 'sound/weapons/guns/fire/Garand.ogg'
 	slot_flags = SLOT_SHOULDER
 	ammo_type = /obj/item/ammo_casing/a792x57
 	magazine_type = /obj/item/ammo_magazine/g43
@@ -250,7 +310,7 @@
 	effectiveness_mod = 1.07
 
 /obj/item/weapon/gun/projectile/semiautomatic/stg
-	name = "StG 44"
+	name = "StG-44"
 	desc = "German assault rifle chambered in 7.92x33mm Kurz, 30 round magazine."
 	icon_state = "stg"
 	item_state = "stg"
@@ -259,8 +319,8 @@
 	slot_flags = SLOT_SHOULDER|SLOT_BELT
 	w_class = 4
 	caliber = "a792x33"
-	fire_sound = 'sound/weapons/stg.ogg'
-	load_magazine_sound = 'sound/weapons/stg_reload.ogg'
+	fire_sound = 'sound/weapons/guns/fire/stg.ogg'
+	reload_sound = 'sound/weapons/guns/interact/stg_reload.ogg'
 	magazine_type = /obj/item/ammo_magazine/stg
 	weight = 4.6
 	load_delay = 8
@@ -273,7 +333,7 @@
 	sel_mode = 1
 
 /obj/item/weapon/gun/projectile/semiautomatic/m1garand
-	name = "M1garand"
+	name = "M1 Garand"
 	desc = "An American semi-automatic rifle using .30-06 ammunition in a 8 round internal magazine."
 	icon_state = "m1garand"
 	item_state = "m1garand"
@@ -282,10 +342,12 @@
 	load_method = SINGLE_CASING|SPEEDLOADER
 	max_shells = 8
 	caliber = "a3006"
-	fire_sound = 'sound/weapons/mosin_shot.ogg'
+	fire_sound = 'sound/weapons/guns/fire/Garand.ogg'
 	slot_flags = SLOT_SHOULDER
 	ammo_type = /obj/item/ammo_casing/a3006
 	magazine_type = /obj/item/ammo_magazine/garand
+	reload_sound = 'sound/weapons/guns/interact/GarandLoad.ogg'
+	unload_sound = 'sound/weapons/guns/interact/GarandUnload.ogg'
 	weight = 4.9
 	firemodes = list(
 		list(name="single shot",burst=1, move_delay=2, fire_delay=2)
@@ -294,3 +356,26 @@
 	throwforce = 20
 	attachment_slots = ATTACH_IRONSIGHTS|ATTACH_BARREL
 	effectiveness_mod = 1.05
+
+/obj/item/weapon/gun/projectile/semiautomatic/ar15
+	name = "Bushmaster XM-15"
+	desc = "A civilian semi-automatic rifle chambered in 5.56x45mm."
+	icon_state = "m4"
+	item_state = "m4"
+	base_icon = "m4"
+	w_class = 4
+	load_method = MAGAZINE
+	load_delay = 5
+	caliber = "a556x45"
+	fire_sound = 'sound/weapons/guns/fire/M4A1.ogg'
+	slot_flags = SLOT_SHOULDER
+	ammo_type = /obj/item/ammo_casing/a556x45
+	magazine_type = /obj/item/ammo_magazine/m16
+	weight = 4.9
+	firemodes = list(
+		list(name="single shot",burst=1, move_delay=2, fire_delay=6)
+		)
+	force = 10
+	throwforce = 20
+	attachment_slots = ATTACH_SCOPE|ATTACH_BARREL
+	effectiveness_mod = 1.07

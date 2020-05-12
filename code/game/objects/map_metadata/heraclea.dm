@@ -1,17 +1,15 @@
-#define NO_WINNER "The fighting is still going on."
 /obj/map_metadata/heraclea
 	ID = MAP_HERACLEA
 	title = "Heraclea (150x75x1)"
 	lobby_icon_state = "ancient"
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall/)
 	respawn_delay = 300
-	squad_spawn_locations = FALSE
-//	min_autobalance_players = 90
+
+
 	faction_organization = list(
 		ROMAN,
 		GREEK)
-	available_subfactions = list(
-		)
+
 	roundend_condition_sides = list(
 		list(ROMAN) = /area/caribbean/roman,
 		list(GREEK) = /area/caribbean/greek
@@ -42,4 +40,3 @@ obj/map_metadata/heraclea/job_enabled_specialcheck(var/datum/job/J)
 	return (processes.ticker.playtime_elapsed >= 3000 || admin_ended_all_grace_periods)
 
 
-	#undef NO_WINNER

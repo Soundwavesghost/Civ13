@@ -63,35 +63,35 @@ var/list/name_to_material
 
 // Material definition and procs follow.
 /material
-	var/name	                          // Unique name for use in indexing the list.
-	var/display_name                      // Prettier name for display.
+	var/name							  // Unique name for use in indexing the list.
+	var/display_name					  // Prettier name for display.
 	var/use_name
-	var/flags = FALSE                         // Various status modifiers.
+	var/flags = FALSE						 // Various status modifiers.
 	var/sheet_singular_name = "sheet"
 	var/sheet_plural_name = "sheets"
 
 	// Shards/tables/structures
-	var/shard_type = SHARD_SHRAPNEL       // Path of debris object.
-	var/shard_icon                        // Related to above.
-	var/shard_can_repair = TRUE              // Can shards be turned into sheets with a welder?
-	var/list/recipes                      // Holder for all recipes usable with a sheet of this material.
+	var/shard_type = SHARD_SHRAPNEL	   // Path of debris object.
+	var/shard_icon						// Related to above.
+	var/shard_can_repair = TRUE			  // Can shards be turned into sheets with a welder?
+	var/list/recipes					  // Holder for all recipes usable with a sheet of this material.
 	var/destruction_desc = "breaks apart" // Fancy string for barricades/tables/objects exploding.
 
 	// Icons
-	var/icon_colour                                      // Colour applied to products of this material.
-	var/icon_base = "metal"                              // Wall and table base icon tag. See header.
-	var/door_icon_base = "metal"                         // Door base icon tag. See header.
-	var/icon_reinf = "reinf_metal"                       // Overlay used
+	var/icon_colour									  // Colour applied to products of this material.
+	var/icon_base = "metal"							  // Wall and table base icon tag. See header.
+	var/door_icon_base = "metal"						 // Door base icon tag. See header.
+	var/icon_reinf = "reinf_metal"					   // Overlay used
 
 	// Attributes
-	var/cut_delay = FALSE            // Delay in ticks when cutting through this wall.
-	var/radioactivity            // Radiation var. Used in wall and object processing to irradiate surroundings.
-	var/ignition_point           // K, point at which the material catches on fire.
-	var/melting_point = 1800     // K, walls will take damage if they're next to a fire hotter than this
-	var/integrity = 150          // General-use HP value for products.
-	var/opacity = TRUE              // Is the material transparent? 0.5< makes transparent walls/doors.
+	var/cut_delay = FALSE			// Delay in ticks when cutting through this wall.
+	var/radioactivity			// Radiation var. Used in wall and object processing to irradiate surroundings.
+	var/ignition_point		   // K, point at which the material catches on fire.
+	var/melting_point = 1800	 // K, walls will take damage if they're next to a fire hotter than this
+	var/integrity = 150		  // General-use HP value for products.
+	var/opacity = TRUE			  // Is the material transparent? 0.5< makes transparent walls/doors.
 	var/explosion_resistance = 5 // Only used by walls currently.
-	var/conductive = TRUE           // Objects with this var add CONDUCTS to flags on spawn.
+	var/conductive = TRUE		   // Objects with this var add CONDUCTS to flags on spawn.
 	var/list/composite_material  // If set, object matter var will be a list containing these values.
 
 	// Placeholder vars for the time being, todo properly integrate windows/light tiles/rods.
@@ -101,8 +101,8 @@ var/list/name_to_material
 //	var/list/window_options = list()
 
 	// Damage values.
-	var/hardness = 60            // Prob of wall destruction by hulk, used for edge damage in weapons.
-	var/weight = 20              // Determines blunt damage/throwforce for weapons.
+	var/hardness = 60			// Prob of wall destruction by hulk, used for edge damage in weapons.
+	var/weight = 20			  // Determines blunt damage/throwforce for weapons.
 
 	// Noise when someone is faceplanted onto a table made of this material.
 	var/tableslam_noise = 'sound/weapons/tablehit1.ogg'
@@ -112,8 +112,6 @@ var/list/name_to_material
 	var/hitsound = 'sound/weapons/genhit.ogg'
 	// Path to resulting stacktype. Todo remove need for this.
 	var/stack_type
-	// Wallrot crumble message.
-	var/rotting_touch_message = "crumbles under your touch"
 
 // Placeholders for light tiles and rglass.
 /material/proc/build_rod_product(var/mob/user, var/obj/item/stack/used_stack, var/obj/item/stack/target_stack)
@@ -222,6 +220,14 @@ var/list/name_to_material
 	tableslam_noise = 'sound/effects/Glasshit.ogg'
 	hardness = 100
 
+/material/obsidian
+	name = "obsidian"
+	stack_type = /obj/item/stack/material/obsidian
+	icon_colour = "#060606"
+	hardness = 85
+	sheet_singular_name = "cut rock"
+	sheet_plural_name = "cut rocks"
+
 /material/barbedwire
 	name = "barbedwire"
 	stack_type = /obj/item/stack/material/barbwire
@@ -258,6 +264,31 @@ var/list/name_to_material
 	sheet_singular_name = "leave"
 	sheet_plural_name = "leaves"
 
+/material/hemp
+	name = "hemp"
+	stack_type = /obj/item/stack/material/hemp
+	flags = MATERIAL_UNMELTABLE
+	cut_delay = 5
+	icon_colour = "#FFFFFE"
+	shard_type = null
+	tableslam_noise = null
+	hardness = 10
+
+	sheet_singular_name = "leaf"
+	sheet_plural_name = "leaves"
+
+/material/flax
+	name = "flax"
+	stack_type = /obj/item/stack/material/flax
+	flags = MATERIAL_UNMELTABLE
+	cut_delay = 5
+	icon_colour = "#5f9ea0"
+	shard_type = null
+	tableslam_noise = null
+	hardness = 10
+
+	sheet_singular_name = "bundle"
+	sheet_plural_name = "bundles"
 
 /material/coca
 	name = "coca"
@@ -360,8 +391,8 @@ var/list/name_to_material
 	integrity = 500
 	hardness = 45
 	door_icon_base = "stone"
-	sheet_singular_name = "brick"
-	sheet_plural_name = "bricks"
+	sheet_singular_name = "block"
+	sheet_plural_name = "blocks"
 
 /material/stone
 	name = "stone"
@@ -377,6 +408,26 @@ var/list/name_to_material
 	stack_type = /obj/item/stack/material/stone
 	door_icon_base = "stone"
 
+/material/stonebrick
+	name = "stonebrick"
+	display_name = "stone brick"
+	hardness = 50
+	weight = 11
+	integrity = 450
+	icon_colour = "#808080"
+	sheet_singular_name = "brick"
+	sheet_plural_name = "bricks"
+	stack_type = /obj/item/stack/material/stonebrick
+
+/material/flint
+	name = "flint"
+	hardness = 50
+	weight = 22
+	integrity = 500
+	icon_colour = "#6f6a64"
+	sheet_singular_name = "stone"
+	sheet_plural_name = "stones"
+
 /material/bone
 	name = "bone"
 	hardness = 45
@@ -384,11 +435,12 @@ var/list/name_to_material
 	sheet_singular_name = "piece"
 	sheet_plural_name = "pieces"
 
-/material/stone/stonebrick
+/* /material/stone/stonebrick
 	name = "brick"
 	icon_base = "newbrick"
 	icon_colour = "#808080"
 	stack_type = /obj/item/stack/material/marble
+*/
 
 /material/stone/marble
 	name = "marble"
@@ -399,7 +451,7 @@ var/list/name_to_material
 	stack_type = /obj/item/stack/material/marble
 
 /material/steel
-	name = DEFAULT_WALL_MATERIAL
+	name = "steel"
 	stack_type = /obj/item/stack/material/steel
 	integrity = 300
 	hardness = 60
@@ -479,6 +531,27 @@ var/list/name_to_material
 	hardness = 90
 	icon_colour = "#D2BA9C"
 
+/material/bamboo
+	name = "bamboo"
+	stack_type = /obj/item/stack/material/bamboo
+	icon_colour = "#414833"
+	integrity = 50
+	icon_base = "wood"
+	explosion_resistance = 2
+	shard_type = SHARD_SPLINTER
+	shard_can_repair = FALSE
+	hardness = 45
+	weight = 15
+	melting_point = T0C+300
+	ignition_point = T0C+288
+
+	dooropen_noise = 'sound/effects/doorcreaky.ogg'
+	door_icon_base = "wood"
+	destruction_desc = "splinters"
+	sheet_singular_name = "bundle"
+	sheet_plural_name = "bundles"
+	hitsound = 'sound/effects/woodhit.ogg'
+
 /material/clay
 	name = "clay"
 	integrity = 60
@@ -516,6 +589,15 @@ var/list/name_to_material
 	melting_point = T0C+300
 	flags = MATERIAL_PADDING
 
+/material/rettedfabric
+	name = "rettedfabric"
+	display_name = "retted fabric"
+	icon_colour = "#c19a6b"
+	stack_type = /obj/item/stack/material/rettedfabric
+	hardness = 7
+	sheet_singular_name = "bundle"
+	sheet_plural_name = "bundles"
+
 /material/woolcloth
 	name = "woolcloth"
 	hardness = 10
@@ -552,7 +634,16 @@ var/list/name_to_material
 	ignition_point = T0C+300
 	melting_point = T0C+300
 	hardness = 25
+/*
+/material/gatorscale // In preparation, snakes and other reptiles have other sorts.
+	name = "alligator scale"
+	icon_colour = "#443d36"
 
+	flags = MATERIAL_PADDING
+	ignition_point = T0C+300
+	melting_point = T0C+300
+	hardness = 25
+*/
 /material/pelt
 	name = "pelt"
 	use_name = "pelt"
@@ -619,6 +710,39 @@ var/list/name_to_material
 	sheet_plural_name = "pelts"
 	stack_type = /obj/item/stack/material/pelt/catpelt
 
+/material/pantherpelt
+	name = "pantherpelt"
+	use_name = "panther"
+	icon_colour = "#8C7E6E"
+	ignition_point = T0C+400
+	melting_point = T0C+400
+	hardness = 30
+	sheet_singular_name = "pelt"
+	sheet_plural_name = "pelts"
+	stack_type = /obj/item/stack/material/pelt/pantherpelt
+
+/material/lionpelt
+	name = "lionpelt"
+	use_name = "lion"
+	icon_colour = "#8C7E6E"
+	ignition_point = T0C+400
+	melting_point = T0C+400
+	hardness = 30
+	sheet_singular_name = "pelt"
+	sheet_plural_name = "pelts"
+	stack_type = /obj/item/stack/material/pelt/lionpelt
+
+/material/gatorpelt
+	name = "alligator pelt"
+	use_name = "alligator"
+	icon_colour = "#443d36"
+	ignition_point = T0C+400
+	melting_point = T0C+400
+	hardness = 30
+	sheet_singular_name = "pelt"
+	sheet_plural_name = "pelts"
+	stack_type = /obj/item/stack/material/pelt/gatorpelt
+
 /material/monkeypelt
 	name = "monkeypelt"
 	use_name = "monkey"
@@ -629,6 +753,50 @@ var/list/name_to_material
 	sheet_singular_name = "pelt"
 	sheet_plural_name = "pelts"
 	stack_type = /obj/item/stack/material/pelt/monkeypelt
+
+/material/foxpelt
+	name = "foxpelt"
+	use_name = "fox"
+	icon_colour = "#8C7E6E"
+	ignition_point = T0C+400
+	melting_point = T0C+400
+	hardness = 30
+	sheet_singular_name = "pelt"
+	sheet_plural_name = "pelts"
+	stack_type = /obj/item/stack/material/pelt/foxpelt
+
+/material/whitefoxpelt
+	name = "whitefoxpelt"
+	use_name = "white fox"
+	icon_colour = "#8C7E6E"
+	ignition_point = T0C+400
+	melting_point = T0C+400
+	hardness = 30
+	sheet_singular_name = "pelt"
+	sheet_plural_name = "pelts"
+	stack_type = /obj/item/stack/material/pelt/foxpelt/white
+
+/material/hairlesshide
+	name = "hairlesshide"
+	use_name = "hairless hide"
+	icon_colour = "#8C7E6E"
+	ignition_point = T0C+400
+	melting_point = T0C+400
+	hardness = 30
+	sheet_singular_name = "pelt"
+	sheet_plural_name = "pelts"
+	stack_type = /obj/item/stack/material/hairlesshide
+
+/*/material/scalelesshide //deactivated for now, prepped up for skinned gatorpelts
+	name = "scalelesshide"
+	use_name = "scaleless hide"
+	icon_colour = "#443d36"
+	ignition_point = T0C+400
+	melting_point = T0C+400
+	hardness = 30
+	sheet_singular_name = "pelt"
+	sheet_plural_name = "pelts"
+	stack_type = /obj/item/stack/material/scalelesshide*/
 
 /material/humanpelt
 	name = "humanpelt"

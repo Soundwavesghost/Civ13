@@ -1,15 +1,15 @@
-#define NO_WINNER "The round is proceeding normally."
+K
 /obj/map_metadata/gladiators
 	ID = MAP_GLADIATORS
 	title = "Gladiators (100x80x1)"
 	lobby_icon_state = "ancient"
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall/one, /area/caribbean/no_mans_land/invisible_wall/two,/area/caribbean/no_mans_land/invisible_wall/three,/area/caribbean/no_mans_land/invisible_wall/four)
 	respawn_delay = 0
-	squad_spawn_locations = FALSE
+
+	no_winner ="The round is proceeding normally."
 	faction_organization = list(
 		ROMAN)
-	available_subfactions = list(
-		)
+
 	roundend_condition_sides = list(
 		list(ROMAN) = /area/caribbean/british,
 		)
@@ -96,4 +96,3 @@
 			if (!gracedown4)
 				return TRUE
 	return FALSE
-#undef NO_WINNER

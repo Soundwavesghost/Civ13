@@ -9,7 +9,7 @@
 	throwforce = 3.0
 	item_state = "plough"
 	w_class = 3.0
-	matter = list(DEFAULT_WALL_MATERIAL = 50)
+
 	attack_verb = list("bashed", "bludgeoned", "whacked")
 	sharp = FALSE
 	edge = FALSE
@@ -42,7 +42,7 @@
 	throwforce = 4.0
 	item_state = "shovel"
 	w_class = 3.0
-	matter = list(DEFAULT_WALL_MATERIAL = 50)
+
 	attack_verb = list("bashed", "bludgeoned", "thrashed", "whacked")
 	sharp = FALSE
 	edge = TRUE
@@ -167,7 +167,7 @@
 	edge = FALSE
 	flammable = FALSE
 	//Designs possible are "smooth", "cave", "brick", "cobbled", "tiled"
-	var design = "smooth"
+	var/design = "smooth"
 
 /obj/item/weapon/chisel/attack_self(mob/user)
 	var/display = list("Smooth", "Cave", "Brick", "Cobbled", "Tiled", "Cancel")
@@ -207,7 +207,7 @@
 
 /obj/item/weapon/shovel/attack_self(mob/user)
 	var/turf/floor/TB = get_turf(user)
-	var/display = list("Tunnel", "Grave", "Pit Latrine","Cancel")
+	var/display = list("Tunnel", "Grave", "Irrigation Channel", "Pit Latrine","Cancel")
 	var/input =  WWinput(user, "What do you want to dig?", "Digging", "Cancel", display)
 	if (input == "Cancel")
 		return
@@ -272,6 +272,13 @@
 		else if (!TB.is_diggable)
 			user << "<span class='warning'>You cannot dig a hole here!</span>"
 			return
+	else if (input == "Irrigation Channel")
+		visible_message("<span class = 'notice'>[user] starts to dig an irrigation channel.</span>")
+		if (do_after(user, 25,src))
+			visible_message("<span class = 'notice'>[user] makes a irrigation channel.</span>")
+			TB.irrigate("empty")
+			return
+		return
 	else if  (input == "Grave")
 		if (istype(TB, /turf/open) || istype(TB, /turf/wall) || istype(TB, /turf/floor/wood) || istype(TB, /turf/floor/wood_broken) || istype(TB, /turf/floor/ship) || istype(TB, /turf/floor/carpet) || istype(TB, /turf/floor/broken_floor) || istype(TB, /turf/floor/plating/cobblestone) || istype(TB, /turf/floor/plating/concrete) || istype(TB, /turf/floor/plating/stone_old))
 			return

@@ -33,9 +33,9 @@
 		if (mind)
 			mind.name = real_name
 
-	hud_list[BASE_FACTION]      = image('icons/mob/hud_1713.dmi', src, "")
-	hud_list[FACTION_TO_ENEMIES]      = image('icons/mob/hud_1713.dmi', src, "")
-	hud_list[SQUAD_FACTION]      = image('icons/mob/hud_1713.dmi', src, "")
+	hud_list[BASE_FACTION]	  = image('icons/mob/hud_1713.dmi', src, "")
+	hud_list[FACTION_TO_ENEMIES]	  = image('icons/mob/hud_1713.dmi', src, "")
+	hud_list[SQUAD_FACTION]	  = image('icons/mob/hud_1713.dmi', src, "")
 	human_mob_list |= src
 
 	..()
@@ -324,6 +324,13 @@ var/list/coefflist = list()
 		return "Unknown"
 	if (original_job.is_prison && istype(original_job, /datum/job/civilian))
 		return "Unknown"
+	if (title && title != "")
+		if (religious_title && religious_title != "")
+			return "[title] [religious_title] [real_name]"
+		else
+			return "[title] [real_name]"
+	if (religious_title && religious_title != "")
+		return "[religious_title] [real_name]"
 	return real_name
 
 
@@ -871,7 +878,7 @@ var/list/coefflist = list()
 	if (flavor_text && flavor_text != "" && !shrink)
 		var/msg = trim(replacetext(flavor_text, "\n", " "))
 		if (!msg) return ""
-		if (lentext(msg) <= 40)
+		if (length(msg) <= 40)
 			return "<span class = 'notice'>[msg]</span>"
 		else
 			return "<span class = 'notice'>[copytext_preserve_html(msg, TRUE, 37)]... <a href='byond://?src=\ref[src];flavor_more=1'>More...</a></span>"

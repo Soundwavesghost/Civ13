@@ -86,9 +86,18 @@
 		O.forceMove(loc)
 	else
 		..()
-
+/obj/structure/barricade/wood_pole/attack_hand(mob/living/user as mob)
+	if (!isliving(user))
+		return
+	if (attached_ob && istype(attached_ob, /obj/item/flashlight/lantern))
+		user << "You remove \the [attached_ob] from \the [src]."
+		var/obj/item/flashlight/lantern/O = attached_ob
+		O.anchored = FALSE
+		O.forceMove(user.loc)
+		user.put_in_hands(O)
+		attached_ob = null
+		return
 /obj/structure/barricade/wood_pole/Destroy()
-	..()
 	if (attached_ob != null)
 		if (istype(attached_ob, /obj/item/flashlight/lantern))
 			var/obj/item/flashlight/lantern/LT = attached_ob
@@ -99,7 +108,7 @@
 			LT.off_state = "lantern"
 			LT.update_icon()
 			attached_ob = null
-
+	..()
 /obj/structure/grille/logfence
 	name = "palisade"
 	desc = "A wooden palisade."
@@ -144,8 +153,8 @@
 	flammable = TRUE
 	not_movable = FALSE
 	not_disassemblable = TRUE
-	density = TRUE
-	opacity = FALSE
+	density = FALSE
+	opacity = TRUE
 	anchored = TRUE
 /obj/structure/props/junk/New()
 	..()
@@ -254,7 +263,6 @@
 	name = "Pirate Flag"
 	desc = "A black and white pirate flags with skull and bones."
 
-
 /obj/structure/flag/black
 	icon_state = "black"
 	name = "Black Flag"
@@ -263,12 +271,33 @@
 /obj/structure/flag/french
 	icon_state = "french"
 	name = "French Flag"
-	desc = "The French flag, white with golden fleur-de-lys"
+	desc = "The French flag, white with golden fleur-de-lys."
+
+/obj/structure/flag/french_modern
+	icon_state = "french2"
+	name = "French Flag"
+	desc = "The modern french tricoleur."
+
+/obj/structure/flag/french_monarchist
+	icon_state = "french3"
+	name = "French Flag"
+	desc = "The french monarchist flag."
+
 
 /obj/structure/flag/spanish
 	icon_state = "spanish"
 	name = "Spanish Flag"
 	desc = "The Spanish flag, white with a red cross of burgundy."
+
+/obj/structure/flag/spanish_modern
+	icon_state = "spanish2"
+	name = "Spanish Flag"
+	desc = "The modern yellow and red spanish flag."
+
+/obj/structure/flag/italian
+	icon_state = "italian"
+	name = "Italian Flag"
+	desc = "The modern italian flag."
 
 /obj/structure/flag/british
 	icon_state = "british"
@@ -315,6 +344,12 @@
 	name = "German Flag"
 	desc = "The German flag."
 
+/obj/structure/flag/german_modern
+	icon_state = "german2"
+	name = "German Flag"
+	desc = "The German flag."
+
+
 /obj/structure/flag/confed
 	icon_state = "confed"
 	name = "Confederate flag"
@@ -329,270 +364,116 @@
 	icon_state = "chinese"
 	name = "Republic of China Flag"
 	desc = "The Republic of China flag."
+/obj/structure/flag/pole
+	icon_state = "flagpole_blank"
+	name = "Flagpole"
+	desc = "Flagless, apply cloth or a flag."
 
-/obj/structure/noose
-	icon = 'icons/obj/noose.dmi'
-	icon_state = ""
-	layer = MOB_LAYER + 1.0
-	anchored = TRUE
-	var/mob/living/carbon/human/hanging = null
-	flammable = TRUE
-	not_movable = TRUE
-	not_disassemblable = TRUE
-
-/obj/structure/noose/New()
-	..()
-	processing_objects |= src
-
-/obj/structure/noose/Del()
-	processing_objects -= src
-	..()
-
-/obj/structure/noose/bullet_act(var/obj/item/projectile/P)
-	if (hanging)
-		hanging.bullet_act(P)
-		visible_message("<span class = 'danger'>[hanging] is hit by the [P.name]!</span>")
-	else
-		..()
-
-/obj/structure/noose/process()
-	fire()
-
-// call this instead of process() if you want to do direct calls, I think its better - Kachnov
-/obj/structure/noose/proc/fire()
-	if (hanging)
-		hanging.forceMove(loc)
-		density = TRUE
-		hanging.lying = 0
-		hanging.dir = SOUTH
-		hanging.pixel_y = 3 // because getting punched resets it
-		icon_state = "noose-hanging"
-
-		if (pixel_x == 0)
-			pixel_x = 1
-		else if (pixel_x == 1)
-			pixel_x = 0
-		else if (pixel_x == 0)
-			pixel_x = -1
-		else // somehow
-			pixel_x = 0
-
-		hanging.pixel_x = pixel_x
-
-		if (hanging.stat != DEAD)
-			hanging.adjustOxyLoss(5)
-			if (prob(5))
-				visible_message("<span class = 'danger'>[hanging]'s neck snaps.</span>")
-				playsound(loc, 'sound/effects/gore/bullethit3.ogg')
-				hanging.death()
-			else if (prob(33))
-				hanging << "<span class = 'danger'>You're suffocating!</span>"
-	else
-		icon_state = ""
-		density = FALSE
-
-/obj/structure/noose/MouseDrop_T(var/atom/dropping, var/mob/user as mob)
-	if (!ismob(dropping))
-		return
-
-	if (hanging)
-		return
-
-	var/mob/living/carbon/human/target = dropping
-	var/mob/living/carbon/human/hangman = user
-
-	if (!istype(target) || !istype(hangman))
-		return
-
-	visible_message("<span class = 'danger'>[hangman] starts to hang [target == hangman ? "themselves" : target]...</span>")
-	if (do_after(hangman, 50, target))
-		if (src)
-			visible_message("<span class = 'danger'>[hangman] hangs [target == hangman ? "themselves" : target]!</span>")
-			hanging = target
-			target.loc = get_turf(src)
-			target.dir = SOUTH
-			fire()
-			target.anchored = TRUE
-			spawn(10)
-				target.update_icons()
-
-/obj/structure/noose/attack_hand(var/mob/living/carbon/human/H)
-	if (!istype(H))
-		return
-
-	if (!hanging)
-		return
-
-	if (hanging == H)
-		return
-
-	visible_message("<span class = 'danger'>[H] starts to free [hanging] from the noose...</span>")
-	if (do_after(H, 75, src))
-		if (src && hanging)
-			visible_message("<span class = 'danger'>[H] frees [hanging] from the noose!</span>")
-			hanging.pixel_x = 0
-			hanging.pixel_y = 0
-			hanging.anchored = TRUE
-			hanging = null
-
-
-/obj/structure/gallows
-	icon = 'icons/obj/gallows.dmi'
-	icon_state = "gallows0"
-	layer = MOB_LAYER + 1.0
-	anchored = TRUE
-	var/mob/living/carbon/human/hanging = null
-	var/roped = FALSE
-	not_movable = FALSE
-	not_disassemblable = FALSE
-
-/obj/structure/gallows/New()
-	..()
-	processing_objects |= src
-
-/obj/structure/gallows/Del()
-	processing_objects -= src
-	..()
-
-/obj/structure/gallows/bullet_act(var/obj/item/projectile/P)
-	if (hanging)
-		hanging.bullet_act(P)
-		visible_message("<span class = 'danger'>[hanging] is hit by the [P.name]!</span>")
-	else
-		..()
-
-/obj/structure/gallows/process()
-	fire()
-
-// call this instead of process() if you want to do direct calls, I think its better - Kachnov
-/obj/structure/gallows/proc/fire()
-	if (hanging)
-		hanging.forceMove(loc)
-		density = TRUE
-		hanging.lying = 0
-		hanging.dir = SOUTH
-		hanging.pixel_y = 3 // because getting punched resets it
-		icon_state = "gallows2"
-
-		if (pixel_x == 0)
-			if (prob(50))
-				pixel_x = -1
-				icon_state = "gallows2a"
-			else
-				pixel_x = 1
-				icon_state = "gallows2b"
-		else if (pixel_x == -1)
-			pixel_x = 0
-			icon_state = "gallows2"
-		else if (pixel_x == 1)
-			pixel_x = 0
-			icon_state = "gallows2"
-		else // somehow
-			pixel_x = 0
-			icon_state = "gallows2"
-
-		hanging.pixel_x = pixel_x
-
-		if (hanging.stat != DEAD)
-			hanging.adjustOxyLoss(5)
-			if (prob(5))
-				visible_message("<span class = 'danger'>[hanging]'s neck snaps.</span>")
-				playsound(loc, 'sound/effects/gore/bullethit3.ogg')
-				hanging.death()
-			else if (prob(33))
-				hanging << "<span class = 'danger'>You're suffocating!</span>"
-	else if (roped == FALSE)
-		icon_state = "gallows0"
-		density = FALSE
-	else
-		icon_state = "gallows1"
-		density = FALSE
-
-/obj/structure/gallows/MouseDrop_T(var/atom/dropping, var/mob/user as mob)
-	if (!ismob(dropping))
-		return
-
-	if (hanging)
-		return
-
-	var/mob/living/carbon/human/target = dropping
-	var/mob/living/carbon/human/hangman = user
-
-	if (!istype(target) || !istype(hangman))
-		return
-	if (roped)
-		visible_message("<span class = 'danger'>[hangman] starts to hang [target == hangman ? "themselves" : target]...</span>")
-		if (do_after(hangman, 50, target))
-			if (src)
-				visible_message("<span class = 'danger'>[hangman] hangs [target == hangman ? "themselves" : target]!</span>")
-				hanging = target
-				target.loc = get_turf(src)
-				target.dir = SOUTH
-				fire()
-				spawn(10)
-					target.update_icons()
-					target.anchored = 1
-
-/obj/structure/gallows/attack_hand(var/mob/living/carbon/human/H)
-	if (!istype(H))
-		return
-	if (!hanging && roped)
-		if (roped == TRUE)
-			visible_message("[H] starts taking out the noose...", "You start taking out the noose...")
-			if (do_after(H, 65, src) && roped == TRUE)
-				visible_message("[H] finishes taking the rope from the gallows.", "You finish taking the rope from the gallows.")
-				roped = FALSE
-				icon_state = "gallows0"
-				new/obj/item/stack/material/rope(H.loc)
-				return
-	if (!hanging)
-		return
-
-	if (hanging == H)
-		return
-
-	if (roped)
-		visible_message("<span class = 'danger'>[H] starts to free [hanging] from the noose...</span>")
-		if (do_after(H, 100, src))
-			if (src && hanging)
-				visible_message("<span class = 'danger'>[H] frees [hanging] from the noose!</span>")
-				hanging.pixel_x = 0
-				hanging.pixel_y = 0
-				hanging.anchored = 0
-				hanging = null
-				icon_state = "gallows1"
-
-/obj/structure/gallows/attackby(var/obj/item/W as obj, var/mob/living/carbon/human/H as mob)
-	if (istype(W, /obj/item/weapon))
-		if (W.sharp == TRUE && hanging && roped)
-			visible_message("<span class = 'danger'>[H] starts to cut the noose with the [W]...</span>")
-			if (do_after(H, 45, src))
-				if (src)
-					visible_message("<span class = 'danger'>[H] frees [hanging] from the noose!</span>")
-					hanging.pixel_x = 0
-					hanging.pixel_y = 0
-					hanging.anchored = 0
-					hanging = null
-					icon_state = "gallows0"
-					roped = FALSE
-	if (istype(W, /obj/item/stack/material/rope))
-		if (roped == FALSE)
-			visible_message("[H] starts making a noose...", "You start making a noose...")
-			if (do_after(H, 45, src))
-				visible_message("[H] finishes attaching the noose to the gallows.", "You finish attaching the noose to the gallows.")
-				roped = TRUE
-				var/obj/item/stack/material/rope/R = W
-				if (R.amount > 1)
-					R.amount--
-				else
-					qdel(W)
-				icon_state = "gallows1"
-				return
+/obj/structure/flag/pole/attackby(obj/item/W as obj, var/mob/living/carbon/human/H)
+	if(istype(W, /obj/item/stack/material/cloth))
+		if(W.amount >= 5)
+			W.amount -= 5
+			new /obj/structure/flag/pole/custom(src.loc)
+			if(W.amount <= 0)
+				qdel(W)
+			qdel(src)
 		else
-			H << "There already is a noose here."
-			return
+			H << "You need atleast five cloth to do that!"
+	else if(istype(W, /obj/item/flagmaker))
+		new /obj/structure/flag/pole/custom(src.loc)
+		qdel(src)
 	else
 		..()
+	..()
+/obj/structure/flag/pole/custom
+	icon_state = "cust_flag"
+	name = "Flag"
+	desc = "A flag."
+	var/uncolored = TRUE
+	var/flagcolor = null
+	var/symbol = "Moon"
+	var/symbolcolor = null
+
+
+/obj/structure/flag/pole/custom/attackby(obj/item/W as obj, var/mob/living/carbon/human/H)
+	if(istype(W, /obj/item/weapon))
+		if(W.sharp)
+			H << "You tear down the flag!"
+			new/obj/structure/flag/pole(src.loc)
+			qdel(src)
+/obj/structure/flag/pole/custom/attack_hand(var/mob/living/carbon/human/H)
+	if (uncolored)
+		var/input = input(H, "Flag Color - Choose a hex color (without the # | default is white):", "Flag Color" , "FFFFFF")
+		if (input == null || input == "")
+			return
+		else
+			input = uppertext(input)
+			if (length(input) != 6)
+				return
+			var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
+			for (var/i = 1, i <= 6, i++)
+				var/numtocheck = 0
+				if (i < 6)
+					numtocheck = copytext(input,i,i+1)
+				else
+					numtocheck = copytext(input,i,0)
+				if (!(numtocheck in listallowed))
+					return
+			flagcolor = addtext("#",input)
+	if (!symbol)
+		var/display = list("Moon", "Cross", "Star", "Sun", "Plus", "Saltire", "None", "Cancel")
+		var/input =  WWinput(H, "What symbol would you like?", "Flag Making", "Cancel", display)
+		playsound(src.loc,'sound/items/ratchet.ogg',40) //rip_pack.ogg
+		if (input == "Cancel")
+			return
+		else if(input == "Moon")
+			symbol = "cust_f_moon"
+		else if(input == "Cross")
+			symbol = "cust_f_cross"
+		else if(input == "Star")
+			symbol = "cust_f_star"
+		else if(input == "Sun")
+			symbol = "cust_f_sun"
+		else if(input == "Plus")
+			symbol = "cust_f_plus"
+		else if(input == "Saltire")
+			symbol = "cust_f_saltire"
+		else if(input == "None")
+			symbol = "cust_f_blank"
+		else
+			H << "<span class='notice'>That does not exist!</span>"
+	if (!symbolcolor)
+		var/input = input(H, "Symbol Color - Choose a hex color (without the # | default is black):", "Symbol Color" , "000000")
+		if (input == null || input == "")
+			return
+		else
+			input = uppertext(input)
+			if (length(input) != 6)
+				return
+			var/list/listallowed = list("A","B","C","D","E","F","1","2","3","4","5","6","7","8","9","0")
+			for (var/i = 1, i <= 6, i++)
+				var/numtocheck = 0
+				if (i < 6)
+					numtocheck = copytext(input,i,i+1)
+				else
+					numtocheck = copytext(input,i,0)
+				if (!(numtocheck in listallowed))
+					return
+			symbolcolor = addtext("#",input)
+	if (flagcolor && symbol && symbolcolor)
+		uncolored = FALSE
+		var/image/flag = image("icon" = 'icons/obj/flags.dmi', "icon_state" = "cust_flag_cloth")
+		flag.color = flagcolor
+		var/image/border = image("icon" = 'icons/obj/flags.dmi', "icon_state" = "cust_flag_outline")
+		var/image/csymbol = image("icon" = 'icons/obj/flags.dmi', "icon_state" = symbol)
+		csymbol.color = symbolcolor
+		overlays += flag
+		overlays += border
+		overlays += csymbol
+		return
+	else
+		..()
+	..()
 
 /obj/structure/wallframe
 	name = "wall frame"
@@ -679,5 +560,34 @@
 					qdel(W)
 		else
 			H << "<span class='notice'>That does not exist!</span>"
-	else
-		..()
+	else if(istype(W, /obj/item/stack/material/bamboo))
+		var/input = WWinput(H, "What wall would you like to make?", "Building", "Cancel",list ("Bamboo Wall - 3", "Bamboo Door - 2", "Bamboo Window - 2", "Cancel"))
+		if (input == "Cancel")
+			return
+		if(input == "Bamboo Wall - 3")
+			if(W.amount >= 3)
+				if (do_after(H, 40, src))
+					new/obj/covers/wood_wall/bamboo(src.loc)
+					qdel(src)
+					W.amount -= 3
+					playsound(src.loc,'sound/effects/rip_pack.ogg',40)
+		else if(input == "Bamboo Door - 2")
+			if(W.amount >= 2)
+				if (do_after(H, 40, src))
+					var/obj/covers/wood_wall/bamboo/S = new /obj/covers/wood_wall/bamboo(loc)
+					S.icon_state = "bamboo-door"
+					S.name = "bamboo door"
+					S.density = FALSE
+					S.opacity = FALSE
+					qdel(src)
+					W.amount -= 2
+					playsound(src.loc,'sound/effects/rip_pack.ogg',40)
+		else if(input == "Bamboo Window - 2")
+			if(W.amount >= 2)
+				if (do_after(H, 40, src))
+					new/obj/structure/window_frame/bamboo(src.loc)
+					qdel(src)
+					W.amount -= 2
+					playsound(src.loc,'sound/effects/rip_pack.ogg',40)
+		else
+			H << "<span class='notice'>That does not exist!</span>"

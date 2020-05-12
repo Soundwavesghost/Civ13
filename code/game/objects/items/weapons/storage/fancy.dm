@@ -14,7 +14,7 @@
  */
 
 /obj/item/weapon/storage/fancy/
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food/food.dmi'
 	icon_state = "donutbox6"
 	name = "donut box"
 	var/icon_type = "donut"
@@ -42,7 +42,7 @@
  */
 
 /obj/item/weapon/storage/fancy/egg_box
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food/food.dmi'
 	icon_state = "eggbox"
 	icon_type = "egg"
 	name = "egg box"
@@ -179,6 +179,77 @@
 	can_hold = list(/obj/item/clothing/mask/smokable/cigarette/cigar)
 	icon_type = "cigar"
 
+/obj/item/weapon/storage/fancy/medal
+	name = "medal case"
+	desc = "A case for holding medals to be awarded."
+	icon_state = "cigarcase"
+	item_state = "cigarcase"
+	icon = 'icons/obj/cigarettes.dmi'
+	w_class = 1
+	throwforce = WEAPON_FORCE_HARMLESS
+	slot_flags = SLOT_BELT
+	storage_slots = 14
+	can_hold = list(/obj/item/clothing/accessory/medal)
+	icon_type = "cigar"
+
+/obj/item/weapon/storage/fancy/medal/german_full
+	name = "german medal case"
+/obj/item/weapon/storage/fancy/medal/german_full/New()
+	..()
+	new /obj/item/clothing/accessory/medal/german/ww2/eastern_front(src)
+	new	/obj/item/clothing/accessory/medal/german/ww2/assault_badge(src)
+	new	/obj/item/clothing/accessory/medal/german/ww2/tank_destruction(src)
+	new	/obj/item/clothing/accessory/medal/german/ww2/tank_destruction_gold(src)
+	new	/obj/item/clothing/accessory/medal/german/ww2/wound(src)
+	new	/obj/item/clothing/accessory/medal/german/ww2/wound_silver(src)
+	new	/obj/item/clothing/accessory/medal/german/ww2/wound_gold(src)
+	new /obj/item/clothing/accessory/medal/german/ww2/eastern_front(src)
+	new	/obj/item/clothing/accessory/medal/german/ww2/assault_badge(src)
+	new	/obj/item/clothing/accessory/medal/german/ww2/tank_destruction(src)
+	new	/obj/item/clothing/accessory/medal/german/ww2/tank_destruction_gold(src)
+	new	/obj/item/clothing/accessory/medal/german/ww2/wound(src)
+	new	/obj/item/clothing/accessory/medal/german/ww2/wound_silver(src)
+	new	/obj/item/clothing/accessory/medal/german/ww2/wound_gold(src)
+
+/obj/item/weapon/storage/fancy/medal/japanese_pacific_full
+	name = "japanese medal case"
+/obj/item/weapon/storage/fancy/medal/japanese_pacific_full/New()
+	..()
+	new /obj/item/clothing/accessory/medal/japanese/ww2/east_asia(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/east_asia(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/east_asia(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/east_asia(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/east_asia(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/east_asia(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/east_asia(src)
+	new /obj/item/clothing/accessory/medal/japanese/ww2/east_asia(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/east_asia(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/east_asia(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/rising_sun(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/rising_sun(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/rising_sun(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/rising_sun(src)
+
+obj/item/weapon/storage/fancy/medal/japanese_china_full
+	name = "japanese medal case"
+/obj/item/weapon/storage/fancy/medal/japanese_china_full/New()
+	..()
+	new /obj/item/clothing/accessory/medal/japanese/ww2/china_incident1931(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/china_incident1931(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/china_incident1931(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/china_incident1931(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/china_incident1937(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/china_incident1937(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/china_incident1937(src)
+	new /obj/item/clothing/accessory/medal/japanese/ww2/china_incident1937(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/china_incident1937(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/china_incident1937(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/rising_sun(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/rising_sun(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/rising_sun(src)
+	new	/obj/item/clothing/accessory/medal/japanese/ww2/rising_sun(src)
+
+
 /obj/item/weapon/storage/fancy/cigar/full
 	name = "cigar case"
 	desc = "A case for holding your cigars when you are not smoking them."
@@ -195,10 +266,12 @@
 	return
 
 /obj/item/weapon/storage/fancy/cigar/remove_from_storage(obj/item/W as obj, atom/new_location)
-		var/obj/item/clothing/mask/smokable/cigarette/cigar/C = W
-		if (!istype(C)) return
+	var/obj/item/clothing/mask/smokable/cigarette/cigar/C = W
+	if (!istype(C))
+		return
+	if (reagents)
 		reagents.trans_to_obj(C, (reagents.total_volume/contents.len))
-		..()
+	..()
 
 
 /*
@@ -208,7 +281,7 @@
 /obj/item/weapon/storage/fancy/picklejar
 	name = "pickle jar"
 	desc = "a jar filled with pickles and vinegar"
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food/food.dmi'
 	icon_state = "picklejar"
 	icon_type = "pickles"
 	throwforce = WEAPON_FORCE_NORMAL

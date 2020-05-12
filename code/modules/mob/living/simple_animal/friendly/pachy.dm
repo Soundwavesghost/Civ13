@@ -11,7 +11,7 @@
 	emote_hear = list("rawrs","hisses")
 	emote_see = list("stares ferociously", "grunts")
 	speak_chance = TRUE
-	turns_per_move = 8
+	move_to_delay = 8
 	see_in_dark = 6
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 6
@@ -22,6 +22,9 @@
 	health = 140
 	mob_size = MOB_LARGE
 	layer = 3.99
-	a_intent = I_HURT
+	a_intent = I_HARM
 	can_ride = TRUE
+	behaviour = "defends"
 
+	melee_damage_lower = 10
+	melee_damage_upper = 16

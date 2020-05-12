@@ -1,7 +1,3 @@
-#define SOLID TRUE
-#define LIQUID 2
-#define GAS 3
-
 #define BOTTLE_SPRITES list("bottle-1", "bottle-2", "bottle-3", "bottle-4") //list of available bottle sprites
 #define REAGENTS_PER_SHEET 20
 
@@ -57,6 +53,13 @@
 		for (var/i in elements)
 			dispensable_reagents += list(list(i,1000))
 
+/obj/structure/chemical_dispenser/drinks
+	New()
+		..()
+		var/list/elements = list("honey", "cola", "mint", "banana", "grapejuice", "grapejuice", "milk", "coffee", "tonic", "milkshake", "cognac", "gin", "kahlua", "melonliquor", "rum", "tequilla", "vodka", "whiskey")
+		for (var/i in elements)
+			dispensable_reagents += list(list(i,400))
+
  /**
   * The ui_interact proc is used to open and update Nano UIs
   * If ui_interact is not used then the UI will not update correctly
@@ -105,7 +108,7 @@
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
-        // for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
+		// for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
 		ui = new(user, src, ui_key, "chem_disp.tmpl", ui_title, 390, 655)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
@@ -113,8 +116,6 @@
 		ui.open()
 
 /obj/structure/chemical_dispenser/Topic(href, href_list)
-	if (stat & (NOPOWER|BROKEN))
-		return FALSE // don't update UIs attached to this object
 
 	if (href_list["amount"])
 		amount = round(text2num(href_list["amount"]), 5) // round to nearest 5
@@ -145,17 +146,13 @@
 
 /obj/structure/chemical_dispenser/attackby(var/obj/item/weapon/reagent_containers/B as obj, var/mob/user as mob)
 	if (beaker)
-		if (B.reagents.reagent_list.len)
+		if (B && B.reagents && B.reagents.reagent_list.len)
 			user << "You transfer the reagents to the dispenser."
 			for(var/datum/reagent/R in B.reagents.reagent_list)
 				var/done = FALSE
 				for (var/list/r in dispensable_reagents)
 					if (R.id == r[1])
 						r[2] += B.reagents.get_reagent_amount(R.id)
-						done = TRUE
-						break
-					else
-						dispensable_reagents += list(list(R.id, B.reagents.get_reagent_amount(R.id)))
 						done = TRUE
 						break
 				if (!done)
@@ -175,6 +172,7 @@
 		user << "You place [B] in the dispenser."
 		nanomanager.update_uis(src) // update all UIs attached to src
 		return
+	..()
 
 /obj/structure/chemical_dispenser/attack_hand(mob/user as mob)
 	sanitize_reagents()

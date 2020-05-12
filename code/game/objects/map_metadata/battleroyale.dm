@@ -1,16 +1,15 @@
-#define NO_WINNER "The fighting is still going."
 /obj/map_metadata/battleroyale
 	ID = MAP_ROBUSTA
 	title = "Isla Robusta Battle Royale (125x125x1)"
 	lobby_icon_state = "imperial"
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall)
 	respawn_delay = 0
-	squad_spawn_locations = FALSE
-//	min_autobalance_players = 90
+
+	no_winner ="The fighting is still going."
+
 	faction_organization = list(
 		PIRATES)
-	available_subfactions = list(
-		)
+
 	roundend_condition_sides = list(
 		list(PIRATES) = /area/caribbean/british/ship, //it isnt in the map so nobody wins by capture
 		)
@@ -56,19 +55,7 @@
 
 /obj/map_metadata/battleroyale/cross_message(faction)
 	return "<font size = 4><b>The round has started!</b> Players may now cross the invisible wall!</font>"
-/*
-/obj/map_metadata/robusta/win_condition_specialcheck()
-	if (alive_n_of_side(PIRATES) <= 1 && processes.ticker.playtime_elapsed >= 1200)
-		for (var/mob/living/carbon/human/H in player_list)
-			if (H.original_job && H.stat != DEAD)
-				if (H.original_job.base_type_flag() == PIRATES)
-					winner_name =  H.name
-					winner_ckey = H.ckey
-					message = "The battle is over! [winner_name] ([winner_ckey]) was the winner!"
-		return FALSE
-	else
-		return TRUE
-*/
+
 /obj/map_metadata/battleroyale/update_win_condition()
 	if (world.time >= 36000)
 		if (win_condition_spam_check)
@@ -79,7 +66,7 @@
 		win_condition_spam_check = TRUE
 		return FALSE
 	if (processes.ticker.playtime_elapsed >= 1200)
-		if (alive_n_of_side(PIRATES) <= 1)
+		if (alive_n_of_side(PIRATES) <= 1 && !win_condition_spam_check)
 			for (var/mob/living/carbon/human/H in player_list)
 				if (H.original_job && H.stat != DEAD)
 					if (H.original_job.base_type_flag() == PIRATES)
@@ -91,4 +78,3 @@
 			ticker.finished = TRUE
 			return FALSE
 
-#undef NO_WINNER
