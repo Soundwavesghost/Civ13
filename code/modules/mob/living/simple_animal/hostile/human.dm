@@ -216,7 +216,7 @@
 		stance = HOSTILE_STANCE_IDLE
 		wander = TRUE
 	if (target_mob in ListTargets(8))
-		stance = HOSTILE_STANCE_ATTACKING
+		stance = HOSTILE_STANCE_ATTACK
 		wander = FALSE
 		if(ranged)
 			if(get_dist(src, target_mob) <= 6)
@@ -432,13 +432,7 @@
 		if (HOSTILE_STANCE_ATTACK)
 			if (destroy_surroundings)
 				DestroySurroundings()
-			MoveToTarget()
-
-		if (HOSTILE_STANCE_ATTACKING)
-			if (destroy_surroundings)
-				DestroySurroundings()
-			spawn(3)
-				AttackTarget()
+			AttackTarget()
 	return t_behaviour
 
 /mob/living/simple_animal/hostile/human/throw_item(var/obj/item/item,var/atom/target)

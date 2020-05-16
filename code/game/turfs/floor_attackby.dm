@@ -792,7 +792,7 @@
 			if (!use_flooring)
 				return
 			// Do we have enough?
-			if (use_flooring.build_cost && S.get_amount() < use_flooring.build_cost)
+			if (use_flooring.build_cost && S.amount < use_flooring.build_cost)
 				user << "<span class='warning'>You require at least [use_flooring.build_cost] [S.name] to complete the [use_flooring.descriptor].</span>"
 				return
 			// Stay still and focus...
@@ -837,7 +837,14 @@
 	if (!H || !src || !E)
 		return
 	var/list/elements = list("hydrogen", "helium", "lithium", "nitrogen", "oxygen", "fluorine", "sodium", "magnesium", "aluminum", "silicon", "phosphorus", "chlorine", "potassium", "calcium", "arsenic", "iodine", "tungsten", "radium", "thorium", "bromine")
+	var/list/elements1 = list("nitrogen", "phosphorus", "chlorine", "potassium", "iodine")
+	var/list/elements2 = list("hydrogen", "helium", "lithium", "oxygen", "fluorine", "magnesium", "aluminum", "silicon", "calcium", "arsenic", "tungsten", "radium", "thorium", "bromine")
+
 	var/randreg = pick(elements)
+	if (prob(70))
+		randreg = pick(elements1)
+	else
+		randreg = pick(elements2)
 	if (E.reagents.total_volume <= 0)
 		E.reagents.add_reagent(randreg,5)
 		E.update_icon()
