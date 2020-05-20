@@ -3,6 +3,7 @@
 
 	var/list/epochs = list(
 		//"Stone Age (?-3000 B.C.)" = 0,
+		"Chad Mode" = 0,
 		"Bronze Age (500 B.C.-400 A.D.)" = 0,
 		//"Dark Ages (400-700)" = 0,
 		"Middle Ages (700-1450)" = 0,
@@ -36,6 +37,7 @@
 		map.save_awards()
 		if (config.allowedgamemodes == "TDM")
 			epochs = list(
+				"Chad Mode" = 0,
 				//Stone Age (?-3000 B.C.)" = 0,
 				"Bronze Age (500 B.C.-400 A.D.)" = 0,
 				//"Dark Ages (400-700)" = 0,
@@ -147,7 +149,7 @@
 				MAP_ISLAND = 0,
 		//		MAP_VOYAGE = 10,
 		//		MAP_BATTLEROYALE = 20,
-				MAP_SUPPLY_RAID = 8,
+		//		MAP_SUPPLY_RAID = 8,
 				MAP_RECIFE = 10,
 				MAP_FIELDS = 10,
 				MAP_ROBUSTA = 15,
@@ -158,6 +160,11 @@
 				MAP_HERACLEA = 0,
 				MAP_SIEGE = 0,
 				MAP_GLADIATORS = 0,
+			)
+		if (epoch == "Chad Mode")
+	// chad mode group for TDM
+			maps = list(
+				MAP_JUNGLE_OF_THE_CHADS = 0,
 			)
 		if (epoch == "Middle Ages (700-1450)")
 	//	1013 - TDM
@@ -192,7 +199,7 @@
 				MAP_COLONY = 0,
 				MAP_JUNGLE_COLONY = 4,
 				MAP_PIONEERS = 10,
-				MAP_FOUR_COLONIES = 35,
+				MAP_FOUR_COLONIES = 30,
 			)
 		if (epoch == "Civilization 13 (Prison Camps)")
 			maps = list(
@@ -200,9 +207,10 @@
 			)
 		if (epoch == "Civilization 13 (Others)")
 			maps = list(
-				MAP_TRIBES = 8,
+				MAP_TRIBES = 12,
 				MAP_HUNT = 0,
 				MAP_LITTLE_CREEK = 10,
+//				MAP_FOUR_KINDGOMS = 16
 			)
 
 		spawn(10)
@@ -269,7 +277,7 @@
 	ticker.delay_end = FALSE
 	ticker.pregame_timeleft = 10
 	if (vote.voted_gamemode == "Random")
-		vote.voted_gamemode = pick("Classic (Stone Age Start)", "Auto-Research Mode", "Resource-Based Research", "Bronze Age (No Research)","Medieval (No Research)","Imperial Age (No Research)", "Industrial Age (No Research)", "Early Modern Age (No Research)", "WW2 Age (No Research)", "Modern Age (No Research)",  "Chad Mode", "Chad Mode +")
+		vote.voted_gamemode = pick("Classic (Stone Age Start)", "Auto-Research Mode", "Resource-Based Research", "Bronze Age (No Research)","Medieval (No Research)","Imperial Age (No Research)", "Industrial Age (No Research)", "Early Modern Age (No Research)", "WW2 Age (No Research)", "Modern Age (No Research)")
 
 	map.gamemode = vote.voted_gamemode
 	if (vote.voted_gamemode == "Classic (Stone Age Start)")

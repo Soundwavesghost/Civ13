@@ -9,7 +9,7 @@
 	not_movable = FALSE
 	not_disassemblable = FALSE
 
-/obj/structure/loom/attackby(var/obj/item/stack/W as obj, var/mob/living/carbon/human/H as mob) ///obj/item/stack/material/rettedfabric
+/obj/structure/loom/attackby(var/obj/item/stack/W as obj, var/mob/living/human/H as mob) ///obj/item/stack/material/rettedfabric
 	if (istype(W, /obj/item/stack/material/cotton))
 		H.visible_message("You start to produce the cloth.")
 		icon_state = "loom1"
@@ -45,13 +45,13 @@
 			icon_state = "loom"
 	if (istype(W,/obj/item/weapon/wrench))
 		playsound(loc, 'sound/items/Ratchet.ogg', 100, TRUE)
-		H. << (anchored ? "<span class='notice'r>You unfasten \the [src] from the floor.</span>" : "<span class='notice'>You secure \the [src] to the floor.</span>")
+		H << (anchored ? "<span class='notice'r>You unfasten \the [src] from the floor.</span>" : "<span class='notice'>You secure \the [src] to the floor.</span>")
 		anchored = !anchored
 	else if (istype(W,/obj/item/weapon/hammer) || istype(W,/obj/item/weapon/hammer/modern))
 		playsound(loc, 'sound/items/Screwdriver.ogg', 75, TRUE)
-		H. << "<span class='notice'>You begin dismantling \the [src].</span>"
+		H << "<span class='notice'>You begin dismantling \the [src].</span>"
 		if (do_after(H,50,src))
-			H. << "<span class='notice'>You dismantle \the [src].</span>"
+			H << "<span class='notice'>You dismantle \the [src].</span>"
 			new /obj/item/stack/material/wood(loc)
 			new /obj/item/stack/material/wood(loc)
 			new /obj/item/stack/material/wood(loc)
@@ -69,7 +69,7 @@
 	not_movable = FALSE
 	not_disassemblable = FALSE
 
-/obj/structure/mill/attackby(var/obj/item/stack/W as obj, var/mob/living/carbon/human/H as mob)
+/obj/structure/mill/attackby(var/obj/item/stack/W as obj, var/mob/living/human/H as mob)
 	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat) || istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/oat) || istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/barley))
 		H.visible_message("You start to mill the [W.name].")
 		icon_state = "flour_mill1"
@@ -123,7 +123,7 @@
 	flammable = TRUE
 	not_movable = TRUE
 	not_disassemblable = TRUE
-/obj/structure/mill/large/attackby(var/obj/item/stack/W as obj, var/mob/living/carbon/human/H as mob)
+/obj/structure/mill/large/attackby(var/obj/item/stack/W as obj, var/mob/living/human/H as mob)
 	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat))
 		H.visible_message("You start to mill the [W.name].")
 		icon_state = "mill_large1"
@@ -160,7 +160,7 @@
 	not_movable = FALSE
 	not_disassemblable = FALSE
 
-/obj/structure/dehydrator/attackby(var/obj/item/stack/W as obj, var/mob/living/carbon/human/H as mob)
+/obj/structure/dehydrator/attackby(var/obj/item/stack/W as obj, var/mob/living/human/H as mob)
 	if (filled >= 4)
 		H << "<span class='notice'>\The [src] is full!</span>"
 		return
@@ -257,7 +257,7 @@
 /obj/item/weapon/starterjar/New()
 	..()
 
-/obj/item/weapon/starterjar/attackby(obj/O as obj, mob/living/carbon/human/user as mob)
+/obj/item/weapon/starterjar/attackby(obj/O as obj, mob/living/human/user as mob)
 	if (fermenting != 0)
 		user << "This jar already has a starter culture inside!"
 		return
@@ -317,7 +317,7 @@
 				fermenting_contents++
 			yeast_growth()
 
-/obj/item/weapon/starterjar/attack_self(var/mob/living/carbon/human/user as mob)
+/obj/item/weapon/starterjar/attack_self(var/mob/living/human/user as mob)
 	if (fermenting == 2 && fermenting_contents > 0)
 		user << "You take some yeast out of the jar."
 		new/obj/item/weapon/reagent_containers/food/condiment/enzyme(user.loc)
@@ -346,7 +346,7 @@
 		)
 	flammable = TRUE
 
-/obj/item/weapon/storage/seed_collector/attack_self(var/mob/living/carbon/human/user as mob)
+/obj/item/weapon/storage/seed_collector/attack_self(var/mob/living/human/user as mob)
 	active = TRUE
 	var/total_storage_space = 0
 	for (var/obj/item/I in contents)
@@ -393,7 +393,7 @@
 		)
 	flammable = TRUE
 
-/obj/item/weapon/storage/ore_collector/attack_self(var/mob/living/carbon/human/user as mob)
+/obj/item/weapon/storage/ore_collector/attack_self(var/mob/living/human/user as mob)
 	active = TRUE
 	var/total_storage_space = 0
 	for (var/obj/item/I in contents)
@@ -508,9 +508,9 @@
 
 	if (istype(W,/obj/item/weapon/hammer) || istype(W,/obj/item/weapon/hammer/modern))
 		playsound(loc, 'sound/items/Screwdriver.ogg', 75, TRUE)
-		user. << "<span class='notice'>You begin dismantling \the [src].</span>"
+		user << "<span class='notice'>You begin dismantling \the [src].</span>"
 		if (do_after(user,130,src))
-			user. << "<span class='notice'>You dismantle \the [src].</span>"
+			user << "<span class='notice'>You dismantle \the [src].</span>"
 			new /obj/item/stack/material/wood(loc)
 			new /obj/item/stack/material/wood(loc)
 			new /obj/item/stack/material/wood(loc)
@@ -526,7 +526,7 @@
 	else
 		..()
 
-/obj/structure/oilwell/attack_hand(var/mob/living/carbon/human/H)
+/obj/structure/oilwell/attack_hand(var/mob/living/human/H)
 	if (!isemptylist(barrel))
 		H << "You start taking \the barrel from \the [src]..."
 		if (do_after(H,35,src))
@@ -583,13 +583,13 @@
 
 	if (istype(W,/obj/item/weapon/wrench))
 		playsound(loc, 'sound/items/Ratchet.ogg', 100, TRUE)
-		user. << (anchored ? "<span class='notice'r>You unfasten \the [src] from the floor.</span>" : "<span class='notice'>You secure \the [src] to the floor.</span>")
+		user << (anchored ? "<span class='notice'r>You unfasten \the [src] from the floor.</span>" : "<span class='notice'>You secure \the [src] to the floor.</span>")
 		anchored = !anchored
 	else if (istype(W,/obj/item/weapon/hammer) || istype(W,/obj/item/weapon/hammer/modern))
 		playsound(loc, 'sound/items/Screwdriver.ogg', 75, TRUE)
-		user. << "<span class='notice'>You begin dismantling \the [src].</span>"
+		user << "<span class='notice'>You begin dismantling \the [src].</span>"
 		if (do_after(user,60,src))
-			user. << "<span class='notice'>You dismantle \the [src].</span>"
+			user << "<span class='notice'>You dismantle \the [src].</span>"
 			new /obj/item/stack/material/wood(loc)
 			new /obj/item/stack/material/wood(loc)
 			new /obj/item/stack/material/wood(loc)
@@ -600,7 +600,7 @@
 	else
 		..()
 
-/obj/structure/printingpress/attack_hand(var/mob/living/carbon/human/H)
+/obj/structure/printingpress/attack_hand(var/mob/living/human/H)
 	if (copying)
 		return
 
@@ -712,7 +712,7 @@
 	not_movable = FALSE
 	not_disassemblable = FALSE
 
-/obj/structure/canner/attackby(var/obj/item/W as obj, var/mob/living/carbon/human/H as mob)
+/obj/structure/canner/attackby(var/obj/item/W as obj, var/mob/living/human/H as mob)
 	if (istype(W, /obj/item/weapon/can))
 		var/obj/item/weapon/can/C = W
 		if (C.stored.len)
@@ -789,7 +789,7 @@
 	else
 		icon_state = "[base_icon]"
 
-/obj/item/weapon/can/attackby(var/obj/item/W as obj, var/mob/living/carbon/human/H as mob)
+/obj/item/weapon/can/attackby(var/obj/item/W as obj, var/mob/living/human/H as mob)
 	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks) && open)
 		if (stored.len < max_capacity && !sealed)
 			stored += W
@@ -827,7 +827,7 @@
 	else
 		..()
 
-/obj/item/weapon/can/attack_hand(mob/living/carbon/human/user)
+/obj/item/weapon/can/attack_hand(mob/living/human/user)
 	if (stored.len && user.has_empty_hand() && loc == user && open)
 		for (var/obj/item/I in stored)
 			I.loc = user.loc
@@ -898,7 +898,7 @@
 	var/max = 10
 	var/current = 0
 
-/obj/structure/compost/attackby(var/obj/item/W as obj, var/mob/living/carbon/human/H as mob)
+/obj/structure/compost/attackby(var/obj/item/W as obj, var/mob/living/human/H as mob)
 	if (current >= max)
 		H << "<span class='warning'>The compost bin is full!</span>"
 		return
@@ -960,7 +960,7 @@
 			new /obj/item/stack/material/wood(loc)
 			qdel(src)
 
-/obj/structure/compost/proc/compost(mob/living/carbon/human/H as mob)
+/obj/structure/compost/proc/compost(mob/living/human/H as mob)
 	spawn(500)
 	visible_message("The composted material begins to degrade.")
 	if (current>=1)

@@ -219,7 +219,7 @@
 /obj/structure/barricade/sandstone_h/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W,/obj/item/weapon) && !istype(W,/obj/item/weapon/wrench) && !istype(W,/obj/item/weapon/hammer)) //No weapons can harm me! If not weapon and not a wrench.
 		user << "You hit the wall uselessly!"//sucker
-	else if (istype(W, /obj/item/weapon/siegeladder))
+	if (istype(W, /obj/item/weapon/siegeladder))
 		visible_message(
 			"<span class='danger'>\The [user] starts deploying \the [W.name].</span>",
 			"<span class='danger'>You start deploying \the [W.name].</span>")
@@ -240,7 +240,7 @@
 /obj/structure/barricade/sandstone_v/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W,/obj/item/weapon) && !istype(W,/obj/item/weapon/wrench) && !istype(W,/obj/item/weapon/hammer)) //No weapons can harm me! If not weapon and not a wrench.
 		user << "You hit the wall uselessly!"//sucker
-	else if (istype(W, /obj/item/weapon/siegeladder))
+	if (istype(W, /obj/item/weapon/siegeladder))
 		visible_message(
 			"<span class='danger'>\The [user] starts deploying \the [W.name].</span>",
 			"<span class='danger'>You start deploying \the [W.name].</span>")
@@ -376,7 +376,7 @@
 /obj/structure/barricade/stone_h/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W,/obj/item/weapon) && !istype(W,/obj/item/weapon/wrench) && !istype(W,/obj/item/weapon/hammer)) //No weapons can harm me! If not weapon and not a wrench.
 		user << "You hit the wall uselessly!"//sucker
-	else if (istype(W, /obj/item/weapon/siegeladder))
+	if (istype(W, /obj/item/weapon/siegeladder))
 		visible_message(
 			"<span class='danger'>\The [user] starts deploying \the [W.name].</span>",
 			"<span class='danger'>You start deploying \the [W.name].</span>")
@@ -407,7 +407,7 @@
 /obj/structure/barricade/stone_v/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W,/obj/item/weapon) && !istype(W,/obj/item/weapon/wrench) && !istype(W,/obj/item/weapon/hammer)) //No weapons can harm me! If not weapon and not a wrench.
 		user << "You hit the wall uselessly!"//sucker
-	else if (istype(W, /obj/item/weapon/siegeladder))
+	if (istype(W, /obj/item/weapon/siegeladder))
 		visible_message(
 			"<span class='danger'>\The [user] starts deploying \the [W.name].</span>",
 			"<span class='danger'>You start deploying \the [W.name].</span>")
@@ -752,7 +752,7 @@
 	icon = 'icons/obj/junk.dmi'
 	icon_state = "shelf0"
 
-/obj/structure/shelf/attackby(obj/item/W as obj, mob/living/carbon/human/user as mob)
+/obj/structure/shelf/attackby(obj/item/W as obj, mob/living/human/user as mob)
 	if (user.a_intent == I_HELP)
 		user.drop_from_inventory(W)
 		W.forceMove(loc)

@@ -13,7 +13,7 @@
 	not_movable = TRUE
 	not_disassemblable = TRUE
 	var/seedtimer = 1
-	var/mob/living/carbon/human/stored_unit = null
+	var/mob/living/human/stored_unit = null
 
 	var/edible = FALSE
 	var/leaves = 0
@@ -112,8 +112,8 @@
 			health = 0
 			try_destroy()
 			if (prob(50))
-				if (istype(user, /mob/living/carbon/human))
-					var/mob/living/carbon/human/H = user
+				if (istype(user, /mob/living/human))
+					var/mob/living/human/H = user
 					H.adaptStat("strength", 1)
 			return
 	else
@@ -121,7 +121,10 @@
 			if ("fire")
 				health -= W.force * TRUE
 			if ("brute")
-				health -= W.force * 0.20
+				if (istype (W, /obj/item/projectile))
+					health -= W.force * 0.2
+				else
+					health -= W.force * 0.20
 
 	playsound(get_turf(src), 'sound/effects/wood_cutting.ogg', 100)
 	user.do_attack_animation(src)
@@ -138,7 +141,7 @@
 
 
 /obj/structure/wild/bullet_act(var/obj/item/projectile/proj)
-	if (proj.damage > 100 && prob(33)) // makes shrapnel unable to take down trees
+	if (proj.damage > 200 && prob(33)) // makes shrapnel unable to take down trees
 		visible_message("<span class = 'danger'>[src] collapses!</span>")
 		qdel(src)
 	else if (istype(proj, /obj/item/projectile/shell))
@@ -829,7 +832,7 @@
 
 /obj/structure/wild/attack_hand(mob/user as mob)
 	if (user.a_intent == I_GRAB && ishuman(user) && edible && leaves >= 1)
-		var/mob/living/carbon/human/H = user
+		var/mob/living/human/H = user
 		if (H.gorillaman)
 			H << "You start foraging for some edible leaves..."
 			if (do_after(user, 80, src))
@@ -864,15 +867,15 @@
 		..()
 
 
-/obj/structure/wild/jungle/MouseDrop_T(var/mob/living/carbon/human/user as mob)
-	if (istype(user, /mob/living/carbon/human))
+/obj/structure/wild/jungle/MouseDrop_T(var/mob/living/human/user as mob)
+	if (istype(user, /mob/living/human))
 		if (stored_unit)
 			return
 		if (user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis)
 			return
 		if (!isturf(user.loc)) // are you in a container/closet/pod/etc?
 			return
-		var/mob/living/carbon/human/H = user
+		var/mob/living/human/H = user
 		if (H.faction_text == "VIETNAMESE")
 			user << "You start hiding in \the [src]..."
 			if (do_after(user,100,src))

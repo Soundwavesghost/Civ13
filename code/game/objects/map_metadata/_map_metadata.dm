@@ -527,7 +527,7 @@ var/civmax_research = list(230,230,230)
 /obj/map_metadata/proc/check_events()
 	return TRUE
 
-/obj/map_metadata/proc/check_caribbean_block(var/mob/living/carbon/human/H, var/turf/T)
+/obj/map_metadata/proc/check_caribbean_block(var/mob/living/human/H, var/turf/T)
 	if (!istype(H) || !istype(T))
 		return FALSE
 	var/area/A = get_area(T)
@@ -698,7 +698,7 @@ var/civmax_research = list(230,230,230)
 	var/s1 = 0
 	var/s2 = 0
 
-	for (var/mob/living/carbon/human/H in human_mob_list)
+	for (var/mob/living/human/H in human_mob_list)
 
 		var/datum/job/job = H.original_job
 
@@ -1042,7 +1042,7 @@ var/civmax_research = list(230,230,230)
 			spawn(15000)
 				change_weather(WEATHER_WET)
 				for (var/turf/floor/dirt/D in get_area_turfs(/area/caribbean/nomads/forest))
-					if (z == world.maxz && prob(40) && !istype(D, /turf/floor/dirt/underground) && !istype(D, /turf/floor/dirt/dust))
+					if (z == world.maxz && prob(40) && !istype(D, /turf/floor/dirt/underground) && !istype(D, /turf/floor/dirt/dust) && !(get_area(D).climate == "jungle"))
 						D.ChangeTurf(/turf/floor/dirt/winter)
 				for (var/turf/floor/grass/G in get_area_turfs(/area/caribbean/nomads/forest))
 					if (get_area(G).climate == "temperate")
