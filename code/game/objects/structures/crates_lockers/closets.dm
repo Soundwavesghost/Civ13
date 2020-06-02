@@ -417,3 +417,64 @@
 
 /obj/structure/closet/anchored
 	anchored = TRUE
+
+/obj/structure/closet/safe
+	name = "safe"
+	desc = "A sturdy safe, with a keyslot."
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "safe"
+	icon_closed = "safe"
+	icon_opened = "safe-open"
+	not_disassemblable = TRUE
+	not_movable = TRUE
+	anchored = TRUE
+	var/faction = null
+
+/obj/structure/closet/safe/red
+	New()
+		..()
+		custom_code = REDCODE
+		locked = TRUE
+		faction = "Reddington Arms"
+		new /obj/item/weapon/disk/red(src)
+		new /obj/item/weapon/disk/red(src)
+		new /obj/item/weapon/disk/red(src)
+		new /obj/item/weapon/disk/red(src)
+		new /obj/item/weapon/disk/red/fake(src)
+		new /obj/item/weapon/disk/red/fake(src)
+/obj/structure/closet/safe/blue
+	New()
+		..()
+		custom_code = BLUECODE
+		locked = TRUE
+		faction = "Bluford Stock and Bonds"
+		new /obj/item/weapon/disk/blue(src)
+		new /obj/item/weapon/disk/blue(src)
+		new /obj/item/weapon/disk/blue(src)
+		new /obj/item/weapon/disk/blue(src)
+		new /obj/item/weapon/disk/blue/fake(src)
+		new /obj/item/weapon/disk/blue/fake(src)
+/obj/structure/closet/safe/yellow
+	New()
+		..()
+		custom_code = YELLOWCODE
+		locked = TRUE
+		faction = "Goldstein Solutions"
+		new /obj/item/weapon/disk/yellow(src)
+		new /obj/item/weapon/disk/yellow(src)
+		new /obj/item/weapon/disk/yellow(src)
+		new /obj/item/weapon/disk/yellow(src)
+		new /obj/item/weapon/disk/yellow/fake(src)
+		new /obj/item/weapon/disk/yellow/fake(src)
+/obj/structure/closet/safe/green
+	New()
+		..()
+		custom_code = GREENCODE
+		locked = TRUE
+		faction = "Greene Traders Co-ops"
+		new /obj/item/weapon/disk/green(src)
+		new /obj/item/weapon/disk/green(src)
+		new /obj/item/weapon/disk/green(src)
+		new /obj/item/weapon/disk/green(src)
+		new /obj/item/weapon/disk/green/fake(src)
+		new /obj/item/weapon/disk/green/fake(src)

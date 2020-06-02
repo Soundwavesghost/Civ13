@@ -3,6 +3,7 @@
 
 /obj/item/weapon/gun/projectile/leveraction
 	name = "leveraction rifle"
+	icon = 'icons/obj/guns/rifles.dmi'
 	desc = "A simple rifle using a lever-action mechanism."
 	icon_state = "winchester"
 	item_state = "shotgun"
@@ -34,6 +35,7 @@
 	blackpowder = FALSE
 	handle_casings = HOLD_CASINGS
 	equiptimer = 15
+	gtype = "rifle"
 	// 5x as accurate as MGs for now
 	accuracy_list = list(
 

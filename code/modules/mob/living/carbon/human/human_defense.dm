@@ -55,6 +55,9 @@ bullet_act
 					else if (wolfman)
 						var/obj/item/stack/material/pelt/wolfpelt/HP = new/obj/item/stack/material/pelt/wolfpelt(get_turf(src))
 						HP.amount = 3
+					else if (lizard)
+						var/obj/item/stack/material/pelt/lizardpelt/HP = new/obj/item/stack/material/pelt/lizardpelt(get_turf(src))
+						HP.amount = 3
 					else
 						var/obj/item/stack/material/pelt/humanpelt/HP = new/obj/item/stack/material/pelt/humanpelt(get_turf(src))
 						HP.amount = 3
@@ -70,20 +73,39 @@ bullet_act
 	else
 		return ..(W, user)
 
+/mob/living/human
+	var/mob/living/human/last_harmed = null
+
 /mob/living/human/bullet_act(var/obj/item/projectile/P, var/def_zone)
 	if (P.damage == 0)
 		return // fix for strange bug
-	if (P.firer && ishuman(P.firer) && !map.civilizations && !map.nomads && !map.is_RP)
-		var/mob/living/human/Huser = P.firer
-		if (src.stat != DEAD && src.faction_text != Huser.faction_text)
-			src.awards["wounded"]+=min(P.damage,100)
-			var/done = FALSE
-			for (var/list/i in Huser.awards["kills"])
-				if (i[1]==src.name)
-					i[2]+= min(P.damage,100)
-					done = TRUE
-			if (!done)
-				Huser.awards["kills"]+=list(list(src.name,min(P.damage,100),0))
+	if (P.firer && ishuman(P.firer))
+		if (map.ID == MAP_THE_ART_OF_THE_DEAL)
+			var/mob/living/human/Huser = P.firer
+			if (src.stat != DEAD && src.civilization == "Police" && Huser.civilization != "Police")
+				last_harmed = Huser
+				if (!(Huser.real_name in map.warrants))
+					map.warrants += Huser.real_name
+					var/obj/item/weapon/paper_bin/police/PAR = null
+					for(var/obj/item/weapon/paper_bin/police/PAR2 in world)
+						PAR = PAR2
+						break
+					if (PAR)
+						var/obj/item/weapon/paper/police/warrant/SW = new /obj/item/weapon/paper/police/warrant(PAR.loc)
+						SW.tgt = Huser.real_name
+						SW.tgtcmp = Huser.civilization
+						PAR.add(SW)
+		else if (!map.civilizations && !map.nomads && !map.is_RP)
+			var/mob/living/human/Huser = P.firer
+			if (src.stat != DEAD && src.faction_text != Huser.faction_text)
+				src.awards["wounded"]+=min(P.damage,100)
+				var/done = FALSE
+				for (var/list/i in Huser.awards["kills"])
+					if (i[1]==src.name)
+						i[2]+= min(P.damage,100)
+						done = TRUE
+				if (!done)
+					Huser.awards["kills"]+=list(list(src.name,min(P.damage,100),0))
 	if (istype(P, /obj/item/projectile/shell))
 		visible_message("<span class = 'danger'>[src] gets blown up by \the [P]!</span>")
 		gib()

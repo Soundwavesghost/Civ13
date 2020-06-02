@@ -73,7 +73,7 @@
 		if (istype(target, /obj/structure/pot))
 			return
 
-		if (istype(target, /obj/item/weapon/sandbag))
+		if (istype(target, /obj/item/weapon/barrier))
 			return
 
 		if (!is_open_container() || !flag)
@@ -517,6 +517,11 @@
 	name = "50u motorcycle fueltank"
 	icon_state = "fueltank_bike"
 	volume = 50
+
+/obj/item/weapon/reagent_containers/glass/barrel/fueltank/bike/full
+	New()
+		..()
+		reagents.add_reagent("gasoline",50)
 
 /obj/item/weapon/reagent_containers/glass/barrel/fueltank/bike75
 	name = "75u motorcycle fueltank"

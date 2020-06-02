@@ -1,7 +1,7 @@
 
 /obj/map_metadata/jungle_colony
 	ID = MAP_JUNGLE_COLONY
-	title = "Jungle Colony (155x225x2)"
+	title = "Jungle Colony"
 	no_winner ="The round is proceeding normally."
 	lobby_icon_state = "imperial"
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall/)
@@ -44,6 +44,8 @@ obj/map_metadata/jungle_colony/job_enabled_specialcheck(var/datum/job/J)
 		if (J.is_rcw == TRUE)
 			. = FALSE
 		if (J.is_pioneer == TRUE)
+			. = FALSE
+		if (J.is_deal == TRUE)
 			. = FALSE
 		if (J.is_prison == TRUE)
 			. = FALSE

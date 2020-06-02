@@ -38,8 +38,6 @@
 	var/matrix_l = 0
 	var/matrix_h = 0
 	var/list/matrix_current_locs = list()
-
-	var/color_code = ""
 	var/turret_type = "tank_turret"
 /obj/structure/vehicleparts/axis/bike
 	name = "motorcycle axis"
@@ -47,6 +45,7 @@
 	speeds = 3
 	maxpower = 10
 	speedlist = list(1=3,2=2,3=1)
+	turntimer = 5
 
 /obj/structure/vehicleparts/axis/boat
 	name = "boat rudder control"
@@ -68,7 +67,6 @@
 	name = "T-34"
 	speeds = 4
 	speedlist = list(1=12,2=8,3=6,4=5)
-	color_code = ""
 	color = "#3d5931"
 	New()
 		..()
@@ -108,6 +106,16 @@
 		var/pickedname = pick(tank_names_japanese)
 		tank_names_japanese -= pickedname
 		name = "[name] \'[pickedname]\'"
+/obj/structure/vehicleparts/axis/heavy/m4
+	name = "M-4 Sherman"
+	speeds = 4
+	speedlist = list(1=12,2=8,3=6,4=5)
+	color = "#293822"
+	New()
+		..()
+		var/pickedname = pick(tank_names_usa)
+		tank_names_soviet -= pickedname
+		name = "[name] \'[pickedname]\'"
 /obj/structure/vehicleparts/axis/car
 	name = "car axis"
 	desc = "A powered axis from a car."
@@ -116,7 +124,7 @@
 	speeds = 5
 	maxpower = 800
 	speedlist = list(1=8,2=6,3=4,4=3,5=2)
-
+	turntimer = 8
 /obj/structure/vehicleparts/axis/proc/get_speed()
 	if (currentspeed <= 0)
 		currentspeed = 0
@@ -213,7 +221,7 @@
 	if (!H.driver_vehicle.engine.on && H.driver_vehicle.fueltank.reagents.total_volume > 0)
 		H.driver_vehicle.engine.turn_on(H)
 		H.driver_vehicle.set_light(3)
-		playsound(loc, 'sound/machines/diesel_starting.ogg', 35, FALSE, 2)
+		playsound(loc, H.driver_vehicle.engine.starting_snd, 35, FALSE, 2)
 		spawn(40)
 			if (H.driver_vehicle && H.driver_vehicle.engine && H.driver_vehicle.engine.on)
 				H.driver_vehicle.running_sound()

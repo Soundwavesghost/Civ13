@@ -118,9 +118,15 @@
 		ssd_hiding(config.ssd_invisibility_timer) //makes SSD players invisible after a while
 	if (istype(buckled, /obj/structure/bed) || istype(buckled, /obj/structure/optable))
 		healing_stage += 2
+
+	else if (istype(buckled, /obj/structure/medicalbed))
+		healing_stage += 0.5
 	else
 		healing_stage = 0
-	if (healing_stage >= 30 && (istype(buckled, /obj/structure/bed) || istype(buckled, /obj/structure/optable)))
+	if (healing_stage >= 30 && (istype(buckled, /obj/structure/bed) || istype(buckled, /obj/structure/optable) || istype(buckled, /obj/structure/medicalbed)))
+		if (istype(buckled, /obj/structure/medicalbed))
+			rejuvenate()
+			src << "You feel much better."
 		healing_stage = 0
 		if (getBruteLoss() >= 15)
 			adjustBruteLoss(-2)
@@ -1383,7 +1389,8 @@
 			holder2.plane = HUD_PLANE
 			switch (original_job.base_type_flag())
 				if (PIRATES)
-					holder2.icon_state = "pirate_basic"
+					if (map && !map.battleroyale)
+						holder2.icon_state = "pirate_basic"
 				if (BRITISH)
 					if (map.ordinal_age >= 4)
 						holder2.icon_state = "brit_basic"
@@ -1545,7 +1552,7 @@
 		return
 
 /mob/living/human/proc/do_rotting()
-	if (!map.civilizations && !istype(src, /mob/living/human/corpse))
+	if (map && !map.civilizations && !istype(src, /mob/living/human/corpse))
 		return
 	spawn(600)
 		if (stat == DEAD)

@@ -79,6 +79,20 @@
 	armor = list(melee = 60, arrow = 20, gun = 74, energy = 40, bomb = 20, bio = 32, rad = 20)
 	ripable = FALSE
 
+/obj/item/clothing/under/traffic_police
+	name = "police outfit"
+	desc = "An outfit composed of a blue emergency services shirt and denim trousers. It has a police badge attached"
+	icon_state = "traffic_cop"
+	item_state = "traffic_cop"
+	worn_state = "traffic_cop"
+
+/obj/item/clothing/head/traffic_police
+	name = "police cap"
+	desc = "A blue cap often worn by members of the police and security guards."
+	icon_state = "traffic_cop"
+	item_state = "traffic_cop"
+	worn_state = "traffic_cop"
+
 /* US Army Clothes*/
 
 /obj/item/clothing/under/us_uni
@@ -613,6 +627,14 @@
 	ripable = FALSE
 
 /* Miscallaneous*/
+
+/obj/item/clothing/under/gatorpants
+	name = "shirtless gator pants"
+	desc = "A tight fitting pair of alligator scale pants. When you're this on-point; wearing a shirt would just cramp your style."
+	icon_state = "gator_pants"
+	item_state = "gator_pants"
+	worn_state = "gator_pants"
+	body_parts_covered = LOWER_TORSO|LEGS
 
 /obj/item/clothing/suit/bx //is this futuristic?
 	name = "carbon black suit"

@@ -573,7 +573,7 @@
 			feeding_img = image("icon" = src.icon, "icon_state" = "[src.feeding_type]_unloaded")
 			overlays += feeding_img
 	else
-		icon = 'icons/obj/gun.dmi'
+		icon = 'icons/obj/guns/gun.dmi'
 		icon_state = override_sprite
 	switch(stock_type)
 		if ("Rifle Wooden Stock")
@@ -595,6 +595,7 @@
 	switch(receiver_type)
 		if ("Bolt-Action")
 			item_state = "mosin"
+			gtype = "rifle"
 			w_class = 4
 			force = 10
 			throwforce = 20
@@ -606,7 +607,7 @@
 			load_shell_sound = 'sound/weapons/guns/interact/clip_reload.ogg'
 			accuracy = TRUE
 			gun_type = GUN_TYPE_RIFLE
-			attachment_slots = ATTACH_IRONSIGHTS|ATTACH_SCOPE|ATTACH_BARREL
+			attachment_slots = ATTACH_SILENCER|ATTACH_IRONSIGHTS|ATTACH_SCOPE|ATTACH_BARREL
 			accuracy_increase_mod = 2.00
 			accuracy_decrease_mod = 6.00
 			KD_chance = KD_CHANCE_HIGH
@@ -661,6 +662,7 @@
 			load_delay = 4
 			aim_miss_chance_divider = 3.00
 		if ("Revolver")
+			gtype = "pistol"
 			stat = "pistol"
 			w_class = 2
 			slot_flags = SLOT_BELT|SLOT_POCKET|SLOT_HOLSTER
@@ -727,6 +729,7 @@
 		if ("Semi-Auto (small)")
 			item_state = "pistol"
 			stat = "pistol"
+			gtype = "pistol"
 			move_delay = 1
 			fire_delay = 3
 			equiptimer -= 1
@@ -783,6 +786,7 @@
 		if ("Semi-Auto (large)")
 			item_state = "g41"
 			stat = "rifle"
+			gtype = "rifle"
 			w_class = 4
 			slot_flags = SLOT_SHOULDER
 			accuracy_list = list(
@@ -847,11 +851,12 @@
 		if ("Open-Bolt (small)")
 			item_state = "greasegun"
 			stat = "machinegun"
+			gtype = "smg"
 			w_class = 3
 			slot_flags = SLOT_SHOULDER|SLOT_BELT
 			sel_mode = 1
 			full_auto = TRUE
-			attachment_slots = ATTACH_IRONSIGHTS
+			attachment_slots = ATTACH_SILENCER|ATTACH_IRONSIGHTS
 			firemodes = list(
 				list(name="full auto",	burst=1, burst_delay=1, recoil=1, move_delay=5, dispersion = list(0.7, 1.2, 1.2, 1.3, 1.5))
 				)
@@ -907,13 +912,14 @@
 			accuracy_increase_mod = 1.00
 			accuracy_decrease_mod = 2.00
 			KD_chance = KD_CHANCE_MEDIUM
-			attachment_slots = ATTACH_IRONSIGHTS
+			attachment_slots = ATTACH_SILENCER|ATTACH_IRONSIGHTS
 		if ("Open-Bolt (large)")
 			item_state = "negev"
 			stat = "machinegun"
+			gtype = "mg"
 			w_class = 5
 			heavy = TRUE
-			attachment_slots = ATTACH_IRONSIGHTS
+			attachment_slots = ATTACH_SILENCER|ATTACH_IRONSIGHTS
 			firemodes = list(
 				list(name="full auto",	burst=1, burst_delay=1.3, move_delay=8, dispersion = list(0.7, 1.1, 1.3, 1.4, 1.5), recoil = 2),
 				)
@@ -978,9 +984,10 @@
 			load_method = MAGAZINE
 			sel_mode = 1
 			full_auto = TRUE
-			attachment_slots = ATTACH_IRONSIGHTS
+			attachment_slots = ATTACH_SILENCER|ATTACH_IRONSIGHTS
 		if ("Dual Selective Fire")
 			item_state = "ak47"
+			gtype = "rifle"
 			stat = "rifle"
 			w_class = 3
 			sel_mode = 1
@@ -993,7 +1000,7 @@
 				list(name="full auto",	burst=1, burst_delay=1.3, recoil=1.3, move_delay=4, dispersion = list(1.2, 1.2, 1.3, 1.4, 1.8)),
 				)
 			sel_mode = 1
-			attachment_slots = ATTACH_IRONSIGHTS|ATTACH_BARREL
+			attachment_slots = ATTACH_SILENCER|ATTACH_IRONSIGHTS|ATTACH_BARREL
 			load_delay = 8
 			gun_type = GUN_TYPE_RIFLE
 			accuracy_list = list(
@@ -1044,9 +1051,10 @@
 			accuracy_increase_mod = 1.00
 			accuracy_decrease_mod = 2.00
 			KD_chance = KD_CHANCE_MEDIUM
-			attachment_slots = ATTACH_IRONSIGHTS
+			attachment_slots = ATTACH_SILENCER|ATTACH_IRONSIGHTS
 		if ("Triple Selective Fire")
 			item_state = "m16"
+			gtype = "rifle"
 			stat = "rifle"
 			w_class = 3
 			sel_mode = 1
@@ -1060,7 +1068,7 @@
 				list(name="full auto",	burst=1, burst_delay=1.3, recoil=1.3, move_delay=4, dispersion = list(1.2, 1.2, 1.3, 1.4, 1.8)),
 				)
 			sel_mode = 1
-			attachment_slots = ATTACH_IRONSIGHTS|ATTACH_BARREL
+			attachment_slots = ATTACH_SILENCER|ATTACH_IRONSIGHTS|ATTACH_BARREL
 			load_delay = 8
 			gun_type = GUN_TYPE_RIFLE
 			accuracy_list = list(
@@ -1111,10 +1119,11 @@
 			accuracy_increase_mod = 1.00
 			accuracy_decrease_mod = 2.00
 			KD_chance = KD_CHANCE_MEDIUM
-			attachment_slots = ATTACH_IRONSIGHTS
+			attachment_slots = ATTACH_SILENCER|ATTACH_IRONSIGHTS
 		if ("Pump-Action")
 			item_state = "shotgun-f"
 			stat = "rifle"
+			gtype = "shotgun"
 			gun_type = GUN_TYPE_SHOTGUN
 			fire_sound = 'sound/weapons/guns/fire/shotgun.ogg'
 			// 15% more accurate than SMGs

@@ -1,6 +1,7 @@
 /obj/item/weapon/gun/projectile/revolver
 	move_delay = 1
 	fire_delay = 3
+	icon = 'icons/obj/guns/pistols.dmi'
 	name = "revolver"
 	desc = "A simple revolver."
 	icon_state = "revolver"
@@ -13,6 +14,7 @@
 	reload_sound 	= 'sound/weapons/guns/interact/rev_magin.ogg'
 	cocked_sound 	= 'sound/weapons/guns/interact/rev_cock.ogg'
 	fire_sound = 'sound/weapons/guns/fire/revolver.ogg'
+	silencer_fire_sound = 'sound/weapons/guns/fire/Glock17-SD.ogg'
 	var/chamber_offset = FALSE //how many empty chambers in the cylinder until you hit a round
 	magazine_based = FALSE
 	var/single_action = FALSE
@@ -21,6 +23,8 @@
 	equiptimer = 5
 	gun_type = GUN_TYPE_PISTOL
 	maxhealth = 55
+	gtype = "pistol"
+	load_method = SINGLE_CASING|SPEEDLOADER
 
 	accuracy_list = list(
 		// small body parts: head, hand, feet
@@ -180,7 +184,6 @@
 	icon_state = "nagant"
 	w_class = 2
 	caliber = "a762x38"
-	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 7
 	magazine_type = /obj/item/ammo_magazine/c762x38mmR
@@ -198,7 +201,6 @@
 	icon_state = "m1892"
 	w_class = 2
 	caliber = "a8x27"
-	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
 	magazine_type = /obj/item/ammo_magazine/c8x27
@@ -240,24 +242,28 @@
 	single_action = TRUE
 	blackpowder = TRUE
 	cocked = FALSE
+	pocket = TRUE
 
-/obj/item/weapon/gun/projectile/revolver/coltnewpolice
-	name = "Colt New Police"
+/obj/item/weapon/gun/projectile/revolver/coltpolicepositive
+	name = "Colt Police Positive"
 	desc = "Common revolver used by police."
 	icon_state = "coltnewpolice"
 	w_class = 2
 	caliber = "a32"
 	fire_sound = 'sound/weapons/guns/fire/32ACP.ogg'
-	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
+	equiptimer = 4
 	magazine_type = /obj/item/ammo_magazine/c32
+	ammo_type = /obj/item/ammo_casing/a32
 	weight = 2.3
 	single_action = FALSE
 	blackpowder = FALSE
 	cocked = FALSE
+	pocket = TRUE
+	effectiveness_mod = 0.93
 
-/obj/item/weapon/gun/projectile/revolver/coltnewpolice/standardized
+/obj/item/weapon/gun/projectile/revolver/coltpolicepositive/standardized
 
 /obj/item/weapon/gun/projectile/revolver/enfieldno2
 	name = "Enfield No. 2"
@@ -265,7 +271,6 @@
 	icon_state = "enfield02"
 	w_class = 2
 	caliber = "a41"
-	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
 	magazine_type = /obj/item/ammo_magazine/c41
@@ -281,7 +286,6 @@
 	w_class = 2
 	caliber = "a455"
 	fire_sound = 'sound/weapons/guns/fire/45ACP.ogg'
-	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
 	magazine_type = /obj/item/ammo_magazine/c455
@@ -314,7 +318,6 @@
 	base_icon = "graysonfito"
 	w_class = 2
 	caliber = "a44magnum"
-	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
 	magazine_type = /obj/item/ammo_magazine/c44magnum
@@ -330,26 +333,9 @@
 	base_icon = "biggi"
 	w_class = 2
 	caliber = "a45"
-	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
 	magazine_type = /obj/item/ammo_magazine/c45
-	weight = 2.3
-	single_action = TRUE
-	blackpowder = TRUE
-	cocked = FALSE
-
-/obj/item/weapon/gun/projectile/revolver/black
-	name = "Salamon 47"
-	desc = "A gold plated revolver chambered in (.44 magnum)."
-	icon_state = "salamonblack"
-	base_icon = "salamonblack"
-	w_class = 3
-	caliber = "a44magnum"
-	load_method = SINGLE_CASING
-	handle_casings = CYCLE_CASINGS
-	max_shells = 6
-	magazine_type = /obj/item/ammo_magazine/c44magnum
 	weight = 2.3
 	single_action = TRUE
 	blackpowder = TRUE
@@ -362,7 +348,6 @@
 	base_icon = "magnum58"
 	w_class = 2
 	caliber = "a44magnum"
-	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
 	magazine_type = /obj/item/ammo_magazine/c44magnum
@@ -372,21 +357,24 @@
 	cocked = FALSE
 
 /obj/item/weapon/gun/projectile/revolver/smithwesson
-	name = "Smith Wesson 32"
-	desc = "A smith 'n Wesson revolver, chambered in (.32)."
+	name = "Smith & Wesson Model 30"
+	desc = "A smith 'n Wesson revolver, chambered in .32 S&W."
 	icon_state = "smithwesson32"
 	base_icon = "smithwesson32"
 	w_class = 1
 	caliber = "a32"
 	fire_sound = 'sound/weapons/guns/fire/32ACP.ogg'
-	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
 	magazine_type = /obj/item/ammo_magazine/c32
+	ammo_type = /obj/item/ammo_casing/a32
 	weight = 1.6
-	single_action = TRUE
-	blackpowder = TRUE
+	equiptimer = 3
+	single_action = FALSE
+	blackpowder = FALSE
 	cocked = FALSE
+	pocket = TRUE
+	effectiveness_mod = 0.9
 
 /obj/item/weapon/gun/projectile/revolver/t26_revolver
 	name = "Type 26 revolver"
@@ -394,7 +382,6 @@
 	icon_state = "t26revolver"
 	w_class = 2
 	caliber = "c9mm_jap_revolver"
-	load_method = SINGLE_CASING
 	handle_casings = CYCLE_CASINGS
 	max_shells = 6
 	magazine_type = /obj/item/ammo_magazine/c9mm_jap_revolver
@@ -404,25 +391,6 @@
 	blackpowder = TRUE
 	cocked = FALSE
 	load_delay = 5
-
-/obj/item/weapon/gun/projectile/revolver/webley
-	name = "Webley Revolver"
-	desc = "British officer's revolver."
-	icon_state = "webley"
-	w_class = 2
-	caliber = "a455"
-	fire_sound = 'sound/weapons/guns/fire/45ACP.ogg'
-	load_method = SINGLE_CASING
-	handle_casings = CYCLE_CASINGS
-	max_shells = 6
-	magazine_type = /obj/item/ammo_magazine/c455
-	ammo_type = /obj/item/ammo_casing/a455
-	weight = 1.6
-	single_action = FALSE
-	blackpowder = FALSE
-	cocked = FALSE
-	load_delay = 5
-	gun_safety = TRUE
 
 /obj/item/weapon/gun/projectile/revolver/panther
 	name = "Panther revolver"
@@ -436,7 +404,6 @@
 	max_shells = 7
 	magazine_type = /obj/item/ammo_magazine/c44p
 	weight = 0.8
-	load_method = SINGLE_CASING
 	load_delay = 6
 	gun_safety = TRUE
 
@@ -461,6 +428,7 @@
 	var/recentpump = FALSE // to prevent spammage
 	load_delay = 6
 	blackpowder = TRUE
+	pocket = TRUE
 
 	accuracy_list = list(
 
@@ -568,6 +536,7 @@
 /obj/item/weapon/gun/projectile/revolving
 	move_delay = 1
 	fire_delay = 3
+	icon = 'icons/obj/guns/rifles.dmi'
 	name = "revolving rifle"
 	desc = "A simple revolving rifle."
 	icon_state = "revolver"
@@ -586,6 +555,7 @@
 	var/single_action = FALSE
 	var/cocked = FALSE
 	maxhealth = 45
+	gtype = "rifle"
 
 	accuracy_list = list(
 
@@ -756,6 +726,7 @@
 	icon_state = "revolver"
 	item_state = "revolver"
 	caliber = "musketball_pistol"
+	icon = 'icons/obj/guns/pistols.dmi'
 	handle_casings = CYCLE_CASINGS
 	max_shells = 7
 	ammo_type = /obj/item/ammo_casing/musketball_pistol
@@ -768,6 +739,7 @@
 	var/single_action = FALSE
 	var/cocked = FALSE
 	var/base_icon = null
+	gtype = "pistol"
 	accuracy_list = list(
 
 		// small body parts: head, hand, feet

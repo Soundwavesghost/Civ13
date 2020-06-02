@@ -3,6 +3,7 @@
 	throwforce = 20
 	fire_sound = 'sound/weapons/guns/fire/smg.ogg'
 	var/base_icon = "tactical"
+	icon = 'icons/obj/guns/assault_rifles.dmi'
 	// more accuracy than MGs, less than everything else
 	load_method = MAGAZINE
 	slot_flags = SLOT_SHOULDER|SLOT_BELT
@@ -10,6 +11,7 @@
 	gun_safety = TRUE
 	load_delay = 8
 	gun_type = GUN_TYPE_RIFLE
+	gtype = "smg"
 	accuracy_list = list(
 
 		// small body parts: head, hand, feet
@@ -60,7 +62,7 @@
 	KD_chance = KD_CHANCE_HIGH+5
 	stat = "machinegun"
 	w_class = 3
-	attachment_slots = ATTACH_IRONSIGHTS
+	attachment_slots = ATTACH_SILENCER|ATTACH_IRONSIGHTS
 	var/jammed_until = -1
 	var/jamcheck = 0
 	var/last_fire = -1

@@ -48,6 +48,16 @@
 	weight = 0.5
 	multiple_sprites = TRUE
 
+/obj/item/ammo_magazine/ar10
+	name = "AR-10 magazine (7.62x51mm)"
+	icon_state = "m16"
+	mag_type = MAGAZINE
+	caliber = "a762x51"
+	ammo_type = /obj/item/ammo_casing/a762x51
+	max_ammo = 20
+	weight = 0.5
+	multiple_sprites = TRUE
+
 /obj/item/ammo_magazine/m14
 	name = "M14 Magazine (7.62x51mm)"
 	icon_state = "m14"
@@ -156,14 +166,13 @@
 
 /obj/item/ammo_magazine/p90
 	name = "P90 Magazine (5.7x28mm)"
-	icon_state = "clip"
-
+	icon_state = "p90"
+	mag_type = MAGAZINE
 	ammo_type = /obj/item/ammo_casing/a57x28
-	caliber = "57x28"
+	caliber = "a57x28"
 	max_ammo = 50
 	weight = 0.045
 	multiple_sprites = TRUE
-	clip = TRUE
 
 /obj/item/ammo_magazine/glock17
 	name = "G17 Glock (9x19mm)"
@@ -233,6 +242,16 @@
 	ammo_type = /obj/item/ammo_casing/a32acp
 	max_ammo = 8
 	weight = 0.33
+	multiple_sprites = TRUE
+
+/obj/item/ammo_magazine/colthammerless/a380acp
+	name = "Colt Hammerless (.380)"
+	icon_state = "glock17"
+	mag_type = MAGAZINE
+	caliber = "a380acp"
+	ammo_type = /obj/item/ammo_casing/a380acp
+	max_ammo = 7
+	weight = 0.36
 	multiple_sprites = TRUE
 
 /obj/item/ammo_magazine/bergmann

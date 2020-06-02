@@ -1,6 +1,6 @@
 /obj/map_metadata/missionary_ridge
 	ID = MAP_MISSIONARY_RIDGE
-	title = "Missionary Ridge (120x180x1)"
+	title = "Missionary Ridge"
 	lobby_icon_state = "wildwest"
 	caribbean_blocking_area_types = list(/area/caribbean/no_mans_land/invisible_wall)
 	respawn_delay = 0
@@ -21,13 +21,13 @@
 	faction2 = CIVILIAN
 	ordinal_age = 4
 	songs = list(
-		"Argonnerwaldlied:1" = 'sound/music/good_bad_ugly.ogg')
+		"The Good the Bad the Ugly Theme:1" = 'sound/music/good_bad_ugly.ogg')
 	gamemode = "Siege"
 /obj/map_metadata/missionary_ridge/faction2_can_cross_blocks()
-	return (processes.ticker.playtime_elapsed >= 3600 || admin_ended_all_grace_periods)
+	return (processes.ticker.playtime_elapsed >= 3000 || admin_ended_all_grace_periods)
 
 /obj/map_metadata/missionary_ridge/faction1_can_cross_blocks()
-	return (processes.ticker.playtime_elapsed >= 3600 || admin_ended_all_grace_periods)
+	return (processes.ticker.playtime_elapsed >= 3000 || admin_ended_all_grace_periods)
 
 /obj/map_metadata/missionary_ridge/job_enabled_specialcheck(var/datum/job/J)
 	..()
